@@ -12,7 +12,13 @@ import Physics.Point;
 import Physics.Vector3D;
 import java.awt.Color;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import world.Size;
 
 /**
@@ -134,6 +140,25 @@ public class Models {
         );
         cube.assignRenderType(EnumRenderType.QUAD);
         return cube;
+    }
+    
+    public static Model generateQuad(Vector3D point, float width, float height, String path){
+        BufferedImage bi=null;
+        try {
+            bi = ImageIO.read(new File(path));
+        } catch (IOException ex) {
+            Logger.getLogger(Models.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        int[] pixel;
+        if(bi!=null){
+            for (int y = 0; y < bi.getHeight(); y++) {
+                for (int x = 0; x < bi.getWidth(); x++) {
+                    pixel = bi.getRaster().getPixel(x, y, new int[3]);
+                    System.out.println(pixel[0] + " - " + pixel[1] + " - " + pixel[2] + " - " + (bi.getWidth() * y + x));
+                }
+            }
+        }
+        return null;
     }
     
     public static Model generateTerrain(Vector3D point){

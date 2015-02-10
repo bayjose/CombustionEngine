@@ -21,7 +21,7 @@ public class Intro extends Entity{
     private Handler handler;
 
     private int curTicks = 0;
-    private final int maxTicks = 600000;
+    private final int maxTicks = 120;
     
     public Intro(Model model, Handler handler) {
         super(model);
@@ -38,12 +38,12 @@ public class Intro extends Entity{
         if(this.curTicks>=this.maxTicks){
             this.remove = true;
             handler.egs = EnumGameState.Main;
+            handler.entities.add(new ModelTester(Models.generateQuad(new Vector3D(0,0,0), 100, 100, "tree.png"), handler));
         }
         if(this.curTicks<this.maxTicks){
             this.curTicks++;
         }
-//        System.out.println("Model 1: "+this.models.get(1).Distance+" Scale:"+this.models.get(1).Scale+" Position:"+this.models.get(1).offset.getZ());
-    }
+}
     
     protected void render(Graphics g) {
         

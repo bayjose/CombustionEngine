@@ -59,4 +59,8 @@ public class Vector3D {
         this.yDir+=vector.getY();
         return this;
     }
+    
+    public Vector3D inverse(){
+        return new Vector3D(-this.getX(), -this.getY(), -this.getZ());
+    }
 }

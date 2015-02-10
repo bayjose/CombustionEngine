@@ -46,6 +46,7 @@ public class Model {
     //distance to camera
     public float Distance = 0.0F;
     public float Scale = 0.0f;
+    public float extraScale = 0.0f;
     
     //extra fields for rendering the model
     private boolean debug = false;
@@ -280,10 +281,10 @@ public class Model {
 //        this.Distance = DistanceCalculator.CalculateXDifferenceF(this.offset.getZ(), Handler.cam.position.getZ());
         float scale = (DistanceCalculator.CalculateXDifferenceF(this.offset.getZ()+Camera.globalOffset.getZ(), Handler.cam.position.getZ()+Camera.globalOffset.getZ())+Handler.cam.viewRange)/(Handler.cam.optimalRender+Handler.cam.viewRange);
         this.Scale = scale;
-        pt1.setScale(scale);
-        pt2.setScale(scale);
-        pt3.setScale(scale);
-        if(scale>=0){
+        pt1.setScale(scale+this.extraScale);
+        pt2.setScale(scale+this.extraScale);
+        pt3.setScale(scale+this.extraScale);
+        if(scale+this.extraScale>=0){
             Face temp = new Face(pt1, pt2, pt3, this.AbsoluteAnlgeX, this.AbsoluteAnlgeY, this.AbsoluteAnlgeZ);
             return temp;
         }else{
@@ -303,13 +304,13 @@ public class Model {
         }
     }
     
-    public boolean  intersects(int faceIndex, Face face){
-        if(faceIndex<this.faces.length){
-            Line2D[] face1 = this.faces[faceIndex].calcLines();
-            Line2D[] face2 = face.calcLines();
-            for (int i = 0; i < face1.length; i++) {
-                for (int j = 0; j < face2.length; j++) {
-                    if (face1[i].intersectsLine(face2[j])) {
+    public boolean  intersects(Model face){
+        for(int l =0; l<this.faces.length; l++){
+            if(l<this.faces.length){
+                for(int i =0; i<face.faces.length; i++){
+                    Polygon temp = face.faces[i].returnJavaPolygon();
+                    temp.translate((int)face.offset.getX(),(int)face.offset.getY());
+                    if(temp.contains(this.faces[l].getPoint1().getX()+this.offset.getX(), this.faces[l].getPoint1().getY()+this.offset.getY())){
                         return true;
                     }
                 }
@@ -326,6 +327,17 @@ public class Model {
         return this.textures;
     }
     
+    public Line2D[] calcLines(int faceIndex){
+        if(this.faces[faceIndex]==null){
+            return null;
+        }
+        Line2D[] lines = new Line2D[3];
+        lines[0] = new Line2D.Float(this.faces[faceIndex].getPoint1().getX()+this.offset.getX(), this.faces[faceIndex].getPoint1().getY()+this.offset.getY(), this.faces[faceIndex].getPoint2().getX()+this.offset.getX(), this.faces[faceIndex].getPoint2().getY()+this.offset.getY());
+        lines[1] = new Line2D.Float(this.faces[faceIndex].getPoint2().getX()+this.offset.getX(), this.faces[faceIndex].getPoint2().getY()+this.offset.getY(), this.faces[faceIndex].getPoint3().getX()+this.offset.getX(), this.faces[faceIndex].getPoint3().getY()+this.offset.getY());
+        lines[2] = new Line2D.Float(this.faces[faceIndex].getPoint3().getX()+this.offset.getX(), this.faces[faceIndex].getPoint3().getY()+this.offset.getY(), this.faces[faceIndex].getPoint1().getX()+this.offset.getX(), this.faces[faceIndex].getPoint1().getY()+this.offset.getY());
+        return lines;
+    }
+        
     public static String RandCol(){
         Random rand = new Random();
         int rand2 = rand.nextInt(16)+1;
