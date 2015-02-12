@@ -19,6 +19,8 @@ public class KeyInput extends KeyAdapter{
     public static boolean A = false;
     public static boolean S = false;
     public static boolean D = false;
+    public static boolean Q = false;
+    public static boolean E = false;
             
     public KeyInput(Handler handler){
         this.handler = handler;
@@ -189,6 +191,15 @@ public class KeyInput extends KeyAdapter{
             if(key == KeyEvent.VK_D){
                 KeyInput.D = true;
             }
+            if(key == KeyEvent.VK_Q){
+                KeyInput.Q = true;
+            }
+            if(key == KeyEvent.VK_E){
+                KeyInput.E = true;
+            }
+            if(key == KeyEvent.VK_2){
+                handler.entities.get(0).getModel().CalculateSTL();
+            }
 
     }
     
@@ -206,6 +217,12 @@ public class KeyInput extends KeyAdapter{
         if(key == KeyEvent.VK_D){
             KeyInput.D = false;
         }
+        if(key == KeyEvent.VK_Q){
+                KeyInput.Q = false;
+            }
+            if(key == KeyEvent.VK_E){
+                KeyInput.E = false;
+            }
     }
     
 }

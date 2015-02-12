@@ -142,23 +142,95 @@ public class Models {
         return cube;
     }
     
+    /**
+     *
+     * @param point this is the start point of your quad, also the center
+     * @param width this is the desired width of your quad
+     * @param height this is the desired height of your quad
+     * @param path this is a path to the image inside of the project folder, this folder will exist outside of the jar
+     * @return
+     */
     public static Model generateQuad(Vector3D point, float width, float height, String path){
         BufferedImage bi=null;
         try {
             bi = ImageIO.read(new File(path));
-        } catch (IOException ex) {
-            Logger.getLogger(Models.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        int[] pixel;
-        if(bi!=null){
+        Color[] colors;
+        Point[] points;
+        int[] faces;
+        int[] colorIndex;
+         if(bi!=null){
+            float pixleWidth = width/(float)bi.getWidth();
+            float pixleHeight = height/(float)bi.getHeight();
+            //init arrays
+            colors = new Color[bi.getWidth()*bi.getHeight()];
+            points = new Point[(bi.getWidth()+1)*(bi.getHeight()+1)];
+            faces = new int[bi.getWidth()*bi.getHeight()*6];
+            colorIndex = new int[colors.length*2];
+            
+            int[] rgbData = bi.getRGB(0,0, bi.getWidth(), bi.getHeight(), null, 0,bi.getWidth());   
             for (int y = 0; y < bi.getHeight(); y++) {
                 for (int x = 0; x < bi.getWidth(); x++) {
-                    pixel = bi.getRaster().getPixel(x, y, new int[3]);
-                    System.out.println(pixel[0] + " - " + pixel[1] + " - " + pixel[2] + " - " + (bi.getWidth() * y + x));
+                    int colorRed = (rgbData[(y * bi.getWidth()) + x] >> 16) & 0xFF;
+                    int colorGreen = (rgbData[(y * bi.getWidth()) + x] >> 8) & 0xFF;
+                    int colorBlue = (rgbData[(y * bi.getWidth()) + x]) & 0xFF;
+                    colors[(y*bi.getWidth())+x] = new Color(colorRed, colorGreen, colorBlue);
                 }
             }
+            for (int y = 0; y < bi.getHeight()+1; y++) {
+                for (int x = 0; x < bi.getWidth()+1; x++) {
+//                    points[((y)*(bi.getWidth()+1))+x] = new Point3D(pixleWidth*x-(width/2), pixleHeight*y-(height/2), (float) (Math.sin(x)*Math.cos(y))*64);
+                    points[((y)*(bi.getWidth()+1))+x] = new Point3D(pixleWidth*x-(width/2), pixleHeight*y-(height/2), (float) ((Math.sin(x)+Math.sin(y))*128));
+                }
+            }
+            int length = bi.getWidth();
+            for (int j = 0; j < bi.getHeight(); j++) {       //y
+                for (int i = 0; i < bi.getWidth(); i++) {  //x
+                    faces[((j * length) + i) * 6 + 0] = i + (j * (length + 1));
+                    faces[((j * length) + i) * 6 + 1] = 1 + i + (j * (length + 1));
+                    faces[((j * length) + i) * 6 + 2] = (length + 1) + i + (j * (length + 1));
+                    faces[((j * length) + i) * 6 + 3] = (length + 2) + i + (j * (length + 1));
+                    faces[((j * length) + i) * 6 + 4] = (length + 1) + i + (j * (length + 1));
+                    faces[((j * length) + i) * 6 + 5] = 1 + i + (j * (length + 1));
+                }
+            }
+            for(int i = 0; i<colors.length; i++){
+                colorIndex[i*2+0] = i;
+                colorIndex[i*2+1] = i;
+            }
+            
+        }else{
+            colors = new Color[]{
+                Color.decode("#"+Models.RandCol()+ Models.RandCol()+Models.RandCol()+Models.RandCol()+Models.RandCol()+Models.RandCol()),
+                Color.decode("#"+Models.RandCol()+ Models.RandCol()+Models.RandCol()+Models.RandCol()+Models.RandCol()+Models.RandCol()),
+            };
+            points = new Point[]{
+                new Point3D(-width/2, -height/2, 0),
+                new Point3D(width/2, -height/2, 0),
+                new Point3D(-width/2, height/2, 0),
+                new Point3D(width/2, height/2, 0),
+            };
+            faces = new int[]{ //faces
+                0, 1, 2,
+                3, 2, 1
+            };
+            colorIndex = new int[]{
+                0,
+                1
+            };
         }
-        return null;
+        
+        Model cube = new Model(point,
+        points,
+        faces,
+        colors,
+        colorIndex,
+        new Rectangle((int)point.getX(),(int)point.getY(),(int)width,(int)height)
+        );
+        cube.assignRenderType(EnumRenderType.QUAD);
+        return cube;
     }
     
     public static Model generateTerrain(Vector3D point){
@@ -300,5 +372,7 @@ public class Models {
         }
         return character;
     }
+    
+    
     
 }

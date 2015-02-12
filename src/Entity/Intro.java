@@ -38,7 +38,7 @@ public class Intro extends Entity{
         if(this.curTicks>=this.maxTicks){
             this.remove = true;
             handler.egs = EnumGameState.Main;
-            handler.entities.add(new ModelTester(Models.generateQuad(new Vector3D(0,0,0), 100, 100, "tree.png"), handler));
+            handler.entities.add(new ModelTester(Models.generateQuad(new Vector3D(Game.WIDTH/2,0,0), 1000, 1000, "test2.png"), handler));
         }
         if(this.curTicks<this.maxTicks){
             this.curTicks++;

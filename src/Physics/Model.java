@@ -16,6 +16,7 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Random;
@@ -251,7 +252,8 @@ public class Model {
                         }
                     }
                 }
-            } else {
+            } else
+            {
                 for (int i = 0; i < this.faces.length; i++) {
                     Face tempFace = this.getScaledFace(i);
                     if(tempFace!=null){
@@ -391,6 +393,26 @@ public class Model {
             character = "f";
         }
         return character;
+    }
+    
+    public void CalculateSTL(){
+        try {
+            PrintWriter outFile = new PrintWriter("STL/"+this.toString()+".stl");
+            outFile.println("solid OpenSCAD_Model");
+            for(int i=0; i<this.faces.length; i++){
+                outFile.println("   facet normal 0 0 0");
+                outFile.println("       outer loop");
+                outFile.println("           vertex "+this.faces[i].getPoint1().getX()+" "+this.faces[i].getPoint1().getY()+" "+this.faces[i].getPoint1().getZ());
+                outFile.println("           vertex "+this.faces[i].getPoint2().getX()+" "+this.faces[i].getPoint2().getY()+" "+this.faces[i].getPoint2().getZ());
+                outFile.println("           vertex "+this.faces[i].getPoint3().getX()+" "+this.faces[i].getPoint3().getY()+" "+this.faces[i].getPoint3().getZ());
+                outFile.println("       endloop");
+                outFile.println("  endfacet");
+            }
+            outFile.println("endsolid OpenSCAD_Model");
+            outFile.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
    
 }
