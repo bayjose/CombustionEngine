@@ -18,10 +18,9 @@ public class Camera {
     public int zoom=1;
     public Rectangle WindowSize;
     private Handler handler;
-    public static Vector3D globalOffset = new Vector3D(0,0,128);
     
     
-    public Vector3D position;
+    public static Vector3D position;
     
     
     private float speed = 0.1f;
@@ -29,21 +28,36 @@ public class Camera {
     public final float viewRange = 1024;
     public final float optimalRender = 128;
     
+    //all translation stuff
+    private boolean transition = false;
+    private Vector3D translation = new Vector3D(0, 0, 0);
+    private int ticks = 0;
+    private float maxTicks = 0;
+    
     public Camera(Vector3D position, int zoom, Handler handler){
         this.position = position;
         this.handler = handler;
         this.zoom=zoom;
-        this.WindowSize= new Rectangle(0, 0, Game.WIDTH/zoom, Game.HEIGHT/zoom);
+        this.WindowSize= new Rectangle(0, 0, 0, 0);
     }
     
     public void tick(){
         if(KeyInput.W){
             this.position.increaseVelZ(-5);
-            System.out.println(this.position.getZ());
         }
         if(KeyInput.S){
             this.position.increaseVelZ(5);
-            System.out.println(this.position.getZ());
+        }
+        if(this.transition){
+            if(this.ticks<this.maxTicks){
+                this.position.increaseVelX(this.translation.getX()/this.maxTicks);
+                this.position.increaseVelY(this.translation.getY()/this.maxTicks);
+                this.position.increaseVelZ(this.translation.getZ()/this.maxTicks);
+                this.ticks++;
+                System.out.println(this.ticks+"/"+this.maxTicks);
+            }else{
+                this.resetTranslation();
+            }
         }
     }
     
@@ -55,6 +69,36 @@ public class Camera {
         this.zoom=z;
         System.out.println("Zoom "+zoom);
     }
+    
+    public void applyTranslation(Vector3D translation, float ticks){
+        if(!this.transition){
+            this.transition = true;
+            this.translation = translation;
+            this.maxTicks = ticks;
+            this.ticks = 0;
+        }
+    }
+    
+    public void goTo(Vector3D translation, float ticks){
+       if(!this.transition){
+            this.transition = true;
+            this.translation = new Vector3D(translation.getX() - (Camera.position.getX()-(Game.WIDTH/2)), translation.getY() - Camera.position.getY(), translation.getZ() - Camera.position.getZ());
+            this.maxTicks = ticks;
+            this.ticks = 0;
+        } 
+    }
+    
+    public void cancelTranslation(){
+        this.transition = false;
+    }
+    
+    public void resetTranslation(){
+        transition = false;
+        translation = new Vector3D(0, 0, 0);
+        ticks = 0;
+        maxTicks = 0;
+    }
+            
     
 
 }

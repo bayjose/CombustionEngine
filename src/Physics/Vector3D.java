@@ -63,4 +63,15 @@ public class Vector3D {
     public Vector3D inverse(){
         return new Vector3D(-this.getX(), -this.getY(), -this.getZ());
     }
+    
+    public boolean isEqualTo(Vector3D test){
+        if(test.getX()==this.getX()){
+            if(test.getY()==this.getY()){
+                if(test.getZ()==this.getZ()){
+                    return true;
+                }
+            } 
+        }
+        return false;
+    }
 }

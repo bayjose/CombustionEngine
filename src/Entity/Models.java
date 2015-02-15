@@ -181,8 +181,8 @@ public class Models {
             }
             for (int y = 0; y < bi.getHeight()+1; y++) {
                 for (int x = 0; x < bi.getWidth()+1; x++) {
-//                    points[((y)*(bi.getWidth()+1))+x] = new Point3D(pixleWidth*x-(width/2), pixleHeight*y-(height/2), (float) (Math.sin(x)*Math.cos(y))*64);
-                    points[((y)*(bi.getWidth()+1))+x] = new Point3D(pixleWidth*x-(width/2), pixleHeight*y-(height/2), (float) ((Math.sin(x)+Math.sin(y))*128));
+                    points[((y)*(bi.getWidth()+1))+x] = new Point3D(pixleWidth*x-(width/2), pixleHeight*y-(height/2), x*y);
+//                    points[((y)*(bi.getWidth()+1))+x] = new Point3D(pixleWidth*x-(width/2), pixleHeight*y-(height/2), (float) ((Math.sin(x)+Math.sin(y))*128));
                 }
             }
             int length = bi.getWidth();

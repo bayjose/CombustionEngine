@@ -49,10 +49,10 @@ public class Handler {
     private Intro intro;
     
     public void init(){
-        this.cam= new Camera(new Vector3D(Game.WIDTH/2, Game.HEIGHT/2, 0),1, this);
+        this.cam= new Camera(new Vector3D(Game.WIDTH/2, 0, 0),1, this);
         //load sprite sheets
         this.renderModels = new RenderModels();
-        this.intro = new Intro(Models.generateQuad(new Vector3D(0,0,cam.optimalRender), Game.WIDTH, Game.HEIGHT),this);
+        this.intro = new Intro(Models.generateQuad(new Vector3D(0,0,128), Game.WIDTH, Game.HEIGHT),this);
     }
     
     public void tick(){

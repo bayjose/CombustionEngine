@@ -26,8 +26,7 @@ public class Intro extends Entity{
     public Intro(Model model, Handler handler) {
         super(model);
         model.assignTexture("into.png");
-        model.offset.increaseVelX(Game.WIDTH/2);
-        Model gear = Models.generateQuad(new Vector3D(Game.WIDTH/2, 0, Handler.cam.optimalRender), 128);
+        Model gear = Models.generateQuad(new Vector3D(0, 0, 0), 128);
         gear.assignTexture("Gear.png");
         this.models.add(gear);
         this.handler = handler;
@@ -38,7 +37,9 @@ public class Intro extends Entity{
         if(this.curTicks>=this.maxTicks){
             this.remove = true;
             handler.egs = EnumGameState.Main;
-            handler.entities.add(new ModelTester(Models.generateQuad(new Vector3D(Game.WIDTH/2,0,0), 1000, 1000, "test2.png"), handler));
+            Model temp = Models.generateQuad(new Vector3D(0,0,0), 1024, 1024);
+            temp.assignTexture("tree.png");
+            handler.entities.add(new ModelTester(temp, handler));
         }
         if(this.curTicks<this.maxTicks){
             this.curTicks++;

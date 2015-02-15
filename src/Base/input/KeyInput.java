@@ -5,6 +5,7 @@
 package Base.input;
 
 import Base.Handler;
+import Physics.Vector3D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -87,8 +88,8 @@ public class KeyInput extends KeyAdapter{
                     this.handler.bool3=true;
                     break loop;
                 }
-            
             }
+            Handler.cam.goTo(new Vector3D(0, 0, 0), 120);
         }
         
         if(key == KeyEvent.VK_4){
@@ -103,6 +104,7 @@ public class KeyInput extends KeyAdapter{
                 }
             
             }
+            Handler.cam.goTo(new Vector3D(1024, 0, 256), 120);
         }
         
         if(key == KeyEvent.VK_5){
@@ -196,9 +198,6 @@ public class KeyInput extends KeyAdapter{
             }
             if(key == KeyEvent.VK_E){
                 KeyInput.E = true;
-            }
-            if(key == KeyEvent.VK_2){
-                handler.entities.get(0).getModel().CalculateSTL();
             }
 
     }

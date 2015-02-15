@@ -16,7 +16,6 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
-import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Random;
@@ -230,14 +229,14 @@ public class Model {
                 for (int i = 0; i < this.faces.length / 2; i++) {
                     //rotate the image, then translate it
                     Graphics2D g2d = ((Graphics2D)g);
-                            //(int) this.getScaledFace(i*2).getX() + (int) this.offset.getX() + (int)Camera.globalOffset.getX(), (int) this.getScaledFace(i*2).getY() + (int) this.offset.getY()+ (int)Camera.globalOffset.getY() + Game.HEIGHT / 2,
+                            //(int) this.getScaledFace(i*2).getX() + (int) this.offset.getX() + (int)Camera.position.getX(), (int) this.getScaledFace(i*2).getY() + (int) this.offset.getY()+ (int)Camera.position.getY() + Game.HEIGHT / 2,
                     Face tempFace = this.getScaledFace(i*2);
                     if(tempFace!=null){
-                        g.translate((int) tempFace.getX() + (int) this.offset.getX() + (int)Camera.globalOffset.getX(), (int) tempFace.getY() + (int) this.offset.getY()+ (int)Camera.globalOffset.getY() + Game.HEIGHT / 2);
+                        g.translate((int) tempFace.getX() + (int) this.offset.getX() + (int)Camera.position.getX(), (int) tempFace.getY() + (int) this.offset.getY()+ (int)Camera.position.getY() + Game.HEIGHT / 2);
                         g2d.rotate(Math.toRadians(this.AbsoluteAnlgeY));
                         g.drawImage(textures, 0,0, (int) tempFace.getWidth() + 1, (int) tempFace.getHeight() + 1, null);
                         g2d.rotate(Math.toRadians(-this.AbsoluteAnlgeY));
-                        g.translate(-(int)( tempFace.getX() + (int) this.offset.getX() + (int)Camera.globalOffset.getX()), -(int) (tempFace.getY() + (int) this.offset.getY()+ (int)Camera.globalOffset.getY() + Game.HEIGHT / 2));
+                        g.translate(-(int)( tempFace.getX() + (int) this.offset.getX() + (int)Camera.position.getX()), -(int) (tempFace.getY() + (int) this.offset.getY()+ (int)Camera.position.getY() + Game.HEIGHT / 2));
                     }
                     
                 }
@@ -247,19 +246,18 @@ public class Model {
                         if(tempFace!=null){
                             g.setColor(this.colors[this.colorIndex[i]]);
                             Polygon p = tempFace.returnJavaPolygon();
-                            p.translate((int) this.offset.getX() + (int)Camera.globalOffset.getX(), (int) this.offset.getY()+ (int)Camera.globalOffset.getY() + Game.HEIGHT / 2);
+                            p.translate((int) this.offset.getX() + (int)Camera.position.getX(), (int) this.offset.getY()+ (int)Camera.position.getY() + Game.HEIGHT / 2);
                             g.drawPolygon(p);
                         }
                     }
                 }
-            } else
-            {
+            } else {
                 for (int i = 0; i < this.faces.length; i++) {
                     Face tempFace = this.getScaledFace(i);
                     if(tempFace!=null){
                         g.setColor(this.colors[this.colorIndex[i]]);
                         Polygon p = tempFace.returnJavaPolygon();
-                        p.translate((int) this.offset.getX() + (int)Camera.globalOffset.getX(), (int) this.offset.getY()+ (int)Camera.globalOffset.getY() + Game.HEIGHT / 2);
+                        p.translate((int) this.offset.getX() + (int)Camera.position.getX(), (int) this.offset.getY()+ (int)Camera.position.getY() + Game.HEIGHT / 2);
                         if(!Handler.bool1){
                             g.fillPolygon(p);
                         }else{
@@ -281,7 +279,7 @@ public class Model {
         Point pt2 = new Point3D(faces[index].getPoint2().getX(), faces[index].getPoint2().getY(), faces[index].getPoint2().getZ());
         Point pt3 = new Point3D(faces[index].getPoint3().getX(), faces[index].getPoint3().getY(), faces[index].getPoint3().getZ());
 //        this.Distance = DistanceCalculator.CalculateXDifferenceF(this.offset.getZ(), Handler.cam.position.getZ());
-        float scale = (DistanceCalculator.CalculateXDifferenceF(this.offset.getZ()+Camera.globalOffset.getZ(), Handler.cam.position.getZ()+Camera.globalOffset.getZ())+Handler.cam.viewRange)/(Handler.cam.optimalRender+Handler.cam.viewRange);
+        float scale = (DistanceCalculator.CalculateXDifferenceF(this.offset.getZ()+Camera.position.getZ(), Handler.cam.position.getZ()+Camera.position.getZ())+Handler.cam.viewRange)/(Handler.cam.optimalRender+Handler.cam.viewRange);
         this.Scale = scale;
         pt1.setScale(scale+this.extraScale);
         pt2.setScale(scale+this.extraScale);
@@ -393,26 +391,6 @@ public class Model {
             character = "f";
         }
         return character;
-    }
-    
-    public void CalculateSTL(){
-        try {
-            PrintWriter outFile = new PrintWriter("STL/"+this.toString()+".stl");
-            outFile.println("solid OpenSCAD_Model");
-            for(int i=0; i<this.faces.length; i++){
-                outFile.println("   facet normal 0 0 0");
-                outFile.println("       outer loop");
-                outFile.println("           vertex "+this.faces[i].getPoint1().getX()+" "+this.faces[i].getPoint1().getY()+" "+this.faces[i].getPoint1().getZ());
-                outFile.println("           vertex "+this.faces[i].getPoint2().getX()+" "+this.faces[i].getPoint2().getY()+" "+this.faces[i].getPoint2().getZ());
-                outFile.println("           vertex "+this.faces[i].getPoint3().getX()+" "+this.faces[i].getPoint3().getY()+" "+this.faces[i].getPoint3().getZ());
-                outFile.println("       endloop");
-                outFile.println("  endfacet");
-            }
-            outFile.println("endsolid OpenSCAD_Model");
-            outFile.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
    
 }
