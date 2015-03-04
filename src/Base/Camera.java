@@ -7,6 +7,7 @@
 package Base;
 
 import Base.input.KeyInput;
+import Entity.Entity;
 import Physics.Vector3D;
 import java.awt.Rectangle;
 
@@ -26,7 +27,7 @@ public class Camera {
     private float speed = 0.1f;
     
     public final float viewRange = 1024;
-    public final float optimalRender = 128;
+    public final float optimalRender = 0;
     
     //all translation stuff
     private boolean transition = false;
@@ -43,10 +44,16 @@ public class Camera {
     
     public void tick(){
         if(KeyInput.W){
-            this.position.increaseVelZ(-5);
+            this.applyTranslation(new Vector3D(0, 10, 0), 1);
         }
         if(KeyInput.S){
-            this.position.increaseVelZ(5);
+            this.applyTranslation(new Vector3D(0, -10, 0), 1);
+        }
+        if(KeyInput.A){
+            this.applyTranslation(new Vector3D(10, 0, 0), 1);
+        }
+        if(KeyInput.D){
+            this.applyTranslation(new Vector3D(-10, 0, 0), 1);
         }
         if(this.transition){
             if(this.ticks<this.maxTicks){
@@ -54,7 +61,6 @@ public class Camera {
                 this.position.increaseVelY(this.translation.getY()/this.maxTicks);
                 this.position.increaseVelZ(this.translation.getZ()/this.maxTicks);
                 this.ticks++;
-                System.out.println(this.ticks+"/"+this.maxTicks);
             }else{
                 this.resetTranslation();
             }
@@ -80,6 +86,16 @@ public class Camera {
     }
     
     public void goTo(Vector3D translation, float ticks){
+       if(!this.transition){
+            this.transition = true;
+            this.translation = new Vector3D(translation.getX() - (Camera.position.getX()-(Game.WIDTH/2)), translation.getY() - Camera.position.getY(), translation.getZ() - Camera.position.getZ());
+            this.maxTicks = ticks;
+            this.ticks = 0;
+        } 
+    }
+    
+    public void goTo(Entity entity){
+        Vector3D translation = entity.getModel().offset;
        if(!this.transition){
             this.transition = true;
             this.translation = new Vector3D(translation.getX() - (Camera.position.getX()-(Game.WIDTH/2)), translation.getY() - Camera.position.getY(), translation.getZ() - Camera.position.getZ());

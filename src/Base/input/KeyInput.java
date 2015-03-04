@@ -4,10 +4,17 @@
  */
 package Base.input;
 
+import Base.Game;
 import Base.Handler;
+import Base.SpriteBinder;
+import Entity.DisplayBox;
+import Entity.Room;
+import Listener.Console;
+import Physics.RenderModels;
 import Physics.Vector3D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -73,8 +80,12 @@ public class KeyInput extends KeyAdapter{
                 if(this.handler.bool2==false){
                     this.handler.bool2=true;
                     break loop;
+                }            
+            }
+            for(int i=0; i<handler.entities.size(); i++){
+                if(handler.entities.get(i) instanceof Room){
+                    ((Room)handler.entities.get(i)).dePressurize();
                 }
-            
             }
         }
         
@@ -89,7 +100,12 @@ public class KeyInput extends KeyAdapter{
                     break loop;
                 }
             }
-            Handler.cam.goTo(new Vector3D(0, 0, 0), 120);
+            handler.entities.add(new DisplayBox(new String[]{
+               ("The current Time is:"+System.nanoTime()/1000000000).toUpperCase(),
+               ("The curent Framerate is ~ "+Game.frames).toUpperCase(),
+               ("The Application is called ~ "+Game.name).toUpperCase(),
+               ("The Application has "+RenderModels.globalFaces+" models curently loaded.").toUpperCase(),
+           }, SpriteBinder.font));
         }
         
         if(key == KeyEvent.VK_4){
@@ -104,7 +120,8 @@ public class KeyInput extends KeyAdapter{
                 }
             
             }
-            Handler.cam.goTo(new Vector3D(1024, 0, 256), 120);
+            
+            Console.sendOut(JOptionPane.showInputDialog("",""));
         }
         
         if(key == KeyEvent.VK_5){
@@ -119,6 +136,7 @@ public class KeyInput extends KeyAdapter{
                 }
             
             }
+
         }
         
         if(key == KeyEvent.VK_6){
@@ -133,6 +151,7 @@ public class KeyInput extends KeyAdapter{
                 }
             
             }
+
         }
         
         if(key == KeyEvent.VK_7){
@@ -147,6 +166,7 @@ public class KeyInput extends KeyAdapter{
                 }
             
             }
+
         }
         
         if(key == KeyEvent.VK_8){

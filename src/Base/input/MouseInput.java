@@ -6,7 +6,10 @@ package Base.input;
  */
 
 
+import Base.Camera;
+import Base.Game;
 import Base.Handler;
+import static Base.input.MousePositionLocator.MouseLocation;
 import Physics.Vector3D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -51,10 +54,20 @@ public class MouseInput implements MouseListener{
             IsRightClick=true;
         }
         
+        if(this.handler.cam!=null){
+            MouseLocation.offset.setVelX((e.getX()/this.handler.cam.zoom)-(Game.WIDTH/2+(Camera.position.getX()-Game.WIDTH/2)));
+            MouseLocation.offset.setVelY((e.getY()/this.handler.cam.zoom)-Game.HEIGHT/2-Camera.position.getY());
+        }
+        MouseLocation.offset.setVelZ(Camera.position.getZ()+Handler.cam.optimalRender);
+        //left click
         if(!IsRightClick){
+            for(int i=0; i<handler.entities.size(); i++){
+                handler.entities.get(i).onClick(MousePositionLocator.MouseLocation);
+            }
+        }
+        //right click
+        else{
             
-        }else{
-            Handler.cam.position = new Vector3D(e.getX(), e.getY(), Handler.cam.position.getZ());
         }
     }
 

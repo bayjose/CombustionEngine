@@ -20,7 +20,7 @@ import java.util.LinkedList;
 public abstract class Entity {
     
     public boolean remove;
-    int lifespan=1;
+    public int lifespan=1;
     
     public LinkedList<Model> models = new LinkedList<Model>();
     public Vector3D vecForward = new Vector3D(0, 0, 0);
@@ -33,14 +33,14 @@ public abstract class Entity {
     
     public void tick(){
         //gravity and movement
-        if(Handler.bool6){
-            this.vecForward.increaseVelX(this.gravity.getGravity().getX());
-            this.vecForward.increaseVelY(this.gravity.getGravity().getY());
-            this.vecForward.increaseVelZ(this.gravity.getGravity().getZ());
-            this.traslateAllX(this.vecForward.getX());
-            this.translateAllYWithRespectToAngle(this.vecForward.getY());
-            this.translateAllZWithRespectToAngle(this.vecForward.getZ());
-        }
+
+        this.vecForward.increaseVelX(this.gravity.getGravity().getX());
+        this.vecForward.increaseVelY(this.gravity.getGravity().getY());
+        this.vecForward.increaseVelZ(this.gravity.getGravity().getZ());
+        this.traslateAllX(this.vecForward.getX());
+        this.translateAllYWithRespectToAngle(this.vecForward.getY());
+        this.translateAllZWithRespectToAngle(this.vecForward.getZ());
+
         this.update();
     }
     
@@ -56,11 +56,48 @@ public abstract class Entity {
     public abstract void dead();
 //    public abstract void collision(Entity i, Entity j);
     
+    public void onClick(Model model){
+        return;
+    }
+    
     public void CheckForDead(){
         if(this.lifespan<=0){
             this.remove=true;
             dead();
         }
+    }
+    
+    public boolean intersects(Entity entity){
+        for(int i=0; i<this.models.size(); i++){
+            for(int j=0; j<entity.models.size(); j++){
+                if(this.models.get(i).intersects(entity.models.get(j))){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public boolean intersects(Model entity){
+        for(int i=0; i<this.models.size(); i++){
+            if(this.models.get(i).intersects(entity)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean overlaps(Model entity){
+        for(int i=0; i<this.models.size(); i++){
+            if(this.models.get(i).intersects(entity)){
+                overlaping();
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public void overlaping(){
+        return;
     }
 
     public Model getModel(){

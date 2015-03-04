@@ -4,7 +4,12 @@
  */
 package Base.input;
 
+import Base.Camera;
+import Base.Game;
 import Base.Handler;
+import Entity.Models;
+import Physics.Model;
+import Physics.Vector3D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -15,7 +20,7 @@ import java.awt.event.MouseMotionListener;
  */
 public class MousePositionLocator implements MouseMotionListener{
     
-    public static Rectangle MouseLocation = new Rectangle(0, 0, 3, 3);
+    public static Model MouseLocation = Models.generateQuad(new Vector3D(0, 0, 0), 8);
     public static boolean enableShake=false;
    
     
@@ -25,19 +30,21 @@ public class MousePositionLocator implements MouseMotionListener{
     }
     
     public void mouseDragged(MouseEvent e) {
-        MouseLocation.x=(e.getX()/this.handler.cam.zoom);
-        MouseLocation.y=(e.getY()/this.handler.cam.zoom);
+
     }
 
     
     public void mouseMoved(MouseEvent e) {
-        if(this.handler.cam!=null){
-            MouseLocation.x=(e.getX()/this.handler.cam.zoom);
-            MouseLocation.y=(e.getY()/this.handler.cam.zoom);
+        try{
+            if(this.handler.cam!=null){
+                MouseLocation.offset.setVelX((e.getX()/this.handler.cam.zoom)-(Game.WIDTH/2+(Camera.position.getX()-Game.WIDTH/2)));
+                MouseLocation.offset.setVelY((e.getY()/this.handler.cam.zoom)-Game.HEIGHT/2-Camera.position.getY());
+            }
+            MouseLocation.offset.setVelZ(Camera.position.getZ()+Handler.cam.optimalRender);
+
+        }catch(Exception e3){
+            e3.printStackTrace();
         }
-       
-//        model.point.setY(MouseLocation.y-(Handler.cam.WindowSize.height/2));
-//        model.update();
     }
     
     

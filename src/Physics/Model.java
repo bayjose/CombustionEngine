@@ -51,6 +51,7 @@ public class Model {
     //extra fields for rendering the model
     private boolean debug = false;
     private boolean wireFrame = false;
+    public boolean visable = true;
     
     //data for representing the rotation of the curent shape
     private double angleX=0;
@@ -60,6 +61,7 @@ public class Model {
     public double AbsoluteAnlgeY=0;
     public double AbsoluteAnlgeZ=0;
   
+    
     
     //
     
@@ -224,7 +226,7 @@ public class Model {
     }
     
     public void render(Graphics g){  
-        if(true){
+        if(visable){
             if (this.textures != null) {
                 for (int i = 0; i < this.faces.length / 2; i++) {
                     //rotate the image, then translate it
@@ -232,11 +234,11 @@ public class Model {
                             //(int) this.getScaledFace(i*2).getX() + (int) this.offset.getX() + (int)Camera.position.getX(), (int) this.getScaledFace(i*2).getY() + (int) this.offset.getY()+ (int)Camera.position.getY() + Game.HEIGHT / 2,
                     Face tempFace = this.getScaledFace(i*2);
                     if(tempFace!=null){
-                        g.translate((int) tempFace.getX() + (int) this.offset.getX() + (int)Camera.position.getX(), (int) tempFace.getY() + (int) this.offset.getY()+ (int)Camera.position.getY() + Game.HEIGHT / 2);
-                        g2d.rotate(Math.toRadians(this.AbsoluteAnlgeY));
+                        g.translate((int)(this.offset.getX()+Camera.position.getX()-tempFace.getWidth()/2), (int)(this.offset.getY()+Camera.position.getY()+(Game.HEIGHT/2)-tempFace.getHeight()/2));
+                        g2d.rotate(Math.toRadians(this.AbsoluteAnlgeY), tempFace.getWidth()/2, tempFace.getHeight()/2);
                         g.drawImage(textures, 0,0, (int) tempFace.getWidth() + 1, (int) tempFace.getHeight() + 1, null);
-                        g2d.rotate(Math.toRadians(-this.AbsoluteAnlgeY));
-                        g.translate(-(int)( tempFace.getX() + (int) this.offset.getX() + (int)Camera.position.getX()), -(int) (tempFace.getY() + (int) this.offset.getY()+ (int)Camera.position.getY() + Game.HEIGHT / 2));
+                        g2d.rotate(Math.toRadians(-this.AbsoluteAnlgeY), tempFace.getWidth()/2, tempFace.getHeight()/2);
+                        g.translate(-(int)(this.offset.getX()+Camera.position.getX()-tempFace.getWidth()/2), -(int)(this.offset.getY()+Camera.position.getY()+(Game.HEIGHT/2)-tempFace.getHeight()/2));
                     }
                     
                 }
@@ -246,7 +248,7 @@ public class Model {
                         if(tempFace!=null){
                             g.setColor(this.colors[this.colorIndex[i]]);
                             Polygon p = tempFace.returnJavaPolygon();
-                            p.translate((int) this.offset.getX() + (int)Camera.position.getX(), (int) this.offset.getY()+ (int)Camera.position.getY() + Game.HEIGHT / 2);
+                            p.translate((int) this.offset.getX() + (int)Camera.position.getX(), (int) (this.offset.getY()*this.Scale)+ (int)Camera.position.getY() + Game.HEIGHT / 2);
                             g.drawPolygon(p);
                         }
                     }
@@ -269,6 +271,7 @@ public class Model {
         }
     }
     
+    
     public int faceLenght(){
         return this.faces.length;
     }
@@ -285,7 +288,7 @@ public class Model {
         pt2.setScale(scale+this.extraScale);
         pt3.setScale(scale+this.extraScale);
         if(scale+this.extraScale>=0){
-            Face temp = new Face(pt1, pt2, pt3, this.AbsoluteAnlgeX, this.AbsoluteAnlgeY, this.AbsoluteAnlgeZ);
+            Face temp = new Face(pt1, pt2, pt3);
             return temp;
         }else{
             return null;
@@ -294,7 +297,7 @@ public class Model {
     
     public void update(){
         for(int i=0; i<this.faces.length; i++){
-            this.faces[i] = new Face(indicies[verticies[(i*3)+0]],indicies[verticies[(i*3)+1]],indicies[verticies[(i*3)+2]], this.AbsoluteAnlgeX, this.AbsoluteAnlgeY, this.AbsoluteAnlgeZ);
+            this.faces[i] = new Face(indicies[verticies[(i*3)+0]],indicies[verticies[(i*3)+1]],indicies[verticies[(i*3)+2]]);
         }
     }
     
@@ -306,13 +309,20 @@ public class Model {
     
     public boolean  intersects(Model face){
         for(int l =0; l<this.faces.length; l++){
-            if(l<this.faces.length){
-                for(int i =0; i<face.faces.length; i++){
-                    Polygon temp = face.faces[i].returnJavaPolygon();
-                    temp.translate((int)face.offset.getX(),(int)face.offset.getY());
-                    if(temp.contains(this.faces[l].getPoint1().getX()+this.offset.getX(), this.faces[l].getPoint1().getY()+this.offset.getY())){
-                        return true;
-                    }
+            Polygon temp = this.getScaledFace(l).returnJavaPolygon();
+            temp.translate((int) this.offset.getX()+ (int)Camera.position.getX(), (int) this.offset.getY()+ (int)Camera.position.getY());
+            for(int i =0; i<face.faces.length; i++){
+                if(temp.contains(face.faces[l].getPoint1().getX()+face.offset.getX()+ (int)Camera.position.getX(), face.faces[l].getPoint1().getY()+face.offset.getY()+ (int)Camera.position.getY())){
+                    return true;
+                }
+            }
+        }
+        for(int l =0; l<this.faces.length; l++){
+            for(int i =0; i<face.faces.length; i++){
+                Polygon temp = face.getScaledFace(i).returnJavaPolygon();
+                temp.translate((int) face.offset.getX()+ (int)Camera.position.getX(), (int) face.offset.getY()+ (int)Camera.position.getY());
+                if(temp.contains(this.faces[l].getPoint1().getX()+this.offset.getX()+ (int)Camera.position.getX(), this.faces[l].getPoint1().getY()+this.offset.getY()+ (int)Camera.position.getY())){
+                    return true;
                 }
             }
         }

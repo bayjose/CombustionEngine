@@ -20,6 +20,7 @@ import java.util.Random;
  * @author Bayjose
  */
 public class Game extends Canvas implements Runnable{
+    public static int frames = 0;
 
     /**
      * @param args the command line arguments
@@ -33,12 +34,8 @@ public class Game extends Canvas implements Runnable{
     
     public static int WIDTH, HEIGHT;
     public static int GlobalXOffset=481, GlobalYOffset=289;
-    
-    public static int chunkSize=32;
-    public static int frames=0;
-    public static int seed=0;
-    public static int lightingPower=2;
-    public static int lightingDefinition=(int)Math.pow(2, lightingPower);
+
+    public static String name = "2D Engine";
     
     public Handler handler;
     public MousePositionLocator mpl;
@@ -95,8 +92,8 @@ public class Game extends Canvas implements Runnable{
             if(System.currentTimeMillis() - timer > 1000){
                 timer += 1000;
                 Game.frames=frames;
-                System.out.println("FPS:"+frames);
-                System.out.println("TICKS:"+updates);
+//                System.out.println("FPS:"+frames);
+//                System.out.println("TICKS:"+updates);
                 frames = 0;
                 updates = 0;
             }
@@ -114,11 +111,11 @@ public class Game extends Canvas implements Runnable{
             this.createBufferStrategy(3);
             return;
         }
-        
         Graphics g = bs.getDrawGraphics();
         ///////////////////////////////////
         //Draw Here
         g.setColor(Color.GRAY);
+        
         g.fillRect(0, 0, getWidth(), getHeight());
         //translate to the righ tposition
         handler.render(g);
@@ -129,8 +126,8 @@ public class Game extends Canvas implements Runnable{
     }
     
     public static void main(String[] args) {
-            new Window(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, "The Game", new Game());
-//        new Window(1200, 800, "ide 3D", new Game());
+            new Window(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, name, new Game());
+//        new Window(256, 512, "ide 3D", new Game());
         System.out.println("Size:("+Toolkit.getDefaultToolkit().getScreenSize().width+","+Toolkit.getDefaultToolkit().getScreenSize().height+")");
         System.out.println("Width:"+Game.WIDTH+" Height:"+Game.HEIGHT);    
     }

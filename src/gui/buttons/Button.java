@@ -43,16 +43,16 @@ public abstract class Button {
         return this.title;
     }
     public void Render(Graphics g){
-
-        H.di.drawImage("gui/"+this.title+"_button.png", x, y, g);
-        if(MousePositionLocator.MouseLocation.intersects(rect)&&MouseInput.IsPressed==false){
-            H.di.drawImage("gui/"+this.title+"_button_hover.png", x, y, g);
-        }
-        if(MousePositionLocator.MouseLocation.intersects(rect)&&MouseInput.IsPressed){
-            H.di.drawImage("gui/"+this.title+"_button_pressed.png", x, y, g);
-        }
-//        g.setColor(Color.red);
-//        g.drawRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
+//
+//        H.di.drawImage("gui/"+this.title+"_button.png", x, y, g);
+//        if(MousePositionLocator.MouseLocation.intersects(rect)&&MouseInput.IsPressed==false){
+//            H.di.drawImage("gui/"+this.title+"_button_hover.png", x, y, g);
+//        }
+//        if(MousePositionLocator.MouseLocation.intersects(rect)&&MouseInput.IsPressed){
+//            H.di.drawImage("gui/"+this.title+"_button_pressed.png", x, y, g);
+//        }
+////        g.setColor(Color.red);
+////        g.drawRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
     }
     public abstract void Event(Handler handler);
 
