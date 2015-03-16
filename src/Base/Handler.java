@@ -9,8 +9,6 @@ import Base.util.EnumGameState;
 import Base.util.drawImage;
 import Entity.Entity;
 import Entity.Intro;
-import Entity.Models;
-import Entity.SteamParticle;
 import Physics.Model;
 import Physics.RenderModels;
 import Physics.Vector3D;

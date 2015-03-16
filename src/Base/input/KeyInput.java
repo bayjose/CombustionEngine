@@ -82,11 +82,6 @@ public class KeyInput extends KeyAdapter{
                     break loop;
                 }            
             }
-            for(int i=0; i<handler.entities.size(); i++){
-                if(handler.entities.get(i) instanceof Room){
-                    ((Room)handler.entities.get(i)).dePressurize();
-                }
-            }
         }
         
         if(key == KeyEvent.VK_3){

@@ -37,28 +37,23 @@ public class Intro extends Entity{
         Handler.cam.goTo(new Vector3D(0, 0, 0), 1);
         Text = SpriteBinder.fontBig.returnTextbox(new Vector3D(0, -(Game.HEIGHT/2)+SpriteBinder.fontBig.fontSize*64, 0), ""+Game.name);
     }
-
+    //----------------------------------------------------
+    //main loop to run when game starts goes here
+    public void Main(){
+        //game
+        handler.entities.add(new skyBox("bg.png"));
+        Player player = new Player();
+        handler.entities.add(player);
+        handler.entities.add(new Platform(new Vector3D(250, 250, 0), handler));
+        handler.entities.add(new Platform(new Vector3D(250, -250, 0), handler));
+    }
+    //----------------------------------------------------
     public void update() {
         this.models.get(1).RotateYOnlyPoints(1);
         if(this.curTicks>=this.maxTicks){
             this.remove = true;
             handler.egs = EnumGameState.Main;
-            
-            //game
-//            handler.entities.add(new skyBox("bg.png"));
-//           
-//            handler.entities.add(new Hud(new Vector3D(0, -1024, -2048), handler));  
-            handler.entities.add(new Room(new Vector3D(0, 0, 0), "MainPod", handler));
-            handler.entities.add(new Room(new Vector3D(0, -256, 0), "SolarPanels", handler));
-//            
-//            handler.entities.add(new OxygenProducer(new Vector3D(0, -1024, -2048), handler));
-//            handler.entities.add(new BasicBatteryPack(new Vector3D(0, -1024+92, -2048), handler));
-            
-           
-           
-            
-//            Handler.cam.goTo(new Vector3D(0, 1024, -2048), 250);
-//             handler.entities.add(new Planet("earth.png"));
+            Main();
         }
         if(this.curTicks<this.maxTicks){
             this.curTicks++;
@@ -74,5 +69,6 @@ public class Intro extends Entity{
     public void dead() {
         
     }
+    
     
 }

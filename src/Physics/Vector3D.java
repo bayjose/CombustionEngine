@@ -74,4 +74,16 @@ public class Vector3D {
         }
         return false;
     }
+    
+    public Vector3D newInstance(){
+        return new Vector3D(this.getX(), this.getY(), this.getZ());
+    }
+    
+    public float dotProduct(Vector3D compare){
+        float uv = (this.getX()*compare.getX()) + (this.getY() * compare.getY()) + (this.getZ() + compare.getZ());
+        float u = (float)(Math.sqrt((this.getX()*this.getX())+(this.getY()*this.getY())+(this.getZ() * this.getZ())));
+        float v = (float)(Math.sqrt((compare.getX()*compare.getX())+(compare.getY()*compare.getY())+(compare.getZ() * compare.getZ())));
+        System.out.println((float)Math.acos(uv/u*v));
+        return (float)Math.acos(uv/u*v);
+    }
 }

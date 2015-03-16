@@ -18,7 +18,6 @@ public class Room extends Entity{
     public int width;
     public int height;
     
-    public boolean pressureized = true;
     private Handler handler;
     
     public Room(Vector3D center, String path, Handler handler) {
@@ -66,8 +65,7 @@ public class Room extends Entity{
             public void Event() {
                 super.setRepeatable(true);
                 System.out.println("Rotateing Model");
-                dePressurize();
-                MoveX();
+                rotX();
             }
             
         });
@@ -85,16 +83,8 @@ public class Room extends Entity{
 
     }
     
-    public void dePressurize(){
-        for(int i=0; i<this.width; i++){
-            for(int j=0; j<this.height; j++){
-                handler.entities.add(new SteamParticle(new Vector3D(this.getModel().offset.getX()-((this.width*64)/2)+(i*64), this.getModel().offset.getY()-((this.height*64)/2)+(j*64), this.getModel().offset.getZ())));
-            }
-        }
-    }
-    
-    public void MoveX(){
-        super.RotateYOnlyPoints(10);
+    public void rotX(){
+        super.RotateYOnlyPoints(90);
     }
     
 

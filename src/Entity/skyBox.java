@@ -8,6 +8,7 @@ package Entity;
 import Base.Camera;
 import Base.Game;
 import Base.Handler;
+import Physics.GravityHandler;
 import Physics.Vector3D;
 import java.awt.Graphics;
 
@@ -18,8 +19,9 @@ import java.awt.Graphics;
 public class skyBox extends Entity{
 
     public skyBox(String texture) {
-        super(Models.generateQuad(new Vector3D(0,0,128), Game.WIDTH, Game.HEIGHT));
+        super(Models.generateQuad(new Vector3D(0,0,0), Game.WIDTH, Game.HEIGHT));
         super.getModel().assignTexture(texture);
+        super.gravity = GravityHandler.Up;
     }
 
     public void update() {

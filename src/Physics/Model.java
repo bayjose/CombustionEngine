@@ -28,7 +28,9 @@ import javax.imageio.ImageIO;
 public class Model {
     //spacial position
     public Vector3D offset = new Vector3D(0,0,0);
-    
+    //normal vector pointing directly off the center face of the object 
+    //normal vector must be of size 0, -1, 0
+    public Vector3D normal = new Vector3D(0,-1, 0);
     //render box around the model
 //    private Rectangle renderBox;
     
@@ -96,6 +98,7 @@ public class Model {
             double temp_y1 = y1;
             double temp_z1 = x1 * Math.sin(this.angleX) + z1 * Math.cos(this.angleX);
             this.offset = new Vector3D((float)temp_x1,(float)temp_y1, (float)temp_z1);
+            this.normal = new Vector3D((float)temp_x1,(float)temp_y1, (float)temp_z1);
         this.update();
     }
     
@@ -118,6 +121,7 @@ public class Model {
             double temp_y1 = x1 * Math.sin(this.angleY) + y1 * Math.cos(this.angleY);
             double temp_z1 = z1;
             this.offset = new Vector3D((float)temp_x1,(float)temp_y1, (float)temp_z1);
+            this.normal = new Vector3D((float)temp_x1,(float)temp_y1, (float)temp_z1);
         this.update();
     }
 
@@ -140,6 +144,7 @@ public class Model {
             double temp_y1 = y1 * Math.cos(this.angleZ) - z1 * Math.sin(this.angleZ);
             double temp_z1 = y1 * Math.sin(this.angleZ) + z1 * Math.cos(this.angleZ);
             this.offset = new Vector3D((float)temp_x1,(float)temp_y1, (float)temp_z1);
+            this.normal = new Vector3D((float)temp_x1,(float)temp_y1, (float)temp_z1);
         this.update();
     }
     
@@ -156,6 +161,13 @@ public class Model {
             double temp_z1 = x1 * Math.sin(this.angleX) + z1 * Math.cos(this.angleX);
             this.indicies[i].setPoint(((float)(temp_x1)), ((float)(temp_y1)), ((float)(temp_z1)));
         }
+            double x1 = this.normal.getX();
+            double y1 = this.normal.getY();
+            double z1 = this.normal.getZ();
+            double temp_x1 = x1 * Math.cos(this.angleX) - z1 * Math.sin(this.angleX);
+            double temp_y1 = y1;
+            double temp_z1 = x1 * Math.sin(this.angleX) + z1 * Math.cos(this.angleX);
+            this.normal = new Vector3D((float)temp_x1,(float)temp_y1, (float)temp_z1);
         this.update();
     }
     
@@ -171,6 +183,13 @@ public class Model {
             double temp_z1 = z1;
             this.indicies[i].setPoint(((float)(temp_x1)), ((float)(temp_y1)), ((float)(temp_z1)));
         }
+            double x1 = this.normal.getX();
+            double y1 = this.normal.getY();
+            double z1 = this.normal.getZ();
+            double temp_x1 = x1 * Math.cos(this.angleY) - y1 * Math.sin(this.angleY);
+            double temp_y1 = x1 * Math.sin(this.angleY) + y1 * Math.cos(this.angleY);
+            double temp_z1 = z1;
+        this.normal = new Vector3D((float)temp_x1,(float)temp_y1, (float)temp_z1);
         this.update();
     }
 
@@ -186,6 +205,13 @@ public class Model {
             double temp_z1 = y1 * Math.sin(this.angleZ) + z1 * Math.cos(this.angleZ);
             this.indicies[i].setPoint(((float)(temp_x1)), ((float)(temp_y1)), ((float)(temp_z1)));
         }
+            double x1 = this.normal.getX();
+            double y1 = this.normal.getY();
+            double z1 = this.normal.getZ();
+            double temp_x1 = x1;
+            double temp_y1 = y1 * Math.cos(this.angleZ) - z1 * Math.sin(this.angleZ);
+            double temp_z1 = y1 * Math.sin(this.angleZ) + z1 * Math.cos(this.angleZ);
+            this.normal = new Vector3D((float)temp_x1,(float)temp_y1, (float)temp_z1);
         this.update();
     }
    
@@ -267,6 +293,10 @@ public class Model {
                         }
                     }
                 }
+            }
+            
+            if(Handler.bool1){
+                g.drawLine((int) this.offset.getX() + (int) Camera.position.getX(), (int) this.offset.getY() + (int) Camera.position.getY() + Game.HEIGHT / 2, (int) (this.offset.getX() + (int) Camera.position.getX() + this.normal.getX()*100), (int) (this.offset.getY() + (int) Camera.position.getY() + (Game.HEIGHT / 2) + this.normal.getY()*100));
             }
         }
     }

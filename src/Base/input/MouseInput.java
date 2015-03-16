@@ -10,6 +10,7 @@ import Base.Camera;
 import Base.Game;
 import Base.Handler;
 import static Base.input.MousePositionLocator.MouseLocation;
+import Entity.Rock;
 import Physics.Vector3D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -64,6 +65,7 @@ public class MouseInput implements MouseListener{
             for(int i=0; i<handler.entities.size(); i++){
                 handler.entities.get(i).onClick(MousePositionLocator.MouseLocation);
             }
+            handler.entities.add(new Rock(MousePositionLocator.MouseLocation.offset));
         }
         //right click
         else{

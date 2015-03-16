@@ -5,38 +5,36 @@
  */
 package Entity;
 
+import Physics.GravityHandler;
 import Physics.Model;
+import Physics.Vector3D;
 import java.awt.Graphics;
 
 /**
  *
  * @author Bayjose
  */
-public class AirLock extends Entity{
+public class Rock extends Entity{
 
-    public boolean open = false;
-    
-    public AirLock(Model model, Room room) {
-        super(model);
+    public Rock(Vector3D position) {
+        super(Models.generateQuad(position.newInstance(), 32));
+        super.getModel().assignTexture("Gear.png");
+        super.gravity = GravityHandler.Down;
     }
 
+    @Override
     public void update() {
-        
+        super.RotateYOnlyPoints(1);
     }
 
+    @Override
     protected void render(Graphics g) {
         
     }
 
+    @Override
     public void dead() {
         
-    }
-    
-    @Override
-    public void onClick(Model model){
-        if(this.intersects(model)){
-           
-        }
     }
     
 }

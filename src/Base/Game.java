@@ -7,6 +7,8 @@ import Base.input.KeyInput;
 import Base.input.MousePositionLocator;
 import Base.input.MouseInput;
 import Base.input.MouseScroleInput;
+import Listener.Console;
+import Listener.Listener;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -35,7 +37,7 @@ public class Game extends Canvas implements Runnable{
     public static int WIDTH, HEIGHT;
     public static int GlobalXOffset=481, GlobalYOffset=289;
 
-    public static String name = "2D Engine";
+    public static String name = "Doodle Jump";
     
     public Handler handler;
     public MousePositionLocator mpl;
@@ -64,6 +66,14 @@ public class Game extends Canvas implements Runnable{
         Screen = new Rectangle(0, 0, Game.WIDTH, Game.HEIGHT);
         SpriteBinder.init();
         handler.init();
+        
+        Console.listeners.add(new Listener("Profile") {
+            @Override
+            public void Event() {
+                this.repeatable = true;
+                System.out.println("FPS:"+frames);
+            }
+        });
         
     }
     
@@ -126,8 +136,8 @@ public class Game extends Canvas implements Runnable{
     }
     
     public static void main(String[] args) {
-            new Window(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, name, new Game());
-//        new Window(256, 512, "ide 3D", new Game());
+//            new Window(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, name, new Game());
+        new Window(480, 800, name, new Game());
         System.out.println("Size:("+Toolkit.getDefaultToolkit().getScreenSize().width+","+Toolkit.getDefaultToolkit().getScreenSize().height+")");
         System.out.println("Width:"+Game.WIDTH+" Height:"+Game.HEIGHT);    
     }

@@ -8,6 +8,8 @@ package Base;
 
 import Base.input.KeyInput;
 import Entity.Entity;
+import Listener.Console;
+import Listener.Listener;
 import Physics.Vector3D;
 import java.awt.Rectangle;
 
@@ -35,25 +37,37 @@ public class Camera {
     private int ticks = 0;
     private float maxTicks = 0;
     
+    private boolean freeCam = true;
+    
     public Camera(Vector3D position, int zoom, Handler handler){
         this.position = position;
         this.handler = handler;
         this.zoom=zoom;
         this.WindowSize= new Rectangle(0, 0, 0, 0);
+        
+        Console.listeners.add(new Listener("free cam") {
+            @Override
+            public void Event() {
+                this.repeatable = true;
+                freeCamera();
+            }
+        });
     }
     
     public void tick(){
-        if(KeyInput.W){
-            this.applyTranslation(new Vector3D(0, 10, 0), 1);
-        }
-        if(KeyInput.S){
-            this.applyTranslation(new Vector3D(0, -10, 0), 1);
-        }
-        if(KeyInput.A){
-            this.applyTranslation(new Vector3D(10, 0, 0), 1);
-        }
-        if(KeyInput.D){
-            this.applyTranslation(new Vector3D(-10, 0, 0), 1);
+        if(freeCam){
+            if(KeyInput.W){
+                this.applyTranslation(new Vector3D(0, 10, 0), 1);
+            }
+            if(KeyInput.S){
+                this.applyTranslation(new Vector3D(0, -10, 0), 1);
+            }
+            if(KeyInput.A){
+                this.applyTranslation(new Vector3D(10, 0, 0), 1);
+            }
+            if(KeyInput.D){
+                this.applyTranslation(new Vector3D(-10, 0, 0), 1);
+            }
         }
         if(this.transition){
             if(this.ticks<this.maxTicks){
@@ -113,6 +127,19 @@ public class Camera {
         translation = new Vector3D(0, 0, 0);
         ticks = 0;
         maxTicks = 0;
+    }
+    
+    public void freeCamera(){
+        loop:{
+            if(this.freeCam==false){
+                this.freeCam=true;
+                break loop;
+            }
+            if(this.freeCam==true){
+                this.freeCam=false;
+                break loop;
+            }
+        }
     }
             
     

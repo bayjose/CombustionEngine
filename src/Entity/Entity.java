@@ -20,6 +20,7 @@ import java.util.LinkedList;
 public abstract class Entity {
     
     public boolean remove;
+    public boolean justHit = false;
     public int lifespan=1;
     
     public LinkedList<Model> models = new LinkedList<Model>();
