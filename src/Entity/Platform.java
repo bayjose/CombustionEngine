@@ -52,7 +52,7 @@ public class Platform extends Entity{
     public void update() {
         for(int i=0; i<handler.entities.size(); i++){
             Entity temp = handler.entities.get(i);
-            if(temp instanceof Rock || temp instanceof Player){
+            if( temp instanceof Player){
                 if(temp.intersects(this)){
                     temp.vecForward.setVelY(-12);
                 }
