@@ -22,9 +22,11 @@ public class RigidBody {
     public Color color = Color.BLUE;
     public int ImageIndex = -1;
     
-    public int x = 0;
-    public int y = 0;
-    public int z = 0;
+    public Vector3D normal = new Vector3D(0,-1, 0);
+    
+    public float x = 0;
+    public float y = 0;
+    public float z = 0;
     
     public float Scale = 1;
     
@@ -43,14 +45,14 @@ public class RigidBody {
         this.collision = polygon;
     }
     
-    public RigidBody Translate(int x, int y, int z){
+    public RigidBody Translate(float x, float y, float z){
         this.x += x;
         this.y += y;
         this.z += z;
         return this;
     }
     
-    public RigidBody setPosition(int x, int y, int z){
+    public RigidBody setPosition(float x, float y, float z){
         this.x = x;
         this.y = y;
         this.z = z;

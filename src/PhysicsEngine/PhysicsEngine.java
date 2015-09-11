@@ -25,16 +25,13 @@ public class PhysicsEngine {
     
     
     public PhysicsEngine(){
-        PhysicsEngine.collision = new RigidBody(new Point[]{new Point2D(-150, -150), new Point2D(50, -50), new Point2D(50, 50), new Point2D(-50, 50)});
-        PhysicsEngine.collision.Translate((Game.WIDTH/2), (Game.HEIGHT/2), 0);
+        PhysicsEngine.collision = new RigidBody(new Point[]{new Point2D(0, -70), new Point2D(25, 0), new Point2D(35, 50), new Point2D(0, -10), new Point2D(-35, 50), new Point2D(-25, 0)});
+        PhysicsEngine.collision.Translate((Game.WIDTH/2), (Game.HEIGHT/2),0);
         PhysicsEngine.bodies.add(collision);
     }
     
     public void tick(){
         
-        if(!KeyInput.SPACE){
-            RigidUtils.RotateZOnlyPoints(PhysicsEngine.collision, Math.toRadians(2));
-        }
         if(numBods!=PhysicsEngine.bodies.size()){
             System.out.println(PhysicsEngine.bodies.size());
         }
@@ -42,15 +39,21 @@ public class PhysicsEngine {
         
         PhysicsEngine.collision.setColor(Color.BLUE);
          if(KeyInput.W){
-            PhysicsEngine.collision.z+=10;
-         }   
+             RigidUtils.Move(PhysicsEngine.collision.normal.multiplyVector(new Vector3D(5, 5, 0)), PhysicsEngine.collision);
+         }
          if(KeyInput.S){
-            PhysicsEngine.collision.z-=10;
+             RigidUtils.Move(PhysicsEngine.collision.normal.multiplyVector(new Vector3D(-5, -5, 0)), PhysicsEngine.collision);
+         }
+         if(KeyInput.A){
+            RigidUtils.RotateZOnlyPoints(PhysicsEngine.collision, Math.toRadians(-5));
+         }   
+         if(KeyInput.D){
+            RigidUtils.RotateZOnlyPoints(PhysicsEngine.collision, Math.toRadians(5));
          }  
         for(RigidBody obj: bodies){
             if(RigidUtils.Collides(PhysicsEngine.collision, obj)){
                 obj.setColor(Color.red);
-                if(KeyInput.A){
+                if(KeyInput.SPACE){
                     PhysicsEngine.bodiesToRemove.add(obj);
                 }
                 PhysicsEngine.collision.setColor(Color.GREEN);

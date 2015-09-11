@@ -63,11 +63,11 @@ public class Intro extends Entity{
     public void Main(){
         //game
         int size = 8;
-        int numSquares = 128;
+        int numSquares = 64;
         for(int i=0; i<numSquares; i++){
             for(int j=0; j<numSquares; j++){
                 PhysicsEngine.PhysicsEngine.bodies.add(PrebuiltBodies.quad(new Point3D(((i*(size*1.5f))+Game.WIDTH/2)-(numSquares*(size*1.5f))/2, ((j*(size*1.5f))+Game.HEIGHT/2)-(numSquares*(size*1.5f))/2, 0), size));
-                RigidUtils.RotateZOnlyPoints(PhysicsEngine.PhysicsEngine.bodies.getLast(), Math.random()*100);
+                
             }
         }
         

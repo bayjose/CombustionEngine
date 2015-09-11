@@ -8,7 +8,6 @@ package itemmaker;
 import Base.SpriteBinder;
 import Base.Window;
 import Base.util.StringUtils;
-import components.EnumComponentType;
 import gui.items.Item;
 import gui.items.ItemHandler;
 import java.io.PrintWriter;

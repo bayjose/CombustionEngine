@@ -6,6 +6,7 @@
 package PhysicsEngine;
 
 import Base.Camera;
+import Base.Game;
 import Base.Handler;
 import Base.util.DistanceCalculator;
 import PhysicsEngine.RigidBody;
@@ -30,6 +31,13 @@ public class RigidUtils {
             double temp_z1 = z1;
             obj.points[i].setPoint(((float)(temp_x1)), ((float)(temp_y1)), ((float)(temp_z1)));
         }
+            double x1 = obj.normal.getX();
+            double y1 = obj.normal.getY();
+            double z1 = obj.normal.getZ();
+            double temp_x1 = x1 * Math.cos(angle) - y1 * Math.sin(angle);
+            double temp_y1 = x1 * Math.sin(angle) + y1 * Math.cos(angle);
+            double temp_z1 = z1;
+            obj.normal = new Vector3D((float) temp_x1, (float) temp_y1, (float) temp_z1);
         RigidUtils.Update(obj);
     }
 
@@ -45,10 +53,17 @@ public class RigidUtils {
             double temp_z1 = y1 * Math.sin(angle) + z1 * Math.cos(angle);
             obj.points[i].setPoint(((float)(temp_x1)), ((float)(temp_y1)), ((float)(temp_z1)));
         }
+            double x1 = obj.normal.getX();
+            double y1 = obj.normal.getY();
+            double z1 = obj.normal.getZ();
+            double temp_x1 = x1;
+            double temp_y1 = y1 * Math.cos(angle) - z1 * Math.sin(angle);
+            double temp_z1 = y1 * Math.sin(angle) + z1 * Math.cos(angle);
+            obj.normal = new Vector3D((float) temp_x1, (float) temp_y1, (float) temp_z1);
         RigidUtils.Update(obj);
     }
     
-        public static void RotateXOnlyPoints(RigidBody obj, double angle){
+    public static void RotateXOnlyPoints(RigidBody obj, double angle){
         obj.angleX += (float) Math.toRadians(angle);
         obj.angleX%=360;
         for(int i=0; i<obj.points.length; i++){
@@ -60,6 +75,13 @@ public class RigidUtils {
             double temp_z1 = x1 * Math.sin(angle) + z1 * Math.cos(angle);
             obj.points[i].setPoint(((float)(temp_x1)), ((float)(temp_y1)), ((float)(temp_z1)));
         }
+            double x1 = obj.normal.getX();
+            double y1 = obj.normal.getY();
+            double z1 = obj.normal.getZ();
+            double temp_x1 = x1 * Math.cos(angle) - z1 * Math.sin(angle);
+            double temp_y1 = y1;
+            double temp_z1 = x1 * Math.sin(angle) + z1 * Math.cos(angle);
+            obj.normal = new Vector3D((float) temp_x1, (float) temp_y1, (float) temp_z1);
         RigidUtils.Update(obj);
     }
     
@@ -68,46 +90,53 @@ public class RigidUtils {
         //which ever one has more points, has those points passed to see if they intersect the other shape
         if(obj1.points.length>=obj2.points.length){
             Polygon temp = obj2.getCollision();
-            temp.translate(obj2.x, obj2.y);
+            temp.translate((int)obj2.x, (int)obj2.y);
             for(int i=0; i<obj1.points.length; i++){
-                if(temp.contains(obj1.points[i].toJavaPointWithTranslation(obj1.x, obj1.y))){
-                    temp.translate(-obj2.x, -obj2.y);
+                if(temp.contains(obj1.points[i].toJavaPointWithTranslation((int)obj1.x, (int)obj1.y))){
+                    temp.translate((int)-obj2.x, (int)-obj2.y);
                     return true;
                 }
             }
-            temp.translate(-obj2.x, -obj2.y);
+            temp.translate((int)-obj2.x, (int)-obj2.y);
             //part 2
             temp = obj1.getCollision();
-            temp.translate(obj1.x, obj1.y);
+            temp.translate((int)obj1.x, (int)obj1.y);
             for(int i=0; i<obj2.points.length; i++){
-                if(temp.contains(obj2.points[i].toJavaPointWithTranslation(obj2.x, obj2.y))){
-                    temp.translate(-obj1.x, -obj1.y);
+                if(temp.contains(obj2.points[i].toJavaPointWithTranslation((int)obj2.x, (int)obj2.y))){
+                    temp.translate((int)-obj1.x, (int)-obj1.y);
                     return true;
                 }
             }
-            temp.translate(-obj1.x, -obj1.y);
+            temp.translate((int)-obj1.x, (int)-obj1.y);
         }else{
             Polygon temp = obj1.getCollision();
-            temp.translate(obj1.x, obj1.y);
+            temp.translate((int)obj1.x, (int)obj1.y);
             for(int i=0; i<obj2.points.length; i++){
-                if(temp.contains(obj2.points[i].toJavaPointWithTranslation(obj2.x, obj2.y))){
-                    temp.translate(-obj1.x, -obj1.y);
+                if(temp.contains(obj2.points[i].toJavaPointWithTranslation((int)obj2.x, (int)obj2.y))){
+                    temp.translate((int)-obj1.x, (int)-obj1.y);
                     return true;
                 }
             }
-            temp.translate(-obj1.x, -obj1.y);
+            temp.translate((int)-obj1.x, (int)-obj1.y);
             //part 2
             temp = obj2.getCollision();
-            temp.translate(obj2.x, obj2.y);
+            temp.translate((int)obj2.x, (int)obj2.y);
             for(int i=0; i<obj1.points.length; i++){
-                if(temp.contains(obj1.points[i].toJavaPointWithTranslation(obj1.x, obj1.y))){
-                    temp.translate(-obj2.x, -obj2.y);
+                if(temp.contains(obj1.points[i].toJavaPointWithTranslation((int)obj1.x, (int)obj1.y))){
+                    temp.translate((int)-obj2.x, (int)-obj2.y);
                     return true;
                 }
             }
-            temp.translate(-obj2.x, -obj2.y);
+            temp.translate((int)-obj2.x, (int)-obj2.y);
         }
         return false;
+    }
+    
+    public static void Move(Vector3D translation, RigidBody obj){
+        obj.x+=translation.getX();
+        obj.y+=translation.getY();
+        obj.z+=translation.getZ();
+        RigidUtils.Update(obj);
     }
     
     public static void Update(RigidBody obj){
@@ -125,13 +154,14 @@ public class RigidUtils {
     public static void Render(RigidBody obj, Graphics g){
         if(obj.Scale>=0){
             g.setColor(obj.color);
-            g.translate(obj.x, obj.y);
+            g.translate((int)obj.x, (int)obj.y);
             if(Handler.bool1){
                 g.drawPolygon(obj.getCollision());
             }else{
                 g.fillPolygon(obj.getCollision());
             }
-            g.translate(-obj.x, -obj.y);
+            g.translate((int)-obj.x, (int)-obj.y);
+            g.drawLine((int)obj.x, (int)obj.y, (int)(obj.x+(obj.normal.getZ()*10)), (int)(obj.y+(obj.normal.getZ()*10)));
         }
     }
     
