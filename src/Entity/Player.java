@@ -5,47 +5,86 @@
  */
 package Entity;
 
-import Base.Camera;
-import Base.Game;
-import Physics.GravityHandler;
-import Physics.Model;
-import Physics.Vector3D;
+import Base.Handler;
+import Base.input.KeyInput;
+import PhysicsEngine.Point;
+import PhysicsEngine.Point2D;
+import PhysicsEngine.RigidBody;
+import PhysicsEngine.RigidUtils;
+import PhysicsEngine.Vector3D;
 import java.awt.Graphics;
 
 /**
  *
  * @author Bayjose
  */
-public class Player extends Entity{
+public class Player {
 
-    public Player() {
-        super(Models.generateQuad(Camera.position.newInstance(), 54, 76));
-        Model player = Models.generateQuad(this.getModel().offset.newInstance(), 84, 76);
-        player.assignTexture("player.png");
-        super.models.add(player);
-        super.getModel().visable = false;
-        super.gravity = GravityHandler.Down;
-        this.vecForward.increaseVelY(-6.00f);
+    public RigidBody collision = new RigidBody(new Point[]{new Point2D(-8,0),new Point2D(8,0),new Point2D(0,16)});
+    
+    private int Speed = 4;
+    private float ySpeed = 0;
+    private boolean jumping = false;
+  
+    
+    public Player(int x, int y){
+        collision.Translate(x, y, 0);
+//        PhysicsEngine.PhysicsEngine.bodies.add(collision);
     }
-
-    @Override
-    public void update() {
-        if(Camera.position.getY()>this.getModel().offset.getY()){
-            Camera.position = super.getModel().offset.newInstance().inverse().addVector(new Vector3D(Game.WIDTH/2, 0, 0));
+    
+    public void tick(){
+//        RigidUtils.RotateYOnlyPoints(collision, 0.1);
+        this.ySpeed+=1;
+        if(!this.jumping){
+            if(KeyInput.SPACE || KeyInput.W){
+                this.jumping = true;
+                this.ySpeed -= 18;
+            }
         }
-//        super.RotateYOnlyPoints(18);
+        
+        if(!KeyInput.SPACE && this.jumping){
+            this.ySpeed = 0;
+            this.jumping = false;
+        }
+        
+        this.collision.y += ySpeed;
+        
+        if(KeyInput.A){
+            this.collision.x -= Speed;
+            Handler.cam.applyTranslation(new Vector3D(-Speed, 0, 0), 1);
+        }
+        
+        if(KeyInput.D){
+            this.collision.x += Speed;
+            Handler.cam.applyTranslation(new Vector3D(+Speed, 0, 0), 1);
+        }
+        
+        RigidUtils.Update(collision);
+        
+        for(RigidBody obj: PhysicsEngine.PhysicsEngine.bodies){
+            if(RigidUtils.Collides(collision, obj)){
+                if(this.ySpeed>=0){
+                    this.jumping = false;
+                    this.ySpeed = 0;
+                }
+                int trys = 0;
+                do{
+                    if(trys>8){
+                        break;
+                    }
+                    trys++;
+                    this.collision.y--;
+                    RigidUtils.Update(collision);
+                }while(RigidUtils.Collides(collision, obj));
+            }
+        }
         
         
     }
-
-    @Override
-    protected void render(Graphics g) {
-       
-    }
-
-    @Override
-    public void dead() {
-        
+    
+    public void render(Graphics g){
+        g.setColor(this.collision.color);
+        RigidUtils.Render(collision, g);
     }
     
 }

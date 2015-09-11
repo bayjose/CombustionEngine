@@ -4,7 +4,7 @@ import Base.SpriteBinder;
 import Listener.Console;
 import Listener.Listener;
 import Physics.Model;
-import Physics.Vector3D;
+import PhysicsEngine.Vector3D;
 import java.awt.Graphics;
 import java.io.File;
 import java.util.Scanner;
@@ -50,7 +50,7 @@ public class Room extends Entity{
                         int col = s1.nextInt();
                         int notUsed = s1.nextInt();
                         if(row==0&&col==0){}else{
-                            temp2.assignImageFromSpriteBinder(SpriteBinder.resources.getImage(col, row));
+//                            temp2.assignImageFromSpriteBinder(SpriteBinder.resources.getImage(col, row));
                             this.models.add(temp2);  
                         }
                     }

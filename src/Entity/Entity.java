@@ -9,7 +9,7 @@ package Entity;
 import Base.Handler;
 import Physics.GravityHandler;
 import Physics.Model;
-import Physics.Vector3D;
+import PhysicsEngine.Vector3D;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
@@ -21,7 +21,7 @@ public abstract class Entity {
     
     public boolean remove;
     public boolean justHit = false;
-    public int lifespan=1;
+    public int lifespan=-1;
     
     public LinkedList<Model> models = new LinkedList<Model>();
     public Vector3D vecForward = new Vector3D(0, 0, 0);
@@ -34,13 +34,19 @@ public abstract class Entity {
     
     public void tick(){
         //gravity and movement
-
         this.vecForward.increaseVelX(this.gravity.getGravity().getX());
         this.vecForward.increaseVelY(this.gravity.getGravity().getY());
         this.vecForward.increaseVelZ(this.gravity.getGravity().getZ());
         this.traslateAllX(this.vecForward.getX());
         this.translateAllYWithRespectToAngle(this.vecForward.getY());
         this.translateAllZWithRespectToAngle(this.vecForward.getZ());
+        
+        if(this.lifespan>0){
+            this.lifespan--;
+        }
+        if(this.lifespan==0){
+            this.remove = true;
+        }
 
         this.update();
     }

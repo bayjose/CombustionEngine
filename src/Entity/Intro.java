@@ -5,14 +5,16 @@
  */
 package Entity;
 
+import Base.FontBook;
 import Base.Game;
 import Base.Handler;
 import Base.SpriteBinder;
 import Base.util.EnumGameState;
-import Listener.Console;
-import Listener.Listener;
 import Physics.Model;
-import Physics.Vector3D;
+import PhysicsEngine.Point3D;
+import PhysicsEngine.PrebuiltBodies;
+import PhysicsEngine.RigidUtils;
+import PhysicsEngine.Vector3D;
 import java.awt.Graphics;
 
 /**
@@ -24,32 +26,65 @@ public class Intro extends Entity{
     private Handler handler;
 
     private int curTicks = 0;
-    private final int maxTicks = 120;
+    private final int maxTicks = (4*60)+30;
     private Entity Text;
         
     public Intro(Handler handler) {
-        super(Models.generateQuad(new Vector3D(0,0,Handler.cam.optimalRender), Game.WIDTH, Game.HEIGHT));
-        super.getModel().assignTexture("into.png");
-        Model gear = Models.generateQuad(new Vector3D(0, 0, Handler.cam.optimalRender), 128);
-        gear.assignTexture("Gear.png");
+        super(Models.generateQuad(new Vector3D(0,0,128), Game.WIDTH, Game.HEIGHT));
+//        LightingEngine.lights.add(new PointLight(Game.WIDTH/2, Game.HEIGHT/2, Game.WIDTH).setBrightness(0.5f));
+        super.getModel().assignTexture("Core/intro.png");
+        Model gear = Models.generateQuad(new Vector3D(0, 0, 128), 128);
+        gear.assignTexture("Core/Gear.png");
         this.models.add(gear);
+        //people
+        Model Josiah = Models.generateQuad(new Vector3D(-((Game.WIDTH/3)), 0, 0), 18*4, 32*4);
+        Josiah.assignImageFromSpriteBinder(SpriteBinder.toBufferedImage(SpriteBinder.checkImage("Core/Josiah.png")));
+        this.models.add(Josiah);
+        Model Bailey = Models.generateQuad(new Vector3D(-((Game.WIDTH/5)), 0, 0), 18*4, 32*4);
+        Bailey.assignImageFromSpriteBinder(SpriteBinder.toBufferedImage(SpriteBinder.checkImage("Core/Bailey.png")));
+        this.models.add(Bailey);
+        Model Sean = Models.generateQuad(new Vector3D(((Game.WIDTH/5)), 0, 0), 18*4, 32*4);
+        Sean.assignImageFromSpriteBinder(SpriteBinder.toBufferedImage(SpriteBinder.checkImage("null.png")));
+        this.models.add(Sean);
+        Model seanFish = Models.generateQuad(new Vector3D(((Game.WIDTH/5)), 0, 0), 10*5, 8*5);
+        seanFish.assignImageFromSpriteBinder(SpriteBinder.toBufferedImage(SpriteBinder.checkImage("Core/seanFish.png")));
+        seanFish.RotateYOnlyPoints(45);
+        Model Peter = Models.generateQuad(new Vector3D(((Game.WIDTH/3)), 0, 0), 18*4, 38*4);
+        Peter.assignImageFromSpriteBinder(SpriteBinder.toBufferedImage(SpriteBinder.checkImage("null.png")));
+        this.models.add(Peter);
+        this.models.add(seanFish);
         this.handler = handler;
         Handler.cam.goTo(new Vector3D(0, 0, 0), 1);
-        Text = SpriteBinder.fontBig.returnTextbox(new Vector3D(0, -(Game.HEIGHT/2)+SpriteBinder.fontBig.fontSize*64, 0), ""+Game.name);
+        Text = FontBook.fontBig.returnTextbox(new Vector3D(Game.WIDTH/2, (FontBook.fontBig.fontSize*64)-100, 0), ""+Game.name, "Core/yes.png");
+        FontBook.Init();
     }
     //----------------------------------------------------
     //main loop to run when game starts goes here
     public void Main(){
         //game
-        handler.entities.add(new skyBox("bg.png"));
-        Player player = new Player();
-        handler.entities.add(player);
-        handler.entities.add(new Platform(new Vector3D(250, 250, 0), handler));
-        handler.entities.add(new Platform(new Vector3D(250, -250, 0), handler));
+        int size = 8;
+        int numSquares = 128;
+        for(int i=0; i<numSquares; i++){
+            for(int j=0; j<numSquares; j++){
+                PhysicsEngine.PhysicsEngine.bodies.add(PrebuiltBodies.quad(new Point3D(((i*(size*1.5f))+Game.WIDTH/2)-(numSquares*(size*1.5f))/2, ((j*(size*1.5f))+Game.HEIGHT/2)-(numSquares*(size*1.5f))/2, 0), size));
+                RigidUtils.RotateZOnlyPoints(PhysicsEngine.PhysicsEngine.bodies.getLast(), Math.random()*100);
+            }
+        }
+        
     }
     //----------------------------------------------------
     public void update() {
         this.models.get(1).RotateYOnlyPoints(1);
+        //flips
+        this.models.get(2).RotateYOnlyPoints(-4);
+        //jumps
+        this.models.get(2).offset.setVelY(Game.HEIGHT/2 - (64) + (float) -Math.abs(Math.sin(Math.toRadians(this.curTicks*2))*100));
+        this.models.get(3).offset.setVelY(Game.HEIGHT/2 - (64) + (float) -Math.abs(Math.sin(Math.toRadians(this.curTicks*2)+(Math.PI/4)*1)*100));
+        this.models.get(4).offset.setVelY(Game.HEIGHT/2 - (64) + (float) -Math.abs(Math.sin(Math.toRadians(this.curTicks*2)+(Math.PI/4)*2)*100));
+        this.models.get(6).offset.setVelY(Game.HEIGHT/2 - (120) + (float) -Math.abs(Math.sin(Math.toRadians(this.curTicks*2)+(Math.PI/4)*2)*100));
+        this.models.get(6).offset.setVelX((Game.WIDTH/5)+32);
+        this.models.get(5).offset.setVelY(Game.HEIGHT/2 - (64) + (float) -Math.abs(Math.sin(Math.toRadians(this.curTicks*2)+(Math.PI/4)*3)*100));
+
         if(this.curTicks>=this.maxTicks){
             this.remove = true;
             handler.egs = EnumGameState.Main;

@@ -8,6 +8,7 @@ package gui;
 
 import Base.Handler;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 
 /**
@@ -15,16 +16,18 @@ import java.awt.Graphics;
  * @author Bayjose
  */
 public abstract class Gui {
-    public int x,y;
-    public Handler handler;
+    public Rectangle collision = new Rectangle(0, 0, 40, 40);
     public boolean remove=false;
     
-    public Gui(int x, int y, Handler handler){
-        this.x=x;
-        this.y=y;
-        this.handler=handler;
+    public Gui(int x, int y){
+        this.collision.x=x;
+        this.collision.y=y;
     }
     
     public abstract void tick();
     public abstract void render(Graphics g);
+    
+    public void onClick(Rectangle rect){
+       return; 
+    }
 }

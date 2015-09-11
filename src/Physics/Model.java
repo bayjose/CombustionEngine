@@ -5,6 +5,9 @@
  */
 package Physics;
 
+import PhysicsEngine.Vector3D;
+import PhysicsEngine.Point3D;
+import PhysicsEngine.Point;
 import Base.Camera;
 import Base.Game;
 import Base.Handler;

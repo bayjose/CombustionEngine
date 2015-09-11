@@ -6,10 +6,10 @@
 
 package Base;
 
-import Base.input.FontInput;
-import Physics.Vector3D;
+import java.awt.Graphics2D;
 import java.awt.Image;
-import javax.swing.ImageIcon;
+import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 
 /**
  *this is a file that contains all the loaded sprites 
@@ -17,41 +17,51 @@ import javax.swing.ImageIcon;
  */
 public class SpriteBinder {
     //current resources.png file in the dir you are looking at
-    public static SpriteSheet resources;
-    public static FontInput font= new FontInput("mainGameFont");
-    public static FontInput fontMed= new FontInput("mainGameFont");
-    public static FontInput fontBig= new FontInput("mainGameFont");
-//    
-//    public static FontInput spaceFont= new FontInput("spaceFont");
-//    public static FontInput blueFont= new FontInput("blueFont");
-//    public static FontInput greenFont= new FontInput("green");
     
     public static Image preview;
-
+    public static LinkedList<RegisteredImage> loadedImages = new LinkedList<RegisteredImage>();
     
     public static void init(){
-         //load sprite sheets
-        font.fontSize = 0.5f;
-        fontMed.fontSize = 1.25f;
-        fontBig.fontSize = 2f;
-//        blueFont.fontSize = 2f;
-//        greenFont.fontSize = 2f;
-        try{
-            resources=new SpriteSheet(16, 16, 16, 16, "defaultTerrain.png");
-            System.out.println("SpriteSheet is big?:"+resources.sprites.length);
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
 
     }
     
-    public static void updateDirectory(String newDir){
-        try{
-            resources=new SpriteSheet(16, 16, 16, 16, newDir);
-        }catch(Exception e){
-            e.printStackTrace();
+    public static Image checkImage(String id){
+        for(int i=0; i<SpriteBinder.loadedImages.size(); i++){
+            if(SpriteBinder.loadedImages.get(i).id.equals(id)){
+//                System.out.println("Image:"+id+" already exists.");
+                return SpriteBinder.loadedImages.get(i).image;
+            }
         }
+        RegisteredImage temp = new RegisteredImage(id);
+        SpriteBinder.loadedImages.add(temp);
+        return temp.image;
+//        return new RegisteredImage("Core/developer.png").image;
+    }
+    
+    //THis code isnt mine, it was taken from this post
+    //http://stackoverflow.com/questions/13605248/java-converting-image-to-bufferedimage
+    /**
+     * @author http://stackoverflow.com/questions/13605248/java-converting-image-to-bufferedimage
+     * Converts a given Image into a BufferedImage
+     *
+     * @param img The Image to be converted
+     * @return The converted BufferedImage
+     */
+    public static BufferedImage toBufferedImage(Image img) {
+        if (img instanceof BufferedImage) {
+            return (BufferedImage) img;
+        }
+
+        // Create a buffered image with transparency
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+        // Draw the image on to the buffered image
+        Graphics2D bGr = bimage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+
+        // Return the buffered image
+        return bimage;
     }
 
     

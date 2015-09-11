@@ -10,10 +10,9 @@ import Base.SpriteBinder;
 import Base.input.KeyInput;
 import Physics.GravityHandler;
 import Physics.Model;
-import Physics.Vector3D;
+import PhysicsEngine.Vector3D;
 import java.awt.Graphics;
 import java.util.Random;
-import world.Size;
 
 /**
  *

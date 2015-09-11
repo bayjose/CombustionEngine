@@ -5,6 +5,8 @@
  */
 package Physics;
 
+import PhysicsEngine.Vector3D;
+
 /**
  *
  * @author Bayjose

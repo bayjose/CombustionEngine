@@ -10,7 +10,7 @@ import Base.Game;
 import Base.Handler;
 import Base.input.FontInput;
 import Physics.Model;
-import Physics.Vector3D;
+import PhysicsEngine.Vector3D;
 import java.awt.Graphics;
 
 /**

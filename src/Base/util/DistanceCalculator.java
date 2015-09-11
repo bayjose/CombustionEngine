@@ -6,8 +6,8 @@
 
 package Base.util;
 
-import Physics.Point;
-import Physics.Vector3D;
+import PhysicsEngine.Point;
+import PhysicsEngine.Vector3D;
 
 /**
  *

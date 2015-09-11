@@ -4,37 +4,29 @@
  */
 package Base;
 
-import Base.input.MousePositionLocator;
 import Base.util.EnumGameState;
-import Base.util.drawImage;
-import Entity.Entity;
 import Entity.Intro;
-import Physics.Model;
+import Entity.skyBox;
+import Lighting.LightingEngine;
 import Physics.RenderModels;
-import Physics.Vector3D;
-import java.awt.Color;
-import java.awt.Font;
+import PhysicsEngine.PhysicsEngine;
+import PhysicsEngine.Vector3D;
+import TextEngine.TextEngine;
+import World.Chunk;
+import gui.Gui;
+import gui.Inventory;
+import gui.items.MouseItem;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.util.LinkedList;
-import java.util.Random;
 
 /**
  *
  * @author Bayjose
  */
 public class Handler {
-    private Random r = new Random();
-    public drawImage di = new drawImage();
-    
-    private Font font = new Font("Arial", Font.BOLD, 32);
-    private Font fontnormal = new Font("Arial", Font.PLAIN, 12);
     public RenderModels renderModels;
     
     public static Camera cam;
-    public LinkedList<Entity> entities = new LinkedList<Entity>();
-    public LinkedList<Model> collisions = new LinkedList<Model>();
-    
     public static boolean bool1;
     public static boolean bool2;
     public static boolean bool3;
@@ -49,11 +41,27 @@ public class Handler {
     public EnumGameState egs = EnumGameState.Intro;
     private Intro intro;
     
+    public MouseItem mouseItem = new MouseItem();
+//    private Item firstItem = new Item(new Component[]{new ComponentImage(new String[]{"picaxe.png"}),new ComponentColor(new String[]{"#550066"}), new ComponentDurability(new String[]{0+"", 2500+""}), new ComponentLight(new String[]{0+"", 0+"", 128+""})});
+    
+    public LinkedList<Gui> gui = new LinkedList<Gui>();
+    //various Engines
+    public LightingEngine lightingEngine = new LightingEngine();
+    public PhysicsEngine physicsEngine;
+    public TextEngine textEngine = new TextEngine();
+    
+    public Chunk chunk = new Chunk(0, 0, 32, 32);
+    public skyBox skyBox1 = new skyBox("core/developer.png");
+    
+//    private Inventory inv = new Inventory(Game.WIDTH/2, Game.HEIGHT/2, this);
+    
     public void init(){
-        this.cam= new Camera(new Vector3D(0, 0, 0),1, this);
+        this.cam = new Camera(new Vector3D(0, 0, 0),1, this);
         //load sprite sheets
+        this.physicsEngine =  new PhysicsEngine();
         this.renderModels = new RenderModels();
         this.intro = new Intro(this);
+
     }
     
     public void tick(){
@@ -64,30 +72,31 @@ public class Handler {
         }
 
         if(egs.equals(EnumGameState.Main)){
-            
-            for(int i=0; i<this.entities.size(); i++){
-                if(this.entities.get(i).lifespan<=0||this.entities.get(i).remove==true){
-                    this.entities.remove(i);
-                }else{
-                    this.entities.get(i).tick();
-                }
+            for(Gui gui: this.gui){
+                gui.tick();
             }
+            MouseItem.tick();  
+            this.lightingEngine.tick();
+            this.textEngine.tick();
+            this.physicsEngine.tick();
         }
     }
       
     public void render(Graphics g){
         if(egs.equals(EnumGameState.Intro)){
             this.intro.Render(g);
+//            this.lightingEngine.render(g);
         }
-        Graphics2D g2d = (Graphics2D)g;
-        g2d.scale(this.cam.getZoom()/1, this.cam.getZoom()/1);
-        
-
-        
         if(egs.equals(EnumGameState.Main)){
-            this.renderModels.Render(entities, g);
+//            skyBox1.Render(g);
+            this.physicsEngine.Render(g);
+//            this.textEngine.render(g);
+//            this.lightingEngine.render(g);
+            for(Gui gui: this.gui){
+                gui.render(g);
+            }
+            chunk.render(g);
         }
-        MousePositionLocator.MouseLocation.render(g);
     }
     
 }

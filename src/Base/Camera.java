@@ -10,7 +10,7 @@ import Base.input.KeyInput;
 import Entity.Entity;
 import Listener.Console;
 import Listener.Listener;
-import Physics.Vector3D;
+import PhysicsEngine.Vector3D;
 import java.awt.Rectangle;
 
 /**
@@ -23,13 +23,13 @@ public class Camera {
     private Handler handler;
     
     
-    public static Vector3D position;
+    public static Vector3D position = new Vector3D(0,0,0);
     
     
     private float speed = 0.1f;
     
-    public final float viewRange = 1024;
-    public final float optimalRender = 0;
+    public static final float viewRange = 2048;
+    public static final float optimalRender = 0;
     
     //all translation stuff
     private boolean transition = false;
@@ -37,7 +37,7 @@ public class Camera {
     private int ticks = 0;
     private float maxTicks = 0;
     
-    private boolean freeCam = true;
+    private boolean freeCam = false;
     
     public Camera(Vector3D position, int zoom, Handler handler){
         this.position = position;
@@ -57,16 +57,22 @@ public class Camera {
     public void tick(){
         if(freeCam){
             if(KeyInput.W){
-                this.applyTranslation(new Vector3D(0, 10, 0), 1);
+                this.applyTranslation(new Vector3D(0, 0, 128), 1);
             }
             if(KeyInput.S){
-                this.applyTranslation(new Vector3D(0, -10, 0), 1);
+                this.applyTranslation(new Vector3D(0, 0, -128), 1);
             }
             if(KeyInput.A){
-                this.applyTranslation(new Vector3D(10, 0, 0), 1);
+                this.applyTranslation(new Vector3D(100, 0, 0), 1);
             }
             if(KeyInput.D){
-                this.applyTranslation(new Vector3D(-10, 0, 0), 1);
+                this.applyTranslation(new Vector3D(-100, 0, 0), 1);
+            }
+            if(KeyInput.Q){
+                this.applyTranslation(new Vector3D(0, 0, -10), 1);
+            }
+            if(KeyInput.E){
+                this.applyTranslation(new Vector3D(0, 0, 10), 1);
             }
         }
         if(this.transition){
@@ -140,6 +146,10 @@ public class Camera {
                 break loop;
             }
         }
+    }
+
+    public boolean hasTranslation() {
+        return this.transition;
     }
             
     

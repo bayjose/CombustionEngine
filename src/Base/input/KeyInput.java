@@ -11,7 +11,7 @@ import Entity.DisplayBox;
 import Entity.Room;
 import Listener.Console;
 import Physics.RenderModels;
-import Physics.Vector3D;
+import PhysicsEngine.Vector3D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
@@ -29,6 +29,8 @@ public class KeyInput extends KeyAdapter{
     public static boolean D = false;
     public static boolean Q = false;
     public static boolean E = false;
+    public static boolean SPACE = false;
+    public static boolean ESC = false;
             
     public KeyInput(Handler handler){
         this.handler = handler;
@@ -95,12 +97,7 @@ public class KeyInput extends KeyAdapter{
                     break loop;
                 }
             }
-            handler.entities.add(new DisplayBox(new String[]{
-               ("The current Time is:"+System.nanoTime()/1000000000).toUpperCase(),
-               ("The curent Framerate is ~ "+Game.frames).toUpperCase(),
-               ("The Application is called ~ "+Game.name).toUpperCase(),
-               ("The Application has "+RenderModels.globalFaces+" models curently loaded.").toUpperCase(),
-           }, SpriteBinder.font));
+
         }
         
         if(key == KeyEvent.VK_4){
@@ -214,6 +211,12 @@ public class KeyInput extends KeyAdapter{
             if(key == KeyEvent.VK_E){
                 KeyInput.E = true;
             }
+            if(key == KeyEvent.VK_SPACE){
+                KeyInput.SPACE = true;
+            }
+            if(key == KeyEvent.VK_ESCAPE){
+                KeyInput.ESC = true;
+            }
 
     }
     
@@ -232,11 +235,17 @@ public class KeyInput extends KeyAdapter{
             KeyInput.D = false;
         }
         if(key == KeyEvent.VK_Q){
-                KeyInput.Q = false;
-            }
-            if(key == KeyEvent.VK_E){
-                KeyInput.E = false;
-            }
+            KeyInput.Q = false;
+        }
+        if(key == KeyEvent.VK_E){
+            KeyInput.E = false;
+        }
+        if(key == KeyEvent.VK_SPACE){
+            KeyInput.SPACE = false;
+        }
+        if(key == KeyEvent.VK_ESCAPE){
+            KeyInput.ESC = false;
+        }
     }
     
 }

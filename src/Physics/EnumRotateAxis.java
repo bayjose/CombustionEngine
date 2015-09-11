@@ -5,6 +5,9 @@
  */
 package Physics;
 
+import PhysicsEngine.Point2D;
+import PhysicsEngine.Point;
+
 /**
  *
  * @author Bayjose

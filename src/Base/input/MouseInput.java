@@ -9,8 +9,6 @@ package Base.input;
 import Base.Camera;
 import Base.Game;
 import Base.Handler;
-import static Base.input.MousePositionLocator.MouseLocation;
-import Physics.Vector3D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -26,12 +24,9 @@ public class MouseInput implements MouseListener{
     public static Rectangle Mouse= new Rectangle(0, 0, 1, 1);
     public static boolean IsPressed=false;
     public static boolean IsRightClick=false;
-    public static int index = 9;
     
-    public static EnumMouseState ems = EnumMouseState.EditHeight;
     
     //items 
-    public static int numberOfItems=0;
     
     Handler handler;
             
@@ -40,6 +35,7 @@ public class MouseInput implements MouseListener{
     }
 
     public void mouseClicked(MouseEvent e) {
+         
     }
 
     public void mousePressed(MouseEvent e) {
@@ -54,14 +50,13 @@ public class MouseInput implements MouseListener{
             IsRightClick=true;
         }
         
-        if(this.handler.cam!=null){
-            MouseLocation.offset.setVelX((e.getX()/this.handler.cam.zoom)-(Game.WIDTH/2+(Camera.position.getX()-Game.WIDTH/2)));
-            MouseLocation.offset.setVelY((e.getY()/this.handler.cam.zoom)-Game.HEIGHT/2-Camera.position.getY());
-        }
-        MouseLocation.offset.setVelZ(Camera.position.getZ()+Handler.cam.optimalRender);
+        handler.mouseItem.click();
         //left click
         if(!IsRightClick){
-
+            //mouse stuff
+            for(int i=0; i<handler.gui.size(); i++){
+                this.handler.gui.get(i).onClick(Mouse);
+            }
         }
         //right click
         else{
@@ -81,9 +76,5 @@ public class MouseInput implements MouseListener{
 
     public void mouseExited(MouseEvent e) {
         
-    }
-
-    public int ItemCount(){
-        return this.numberOfItems;
     }
 }

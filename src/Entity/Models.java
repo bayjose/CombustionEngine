@@ -5,18 +5,17 @@
  */
 package Entity;
     
-import Physics.Point3D;
+import PhysicsEngine.Point3D;
 import Physics.EnumRenderType;
 import Physics.Model;
-import Physics.Point;
-import Physics.Vector3D;
+import PhysicsEngine.Point;
+import PhysicsEngine.Vector3D;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Random;
 import javax.imageio.ImageIO;
-import world.Size;
 
 /**
  *
@@ -110,6 +109,29 @@ public class Models {
         new Rectangle(0,0,100,100)
         );
         cube.assignRenderType(EnumRenderType.QUAD);
+        return cube;
+    }
+    
+    public static Model generateTriangle(Vector3D point, float size, float spread){
+        Model cube = new Model(point,
+        new Point[]{
+            new Point3D(0, 0, 0),
+            new Point3D(0+size, spread/2, 0),
+            new Point3D(0+size, -spread/2, 0),
+
+        },
+        new int[]{ //faces
+            0,1,2
+        },
+        new Color[]{
+            Color.red
+        },
+        new int[]{
+            0
+        },
+        new Rectangle(0,0,100,100)
+        );
+        cube.assignRenderType(EnumRenderType.TRIANGLES);
         return cube;
     }
     
@@ -296,8 +318,8 @@ public class Models {
             offset,
             new Point[]{
                 new Point3D(0, 0, 0),
-                new Point3D(0, 0, Size.tileSize),
-                new Point3D(0, Size.tileSize, Size.tileSize),},
+                new Point3D(0, 0, 32),
+                new Point3D(0, 32, 32),},
             //faces
             new int[]{
                 0, 1, 2

@@ -1,0 +1,14 @@
+Item:Basic Flashdrive
+MaxStackSize:1
+Component_SubItemArray
+16
+Component_Image
+flashDrive.png
+Component_HoverText
+This drive can hold up to /d~0/ items.
+Component_Integer
+16
+
+
+
+

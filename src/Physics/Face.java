@@ -5,6 +5,7 @@
  */
 package Physics;
 
+import PhysicsEngine.Point;
 import Base.util.DistanceCalculator;
 import java.awt.Polygon;
 
