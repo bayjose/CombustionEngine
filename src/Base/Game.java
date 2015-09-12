@@ -52,7 +52,7 @@ public abstract class Game extends Canvas implements Runnable{
     private boolean broken = false;
     private Exception e = null;
     
-    public boolean profileing = false;
+    public static boolean profileing = false;
     
     public synchronized void start(){
         if(running)

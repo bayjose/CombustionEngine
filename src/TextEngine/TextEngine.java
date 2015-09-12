@@ -24,9 +24,9 @@ public class TextEngine {
     private boolean Debug = false;
     private SceneManager manager = new SceneManager();
     // Data
-    private static LinkedList<String[]> Data = new LinkedList<String[]>();
+    private static LinkedList<Message> Data = new LinkedList<Message>();
     //
-    private static FontInput mainFont = FontBook.fontBig;
+    private static FontInput mainFont = FontBook.font;
     private final int numLines = 8;
     private final int pxlBetweenLines = 0;
     private final int maxCharactersPerLine;
@@ -60,7 +60,7 @@ public class TextEngine {
                 return;
             }
 
-            if((this.lineIndex+this.dataOffset)>=Data.getFirst().length){
+            if((this.lineIndex+this.dataOffset)>=Data.getFirst().data.length){
                 this.promptReset = true;
                 for(int i = this.lineIndex; i<this.lines.length; i++){
                     this.lines[i] = "";
@@ -91,8 +91,11 @@ public class TextEngine {
                     TextEngine.mainFont.returnText(new Vector3D(Game.WIDTH/2, Game.HEIGHT - ((this.numLines-1)*(this.pxlBetweenLines+(mainFont.font.height/2))) + ((i*(this.pxlBetweenLines+(mainFont.font.height/2)))) - ((mainFont.fontSize*mainFont.font.height)/2), 0), this.lines[i]).Render(g);
                 }
             }
+            if(!Data.getFirst().character.equals("empty")){
+                g.drawImage(SpriteBinder.checkImage(Data.getFirst().character), 2, Game.HEIGHT - (((mainFont.font.height/2) + this.pxlBetweenLines) * this.numLines) - 128, 128, 128, null);
+            }
             if(this.promptReset){
-                if((this.lineIndex+this.dataOffset)<Data.getFirst().length){
+                if((this.lineIndex+this.dataOffset)<Data.getFirst().data.length){
                     TextEngine.mainFont.returnText(new Vector3D(Game.WIDTH/2, Game.HEIGHT - ((this.numLines-1)*(this.pxlBetweenLines+(mainFont.font.height/2))) + (((-1.5F)*(this.pxlBetweenLines+(mainFont.font.height/2)))) - ((mainFont.fontSize*mainFont.font.height)/2), 0), "Press 'Space' to Continue").Render(g);
                 }else{
                     TextEngine.mainFont.returnText(new Vector3D(Game.WIDTH/2, Game.HEIGHT - ((this.numLines-1)*(this.pxlBetweenLines+(mainFont.font.height/2))) + (((-1.5F)*(this.pxlBetweenLines+(mainFont.font.height/2)))) - ((mainFont.fontSize*mainFont.font.height)/2), 0), "Press 'Space' to Close").Render(g);
@@ -104,11 +107,11 @@ public class TextEngine {
     
     public void increment(){
         if(Data!=null){
-            if(this.lineIndex+this.dataOffset<Data.getFirst().length){
-                if(this.index<Data.getFirst()[this.lineIndex+this.dataOffset].length()){
+            if(this.lineIndex+this.dataOffset<Data.getFirst().data.length){
+                if(this.index<Data.getFirst().data[this.lineIndex+this.dataOffset].length()){
                     if(this.lineIndex<numLines){
                         this.index++;
-                        this.lines[this.lineIndex] = Data.getFirst()[this.lineIndex+this.dataOffset].substring(0, this.index);
+                        this.lines[this.lineIndex] = Data.getFirst().data[this.lineIndex+this.dataOffset].substring(0, this.index);
                     }else{
                         if(!promptReset){
                             this.promptReset = true;
@@ -123,7 +126,7 @@ public class TextEngine {
     }
      
     private void cleanUp(){
-        if(this.lineIndex+this.dataOffset>=Data.getFirst().length){
+        if(this.lineIndex+this.dataOffset>=Data.getFirst().data.length){
             this.reset();
         }
         this.index = 0;
@@ -148,6 +151,10 @@ public class TextEngine {
     }
     
     public static void addMessage(String[] data){
-        Data.add(data);
+        Data.add(new Message(data, "empty"));
+    }
+    
+    public static void addMessage(String[] data, String character){
+        Data.add(new Message(data, character));
     }
 }

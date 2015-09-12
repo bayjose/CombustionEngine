@@ -5,6 +5,7 @@
 package Base;
 
 import Base.util.EnumGameState;
+import Base.util.StringUtils;
 import Entity.Intro;
 import Entity.skyBox;
 import Lighting.LightingEngine;
@@ -51,7 +52,7 @@ public class Handler {
     public TextEngine textEngine = new TextEngine();
     
     public Chunk chunk = new Chunk(0, 0, 32, 32);
-    public skyBox skyBox1 = new skyBox("core/developer.png");
+    public skyBox skyBox1 = new skyBox("space.jpg");
     
 //    private Inventory inv = new Inventory(Game.WIDTH/2, Game.HEIGHT/2, this);
     
@@ -61,7 +62,9 @@ public class Handler {
         this.physicsEngine =  new PhysicsEngine();
         this.renderModels = new RenderModels();
         this.intro = new Intro(this);
-
+        TextEngine.addMessage(new String[]{"Bailey Said:", "hi"}, "Core/Bailey.png");
+        TextEngine.addMessage(new String[]{"Josiah Said:", "hi"}, "Core/Josiah.png");
+        TextEngine.addMessage(new String[]{"The Developer of this game is a very strange person", "hi"}, "Core/developer.png");
     }
     
     public void tick(){
@@ -88,9 +91,9 @@ public class Handler {
 //            this.lightingEngine.render(g);
         }
         if(egs.equals(EnumGameState.Main)){
-//            skyBox1.Render(g);
+            skyBox1.Render(g);
             this.physicsEngine.Render(g);
-//            this.textEngine.render(g);
+            this.textEngine.render(g);
 //            this.lightingEngine.render(g);
             for(Gui gui: this.gui){
                 gui.render(g);

@@ -18,6 +18,7 @@ import java.util.LinkedList;
  */
 public class PhysicsEngine {
     public static LinkedList<RigidBody> bodies = new LinkedList<RigidBody>();
+    public static LinkedList<RigidBody> bullets = new LinkedList<RigidBody>();
     public static LinkedList<RigidBody> bodiesToRemove = new LinkedList<RigidBody>();
     public static RigidBody collision ;
     private int numBods = 0;
@@ -31,9 +32,10 @@ public class PhysicsEngine {
     }
     
     public void tick(){
-        
-        if(numBods!=PhysicsEngine.bodies.size()){
-            System.out.println(PhysicsEngine.bodies.size());
+        if(Game.profileing){
+            if(numBods!=PhysicsEngine.bodies.size()){
+                System.out.println(PhysicsEngine.bodies.size());
+            }
         }
         numBods = PhysicsEngine.bodies.size();
         
