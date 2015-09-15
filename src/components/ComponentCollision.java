@@ -33,7 +33,7 @@ public class ComponentCollision extends Component{
         }
         body = new RigidBody(pts);
         body.Translate((int)x, (int)y, (int)0);
-        PhysicsEngine.PhysicsEngine.bodies.add(body);
+        PhysicsEngine.PhysicsEngine.getChannel("bodies").append(body);
         RigidUtils.RotateZOnlyPoints(body, (int)(Math.random()*360));
     }
 

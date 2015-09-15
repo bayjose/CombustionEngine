@@ -17,27 +17,33 @@ import java.util.LinkedList;
  * @author Bayjose
  */
 public class PhysicsEngine {
-    public static LinkedList<RigidBody> bodies = new LinkedList<RigidBody>();
+    public static CollisionChannel[] channels = new CollisionChannel[]{new CollisionChannel("bodies", new RigidBody[]{})};
     public static LinkedList<RigidBody> bullets = new LinkedList<RigidBody>();
-    public static LinkedList<RigidBody> bodiesToRemove = new LinkedList<RigidBody>();
     public static RigidBody collision ;
     private int numBods = 0;
+    
+    private int time = 0;
+    
 //    new RigidBody(new Point[]{new Point2D(-20, -20),new Point2D(-20, 20),new Point2D(0, 100)});
     
     
     public PhysicsEngine(){
         PhysicsEngine.collision = new RigidBody(new Point[]{new Point2D(0, -70), new Point2D(25, 0), new Point2D(35, 50), new Point2D(0, -10), new Point2D(-35, 50), new Point2D(-25, 0)});
         PhysicsEngine.collision.Translate((Game.WIDTH/2), (Game.HEIGHT/2),0);
-        PhysicsEngine.bodies.add(collision);
+        PhysicsEngine.addToChannel("bodies", PhysicsEngine.collision);
     }
     
     public void tick(){
+        time++;
         if(Game.profileing){
-            if(numBods!=PhysicsEngine.bodies.size()){
-                System.out.println(PhysicsEngine.bodies.size());
+            if(numBods!=PhysicsEngine.getChannel("bodies").collisons.length){
+                System.out.println(PhysicsEngine.getChannel("bodies").collisons.length);
             }
+            numBods = PhysicsEngine.getChannel("bodies").collisons.length;
         }
-        numBods = PhysicsEngine.bodies.size();
+        for(int i=0; i<PhysicsEngine.channels.length; i++){
+            PhysicsEngine.channels[i].tick();
+        }
         
         PhysicsEngine.collision.setColor(Color.BLUE);
          if(KeyInput.W){
@@ -52,29 +58,60 @@ public class PhysicsEngine {
          if(KeyInput.D){
             RigidUtils.RotateZOnlyPoints(PhysicsEngine.collision, Math.toRadians(5));
          }  
-        for(RigidBody obj: bodies){
+         if(KeyInput.SPACE){
+             RigidBody temp = PrebuiltBodies.quad(new Point2D(PhysicsEngine.collision.points[0].getX()+(PhysicsEngine.collision.x), PhysicsEngine.collision.points[0].getY()+(PhysicsEngine.collision.y)), 6);
+             temp.normal = PhysicsEngine.collision.normal;
+             temp.setColor(this.randomColor());
+             RigidUtils.RotateZOnlyPoints(temp, PhysicsEngine.collision.angleZ);
+             bullets.add(temp);
+         }
+         
+         for(RigidBody obj: bullets){
+             RigidUtils.Move(obj.normal.multiplyVector(new Vector3D(8,8,0)), obj);
+         }
+        for(RigidBody obj: PhysicsEngine.getChannel("bodies").collisons){
+            
             if(RigidUtils.Collides(PhysicsEngine.collision, obj)){
                 obj.setColor(Color.red);
                 if(KeyInput.SPACE){
-                    PhysicsEngine.bodiesToRemove.add(obj);
+                   
                 }
                 PhysicsEngine.collision.setColor(Color.GREEN);
             }else{
                 obj.setColor(Color.BLUE);
             }
         }
-        //cleanup
-        for(RigidBody obj: bodiesToRemove){
-           PhysicsEngine.bodies.remove(obj);
-        }
-        bodiesToRemove.clear();
     }
     
     public void Render(Graphics g){
-        for(RigidBody obj: bodies){
+        for(RigidBody obj: PhysicsEngine.getChannel("bodies").collisons){
+            RigidUtils.Render(obj, g);
+        }
+        for(RigidBody obj: bullets){
             RigidUtils.Render(obj, g);
         }
         RigidUtils.Render(this.collision, g);
     }
     
+    public static void addToChannel(String name, RigidBody object){
+        for(int i=0; i<channels.length; i++){
+            if(channels[i].name.equals(name)){
+//                channels[i].append(object);
+                return;
+            }
+        }
+    }
+    
+    public static CollisionChannel getChannel(String name){
+        for(int i=0; i<channels.length; i++){
+            if(channels[i].name.equals(name)){
+                return channels[i];
+            }
+        }
+        return null;
+    }
+    
+    public Color randomColor(){
+        return (new Color((int)(Math.random()*256),(int)(Math.random()*256),(int)(Math.random()*256)));
+    }
 }

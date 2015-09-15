@@ -25,6 +25,7 @@ import java.util.Scanner;
  */
 public class FontInput {
     public SpriteSheet font;
+    public final String name;
     //percent to scale it, 1 = 100%
     public float fontSize = 1;
     String[][] characterIndex;
@@ -33,7 +34,7 @@ public class FontInput {
     int width = 0;
     int height = 0;
     public FontInput(String path){
-        
+        this.name = path;
         try {
             Scanner s1 = new Scanner(new File("Font/"+path+"/properties.txt"));
              width = s1.nextInt();

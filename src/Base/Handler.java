@@ -62,9 +62,10 @@ public class Handler {
         this.physicsEngine =  new PhysicsEngine();
         this.renderModels = new RenderModels();
         this.intro = new Intro(this);
-        TextEngine.addMessage(new String[]{"Bailey Said:", "hi"}, "Core/Bailey.png");
-        TextEngine.addMessage(new String[]{"Josiah Said:", "hi"}, "Core/Josiah.png");
-        TextEngine.addMessage(new String[]{"The Developer of this game is a very strange person", "hi"}, "Core/developer.png");
+        TextEngine.addMessage(StringUtils.loadUrl("https://raw.githubusercontent.com/bayjose/CombustionEngine/master/Script_intro.txt"), "Wall-E-icon.png");
+//        TextEngine.addMessage(new String[]{"Bailey Said:", "hi"}, "Core/Bailey.png");
+//        TextEngine.addMessage(new String[]{"Josiah Said:", "hi"}, "Core/Josiah.png");
+//        TextEngine.addMessage(new String[]{"The Developer of this game is a very strange person", "hi"}, "Core/developer.png");
     }
     
     public void tick(){

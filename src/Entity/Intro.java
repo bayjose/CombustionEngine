@@ -66,8 +66,7 @@ public class Intro extends Entity{
         int numSquares = 64;
         for(int i=0; i<numSquares; i++){
             for(int j=0; j<numSquares; j++){
-                PhysicsEngine.PhysicsEngine.bodies.add(PrebuiltBodies.quad(new Point3D(((i*(size*1.5f))+Game.WIDTH/2)-(numSquares*(size*1.5f))/2, ((j*(size*1.5f))+Game.HEIGHT/2)-(numSquares*(size*1.5f))/2, 0), size));
-                
+                PhysicsEngine.PhysicsEngine.getChannel("bodies").append(PrebuiltBodies.quad(new Point3D(((i*(size*1.5f))+Game.WIDTH/2)-(numSquares*(size*1.5f))/2, ((j*(size*1.5f))+Game.HEIGHT/2)-(numSquares*(size*1.5f))/2, 0), size));
             }
         }
         

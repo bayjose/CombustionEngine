@@ -7,6 +7,8 @@ package Base.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
@@ -151,5 +153,25 @@ public class StringUtils {
             outData[i] = data.get(i);
         }
         return outData;
+    }
+    
+    public static String[] loadUrl(String urlpath){
+        String[] out = new String[]{};
+        try {
+            URL path = new URL(urlpath);
+            Scanner scanner = new Scanner(path.openStream());
+            for(boolean b=true; b==true;){
+                String tmpData = scanner.nextLine();
+                if(!tmpData.isEmpty()){
+                    System.out.println(tmpData);
+                    out = StringUtils.addLine(out, tmpData);
+                }else{
+                    break;
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return out;
     }
 }

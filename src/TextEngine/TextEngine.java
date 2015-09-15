@@ -35,8 +35,10 @@ public class TextEngine {
     private int lineIndex = 0;
     private int dataOffset = 0;
     
+    private int visualOffset =0;
+    
     //tick Limiter
-    private final int tickRate = 3;
+    private final int tickRate = 1;
     private int curTick = 0;
     private boolean promptReset = false;
     
@@ -119,6 +121,16 @@ public class TextEngine {
                     }
                 }else if(this.lineIndex<this.numLines){
                     this.lineIndex++;
+//                    if(this.lineIndex<this.numLines){
+//                        String checkmessage = Data.getFirst().data[this.lineIndex];
+//                        if(checkmessage.startsWith("/cmd{")){
+//                            checkmessage = checkmessage.substring(4, checkmessage.length());
+//                            checkmessage = checkmessage.replaceAll("}", "");
+//                            String[] cmdData = checkmessage.split(" ");
+//                            Commands.checkCommand(cmdData);
+//                            this.lineIndex++;
+//                        }
+//                    }
                     this.index = 0;
                 }
             }

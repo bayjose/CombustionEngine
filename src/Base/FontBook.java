@@ -27,4 +27,20 @@ public class FontBook {
         FontBook.fontBig.fontSize = 3f;
     }
     
+    public FontInput searchFont(String name){
+        if(name.equals(font.name)){
+            return font;
+        }
+        if(name.equals(fontMed.name)){
+            return font;
+        }
+        if(name.equals(font.name)){
+            return font;
+        }
+        if(name.equals(font.name)){
+            return font;
+        }
+        return font;
+    }
+    
 }

@@ -61,23 +61,23 @@ public class Player {
         
         RigidUtils.Update(collision);
         
-        for(RigidBody obj: PhysicsEngine.PhysicsEngine.bodies){
-            if(RigidUtils.Collides(collision, obj)){
-                if(this.ySpeed>=0){
-                    this.jumping = false;
-                    this.ySpeed = 0;
-                }
-                int trys = 0;
-                do{
-                    if(trys>8){
-                        break;
-                    }
-                    trys++;
-                    this.collision.y--;
-                    RigidUtils.Update(collision);
-                }while(RigidUtils.Collides(collision, obj));
-            }
-        }
+//        for(RigidBody obj: PhysicsEngine.PhysicsEngine.bodies){
+//            if(RigidUtils.Collides(collision, obj)){
+//                if(this.ySpeed>=0){
+//                    this.jumping = false;
+//                    this.ySpeed = 0;
+//                }
+//                int trys = 0;
+//                do{
+//                    if(trys>8){
+//                        break;
+//                    }
+//                    trys++;
+//                    this.collision.y--;
+//                    RigidUtils.Update(collision);
+//                }while(RigidUtils.Collides(collision, obj));
+//            }
+//        }
         
         
     }
