@@ -38,6 +38,7 @@ public abstract class Game extends Canvas implements Runnable{
     private Thread thread;
     private Random rand = new Random();
     public static Rectangle Screen;
+    public static final boolean devMode = true;
     
     public static int WIDTH, HEIGHT;
 

@@ -26,11 +26,16 @@ public class Intro extends Entity{
     private Handler handler;
 
     private int curTicks = 0;
-    private final int maxTicks = (4*60)+30;
+    private final int maxTicks;
     private Entity Text;
         
     public Intro(Handler handler) {
         super(Models.generateQuad(new Vector3D(0,0,128), Game.WIDTH, Game.HEIGHT));
+        if(Game.devMode==true){
+            maxTicks = 0;
+        }else{
+            maxTicks = (4*60)+30;
+        }
 //        LightingEngine.lights.add(new PointLight(Game.WIDTH/2, Game.HEIGHT/2, Game.WIDTH).setBrightness(0.5f));
         super.getModel().assignTexture("Core/intro.png");
         Model gear = Models.generateQuad(new Vector3D(0, 0, 128), 128);
@@ -63,7 +68,7 @@ public class Intro extends Entity{
     public void Main(){
         //game
         int size = 8;
-        int numSquares = 64;
+        int numSquares = 0;
         for(int i=0; i<numSquares; i++){
             for(int j=0; j<numSquares; j++){
                 PhysicsEngine.PhysicsEngine.getChannel("bodies").append(PrebuiltBodies.quad(new Point3D(((i*(size*1.5f))+Game.WIDTH/2)-(numSquares*(size*1.5f))/2, ((j*(size*1.5f))+Game.HEIGHT/2)-(numSquares*(size*1.5f))/2, 0), size));

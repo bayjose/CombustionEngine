@@ -11,7 +11,6 @@ import Base.SpriteBinder;
 import Base.input.FontInput;
 import Base.input.KeyInput;
 import PhysicsEngine.Vector3D;
-import gui.items.ItemHandler;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
@@ -22,7 +21,6 @@ import java.util.LinkedList;
  */
 public class TextEngine {
     private boolean Debug = false;
-    private SceneManager manager = new SceneManager();
     // Data
     private static LinkedList<Message> Data = new LinkedList<Message>();
     //
@@ -52,7 +50,7 @@ public class TextEngine {
     
     public void tick(){
 //                System.out.println(curTick+" "+this.index+" "+(this.lineIndex+this.dataOffset)+"/"+this.Data.length);        TextEngine.ChangeFont(FontBook.fontBig);
-        manager.tick();
+        SceneManager.tick();
         if(Data.size()>0){
             if(promptReset){
     //            System.out.println("Press Space to Reset");
@@ -84,7 +82,7 @@ public class TextEngine {
     }
     
     public void render(Graphics g){
-        manager.render(g);
+        SceneManager.render(g);
         if(Data.size()>0){
             g.setColor(new Color(0,0,0,90));
             g.fillRect(0, Game.HEIGHT - (((mainFont.font.height/2) + this.pxlBetweenLines) * this.numLines), Game.WIDTH, (((mainFont.font.height/2) + this.pxlBetweenLines) * this.numLines));

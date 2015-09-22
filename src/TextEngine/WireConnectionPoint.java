@@ -24,8 +24,8 @@ public class WireConnectionPoint extends WorldObject{
         super(pos, false);
         this.position = pos;
         this.node = node;
-        this.imageUnPowered = SpriteBinder.checkImage("wireConnectionPoint.png");
-        this.imagePowered = SpriteBinder.checkImage("wireConnectionPointPowered.png");
+        this.imageUnPowered = SpriteBinder.checkImage("Core/Text/wireConnectionPoint.png");
+        this.imagePowered = SpriteBinder.checkImage("Core/Text/wireConnectionPointPowered.png");
     }
     
     public boolean isPowered(){
@@ -42,9 +42,9 @@ public class WireConnectionPoint extends WorldObject{
     @Override
     public void render(Graphics g){
         if(!this.Powered){
-            g.drawImage(this.imageUnPowered, (int)position.getX(), (int)position.getY(), null);
+            g.drawImage(this.imageUnPowered, (int)position.getX(), (int)position.getY(), 32, 32, null);
         }else{
-            g.drawImage(this.imagePowered, (int)position.getX(), (int)position.getY(), null);
+            g.drawImage(this.imagePowered, (int)position.getX(), (int)position.getY(), 32, 32, null);
         }
     }
 }

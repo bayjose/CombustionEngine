@@ -74,12 +74,13 @@ public class PhysicsEngine {
             if(RigidUtils.Collides(PhysicsEngine.collision, obj)){
                 obj.setColor(Color.red);
                 if(KeyInput.SPACE){
-                   
+                  PhysicsEngine.getChannel("bodies").remove(obj);
                 }
                 PhysicsEngine.collision.setColor(Color.GREEN);
             }else{
                 obj.setColor(Color.BLUE);
             }
+             PhysicsEngine.getChannel("bodies").clear();
         }
     }
     

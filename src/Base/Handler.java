@@ -12,6 +12,7 @@ import Lighting.LightingEngine;
 import Physics.RenderModels;
 import PhysicsEngine.PhysicsEngine;
 import PhysicsEngine.Vector3D;
+import TextEngine.SceneManager;
 import TextEngine.TextEngine;
 import World.Chunk;
 import gui.Gui;
@@ -50,7 +51,7 @@ public class Handler {
     public LightingEngine lightingEngine = new LightingEngine();
     public PhysicsEngine physicsEngine;
     public TextEngine textEngine = new TextEngine();
-    
+    public SceneManager sceneManager = new SceneManager();    
     public Chunk chunk = new Chunk(0, 0, 32, 32);
     public skyBox skyBox1 = new skyBox("space.jpg");
     
@@ -62,7 +63,8 @@ public class Handler {
         this.physicsEngine =  new PhysicsEngine();
         this.renderModels = new RenderModels();
         this.intro = new Intro(this);
-        TextEngine.addMessage(StringUtils.loadUrl("https://raw.githubusercontent.com/bayjose/CombustionEngine/master/Script_intro.txt"), "Wall-E-icon.png");
+                SceneManager.setScene("intro");
+//        TextEngine.addMessage(StringUtils.loadUrl("https://raw.githubusercontent.com/bayjose/CombustionEngine/master/Script_intro.txt"), "Wall-E-icon.png");
 //        TextEngine.addMessage(new String[]{"Bailey Said:", "hi"}, "Core/Bailey.png");
 //        TextEngine.addMessage(new String[]{"Josiah Said:", "hi"}, "Core/Josiah.png");
 //        TextEngine.addMessage(new String[]{"The Developer of this game is a very strange person", "hi"}, "Core/developer.png");

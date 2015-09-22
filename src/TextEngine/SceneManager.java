@@ -16,25 +16,45 @@ import java.util.LinkedList;
  * @author Bayjose
  */
 public class SceneManager {
-    public LinkedList<WorldObject> objects = new LinkedList<WorldObject>();
+    private static Scene selected = null;
+    public static LinkedList<Scene> scenes = new LinkedList<Scene>();
     
     public SceneManager(){
-        objects.add(new TextOutputNode(new Vector3D(Game.WIDTH/2, Game.HEIGHT/2, 0), StringUtils.loadData("Script_intro.txt")));
-        objects.add(new TextOutputNode(new Vector3D(Game.WIDTH/4, Game.HEIGHT/4, 0), new String[]{"THIS IS THE SECOND PIECE OF DATA"}));
-        BaseNode pt1 = (BaseNode)(this.objects.get(0));
-        BaseNode pt2 = (BaseNode)(this.objects.get(1));
-        objects.add(new Wire(pt1.getPts()[0], pt2.getPts()[1]));
+        LinkedList<WorldObject> objects = new LinkedList<WorldObject>();
+        objects.add(new TextOutputNode(new Vector3D(Game.WIDTH/4, Game.HEIGHT/4, 0), StringUtils.loadData("Script_intro.txt")));
+        objects.add(new TextOutputNode(new Vector3D(Game.WIDTH/2, Game.HEIGHT/2, 0), new String[]{"THIS IS THE SECOND PIECE OF DATA"}));
+        objects.add(new StartNode(new Vector3D(100, 100, 0)));
+        BaseNode pt1 = (BaseNode)(objects.get(0));
+        BaseNode pt2 = (BaseNode)(objects.get(1));
+        objects.add(new Wire(pt1.getPts()[1], pt2.getPts()[0]));
+        BaseNode pt3 = (BaseNode)(objects.get(2));
+        objects.add(new Wire(pt3.getPts()[0], pt1.getPts()[0]));
+        this.scenes.add(new Scene("intro", objects));
     }
     
-    public void tick(){
-        for(WorldObject obj:this.objects){
-            obj.tick();
+    public static void setScene(String name){
+        for(int i=0; i<scenes.size(); i++){
+            if(scenes.get(i).name.equals(name)){
+                selected = scenes.get(i);
+                System.out.println("Selected: "+selected.name);
+                return;
+            }
         }
     }
     
-    public void render(Graphics g){
-        for(WorldObject obj:this.objects){
-            obj.render(g);
+    public static void tick(){
+        if(selected!=null){
+            for(WorldObject obj: selected.objects){
+                obj.tick();
+            }
+        }
+    }
+    
+    public static void render(Graphics g){
+        if(selected!=null){
+            for(WorldObject obj: selected.objects){
+                obj.render(g);
+            }
         }
     }
     

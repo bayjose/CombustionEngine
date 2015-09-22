@@ -5,6 +5,8 @@
  */
 package characterMaker;
 
+import Base.util.StringUtils;
+
 /**
  *
  * @author Bayjose
@@ -36,7 +38,7 @@ public class makePlayer extends javax.swing.JFrame {
         jTextField1.setText("jTextField1");
 
         jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = StringUtils.loadUrl("https://raw.githubusercontent.com/bayjose/CombustionEngine/master/Characters/authors.txt");
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
@@ -50,8 +52,8 @@ public class makePlayer extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
-                .addContainerGap(215, Short.MAX_VALUE))
+                    .addComponent(jTextField1))
+                .addContainerGap(155, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
