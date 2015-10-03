@@ -27,6 +27,13 @@ public abstract class BaseNode extends WorldObject{
     public abstract void Event();
     
     @Override
+    public void tick(){
+        for(WireConnectionPoint obj: this.pts){
+            obj.tick();
+        }
+    }
+    
+    @Override
     public void render(Graphics g){
         for(WireConnectionPoint pt: this.pts){
             pt.render(g);

@@ -5,6 +5,7 @@
  */
 package Entity;
 
+import Base.Camera;
 import Base.FontBook;
 import Base.Game;
 import Base.Handler;
@@ -31,15 +32,11 @@ public class Intro extends Entity{
         
     public Intro(Handler handler) {
         super(Models.generateQuad(new Vector3D(0,0,128), Game.WIDTH, Game.HEIGHT));
-        if(Game.devMode==true){
-            maxTicks = 0;
-        }else{
-            maxTicks = (4*60)+30;
-        }
+        maxTicks = (4*60)+30;
+        System.out.println("Max Ticks:"+maxTicks);
 //        LightingEngine.lights.add(new PointLight(Game.WIDTH/2, Game.HEIGHT/2, Game.WIDTH).setBrightness(0.5f));
         super.getModel().assignTexture("Core/intro.png");
-        Model gear = Models.generateQuad(new Vector3D(0, 0, 128), 128);
-        gear.assignTexture("Core/Gear.png");
+        Model gear = Models.generateQuad(new Vector3D(0, 0, 128), 128, 128, "Core/gear.png");
         this.models.add(gear);
         //people
         Model Josiah = Models.generateQuad(new Vector3D(-((Game.WIDTH/3)), 0, 0), 18*4, 32*4);
@@ -60,7 +57,7 @@ public class Intro extends Entity{
         this.models.add(seanFish);
         this.handler = handler;
         Handler.cam.goTo(new Vector3D(0, 0, 0), 1);
-        Text = FontBook.fontBig.returnTextbox(new Vector3D(Game.WIDTH/2, (FontBook.fontBig.fontSize*64)-100, 0), ""+Game.name, "Core/yes.png");
+        Text = FontBook.fontBig.returnTextbox(new Vector3D(Game.WIDTH/2, (FontBook.fontBig.fontSize*64)-100, 0).inverse(), ""+Game.name, "Core/yes.png");
         FontBook.Init();
     }
     //----------------------------------------------------

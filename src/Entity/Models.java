@@ -174,7 +174,7 @@ public class Models {
         try {
             bi = ImageIO.read(new File(path));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.err.println("Could not load image resource:"+path);
         }
         Color[] colors;
         Point[] points;

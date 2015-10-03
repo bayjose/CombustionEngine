@@ -10,6 +10,10 @@ import Base.Game;
 import Base.SpriteBinder;
 import Base.input.FontInput;
 import Base.input.KeyInput;
+import PhysicsEngine.Point;
+import PhysicsEngine.Point3D;
+import PhysicsEngine.RigidBody;
+import PhysicsEngine.RigidUtils;
 import PhysicsEngine.Vector3D;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -31,6 +35,7 @@ public class TextEngine {
     private String[] lines;
     private int index = 0;
     private int lineIndex = 0;
+    private int lineTracker = -1;
     private int dataOffset = 0;
     
     private int visualOffset =0;
@@ -38,7 +43,7 @@ public class TextEngine {
     //tick Limiter
     private final int tickRate = 1;
     private int curTick = 0;
-    private boolean promptReset = false;
+    private boolean promptInteract = false;
     
     public TextEngine(){
         maxCharactersPerLine = (int)(((mainFont.font.width*mainFont.fontSize)/Game.WIDTH)-0.5f);
@@ -52,16 +57,22 @@ public class TextEngine {
 //                System.out.println(curTick+" "+this.index+" "+(this.lineIndex+this.dataOffset)+"/"+this.Data.length);        TextEngine.ChangeFont(FontBook.fontBig);
         SceneManager.tick();
         if(Data.size()>0){
-            if(promptReset){
+            Data.getFirst().extraTick();
+
+            if(promptInteract){
     //            System.out.println("Press Space to Reset");
                 if(KeyInput.SPACE){
+                    if (Data.getFirst() instanceof MenuMessage) {
+                        MenuMessage mnuMessage = ((MenuMessage) Data.getFirst());
+                        TextEngine.addNextMessage(mnuMessage.menuItems[mnuMessage.index].event);
+                    }
                     this.cleanUp();
                 }
                 return;
             }
 
             if((this.lineIndex+this.dataOffset)>=Data.getFirst().data.length){
-                this.promptReset = true;
+                this.promptInteract = true;
                 for(int i = this.lineIndex; i<this.lines.length; i++){
                     this.lines[i] = "";
                 }
@@ -84,6 +95,7 @@ public class TextEngine {
     public void render(Graphics g){
         SceneManager.render(g);
         if(Data.size()>0){
+            Data.getFirst().extraRender(g);
             g.setColor(new Color(0,0,0,90));
             g.fillRect(0, Game.HEIGHT - (((mainFont.font.height/2) + this.pxlBetweenLines) * this.numLines), Game.WIDTH, (((mainFont.font.height/2) + this.pxlBetweenLines) * this.numLines));
             for(int i=0; i<this.lines.length; i++){
@@ -94,7 +106,10 @@ public class TextEngine {
             if(!Data.getFirst().character.equals("empty")){
                 g.drawImage(SpriteBinder.checkImage(Data.getFirst().character), 2, Game.HEIGHT - (((mainFont.font.height/2) + this.pxlBetweenLines) * this.numLines) - 128, 128, 128, null);
             }
-            if(this.promptReset){
+            if(this.promptInteract){
+                RigidBody space = new RigidBody(new Point[]{new Point3D(0, Game.HEIGHT - (((mainFont.font.height/2) + this.pxlBetweenLines) * this.numLines), 0), new Point3D((Game.WIDTH/2)-96, (Game.HEIGHT - (((mainFont.font.height/2) + this.pxlBetweenLines) * this.numLines))-32, 0),new Point3D((Game.WIDTH/2)+96, (Game.HEIGHT - (((mainFont.font.height/2) + this.pxlBetweenLines) * this.numLines))-32, 0),new Point3D(Game.WIDTH, (Game.HEIGHT - (((mainFont.font.height/2) + this.pxlBetweenLines) * this.numLines)), 0)});
+                space.setColor(new Color(0,0,0,96));
+                RigidUtils.Render(space, g);
                 if((this.lineIndex+this.dataOffset)<Data.getFirst().data.length){
                     TextEngine.mainFont.returnText(new Vector3D(Game.WIDTH/2, Game.HEIGHT - ((this.numLines-1)*(this.pxlBetweenLines+(mainFont.font.height/2))) + (((-1.5F)*(this.pxlBetweenLines+(mainFont.font.height/2)))) - ((mainFont.fontSize*mainFont.font.height)/2), 0), "Press 'Space' to Continue").Render(g);
                 }else{
@@ -107,28 +122,33 @@ public class TextEngine {
     
     public void increment(){
         if(Data!=null){
+            //detect when a new line is started, this processes all comands on in the current line
+            if(this.lineTracker!=this.lineIndex){
+                this.lineTracker = this.lineIndex;
+                if(this.lineIndex<this.numLines){
+                    String checkmessage = Data.getFirst().data[this.lineIndex];
+                    System.out.println("Line Loaded:"+this.lineIndex+" :"+checkmessage);
+                    if(checkmessage.startsWith("/cmd{")){
+                        checkmessage = checkmessage.substring(5, checkmessage.length());
+                        checkmessage = checkmessage.replaceAll("}", "");
+                        String[] cmdData = checkmessage.split(" ");
+                        Commands.checkCommand(cmdData);
+                    }
+                }
+            }
+            //Interprate the curent line data
             if(this.lineIndex+this.dataOffset<Data.getFirst().data.length){
                 if(this.index<Data.getFirst().data[this.lineIndex+this.dataOffset].length()){
                     if(this.lineIndex<numLines){
                         this.index++;
                         this.lines[this.lineIndex] = Data.getFirst().data[this.lineIndex+this.dataOffset].substring(0, this.index);
                     }else{
-                        if(!promptReset){
-                            this.promptReset = true;
+                        if(!promptInteract){
+                            this.promptInteract = true;
                         }
                     }
                 }else if(this.lineIndex<this.numLines){
                     this.lineIndex++;
-//                    if(this.lineIndex<this.numLines){
-//                        String checkmessage = Data.getFirst().data[this.lineIndex];
-//                        if(checkmessage.startsWith("/cmd{")){
-//                            checkmessage = checkmessage.substring(4, checkmessage.length());
-//                            checkmessage = checkmessage.replaceAll("}", "");
-//                            String[] cmdData = checkmessage.split(" ");
-//                            Commands.checkCommand(cmdData);
-//                            this.lineIndex++;
-//                        }
-//                    }
                     this.index = 0;
                 }
             }
@@ -142,7 +162,7 @@ public class TextEngine {
         this.index = 0;
         this.dataOffset += this.lineIndex;
         this.lineIndex = 0;
-        this.promptReset = false;
+        this.promptInteract = false;
     }
     
     private void reset(){
@@ -153,18 +173,31 @@ public class TextEngine {
         this.index       = 0;
         this.dataOffset  = 0;
         this.lineIndex   = 0;
-        this.promptReset = false;
+        this.promptInteract = false;
     }
+    
     
     public static void ChangeFont(FontInput font){
         mainFont = font;
     }
     
     public static void addMessage(String[] data){
-        Data.add(new Message(data, "empty"));
+        Data.add(new BasicMessage(data, "empty"));
+    }
+    
+    public static void addMessage(Message msg){
+        Data.add(msg);
     }
     
     public static void addMessage(String[] data, String character){
-        Data.add(new Message(data, character));
+        Data.add(new BasicMessage(data, character));
+    }
+    
+    public static void addNextMessage(Message msg){
+        Data.add(1,msg);
+    }
+    
+    public static FontInput getFont(){
+        return mainFont;
     }
 }

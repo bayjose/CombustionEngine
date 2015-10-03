@@ -5,16 +5,26 @@
  */
 package TextEngine;
 
+import java.awt.Graphics;
+
 /**
  *
  * @author Bayjose
  */
-public class Message {
+public abstract class Message {
     public String[] data;
     public String character;
     
     public Message(String[] data, String character){
         this.data = data;
         this.character = character;
+    }
+    
+    public void extraTick(){
+        return;
+    }
+    
+    public void extraRender(Graphics g){
+        return;
     }
 }

@@ -5,8 +5,10 @@
  */
 package itemmaker;
 
+import Base.Camera;
 import Base.Game;
 import Base.Handler;
+import Base.util.EnumGameState;
 import PhysicsEngine.Vector3D;
 import gui.Gui;
 import gui.items.Item;
@@ -28,14 +30,14 @@ public class ItemGame extends Game{
     
     public ItemGame(int widht, int height, Item item, boolean useLighting){
         this.item = item;
-        this.basicSlot = new BasicSlot(widht*2, height);
+        this.basicSlot = new BasicSlot(widht, height);
         this.basicSlot.setItem(this.item, this.item.maxStackSize);
         this.useLighting = useLighting;
     }
     
     @Override
     public void postInit(){
-//        Handler.cam.applyTranslation(new Vector3D(Game.WIDTH/2, 0, 0), 180);
+        Handler.cam.position = new Vector3D(Game.WIDTH/2,0,0);
     }
     
     @Override

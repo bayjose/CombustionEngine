@@ -5,6 +5,7 @@
  */
 package PhysicsEngine;
 
+import Base.Camera;
 import Base.Game;
 import Base.Handler;
 import Base.input.KeyInput;

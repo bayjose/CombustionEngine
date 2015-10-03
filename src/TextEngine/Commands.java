@@ -14,6 +14,7 @@ import Base.util.StringUtils;
 public class Commands {
     
     public static void checkCommand(String[] data){
+        System.out.println("Command Loaded:"+data[0]);
         if(data[0].equals("change-font")){
             System.out.println("change font to");
         }
@@ -22,6 +23,12 @@ public class Commands {
                 TextEngine.addMessage(StringUtils.loadData(data[1]));
             }else{
                 TextEngine.addMessage(StringUtils.loadData(data[1]), data[2]);
+            }
+        }
+        if(data[0].equals("menu")){
+            String[] menuData = new String[data.length-1];
+            for(int i=0; i<menuData.length; i++){
+                menuData[i] = data[i+1];
             }
         }
     }

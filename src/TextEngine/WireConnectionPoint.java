@@ -19,6 +19,7 @@ public class WireConnectionPoint extends WorldObject{
     private final Image imageUnPowered;
     private final Image imagePowered;
     private final BaseNode node;
+    private boolean lastTick = false;
     
     public WireConnectionPoint(Vector3D pos, BaseNode node){
         super(pos, false);
@@ -32,11 +33,21 @@ public class WireConnectionPoint extends WorldObject{
         return this.Powered;
     }
     
+    @Override
+    public void tick(){
+        if(this.node!=null){
+            if(this.lastTick!=this.Powered){
+                this.lastTick = this.Powered;
+                if(this.isPowered()){
+                    this.node.Event();
+                }
+            }
+            this.lastTick = this.Powered;
+        }
+    }
+    
     public void setPower(boolean b){
         this.Powered = b;
-        if(this.isPowered()){
-            this.node.Event();
-        }
     }
     
     @Override

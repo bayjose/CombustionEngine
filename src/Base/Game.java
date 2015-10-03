@@ -38,11 +38,11 @@ public abstract class Game extends Canvas implements Runnable{
     private Thread thread;
     private Random rand = new Random();
     public static Rectangle Screen;
-    public static final boolean devMode = true;
+    public static final boolean devMode = false;
     
     public static int WIDTH, HEIGHT;
 
-    public static final String name = "Space Game";
+    public static final String name = "Game Game";
     public static final String version = "Version 0.1";
     
     public Handler handler;
@@ -67,10 +67,11 @@ public abstract class Game extends Canvas implements Runnable{
     private void init(){
         WIDTH=getWidth();
         HEIGHT=getHeight(); 
+
         System.out.println("Combustion Engine Version:"+Game.version);
         System.out.println("Width:"+Game.WIDTH+" Height:"+Game.HEIGHT);    
         //init class vars
-                FontBook.Init();
+        FontBook.Init();
         handler = new Handler();
         mpl = new MousePositionLocator(handler);
         this.msi = new MouseScroleInput(handler);
@@ -183,7 +184,7 @@ public abstract class Game extends Canvas implements Runnable{
         ///////////////////////////////////
         if(!profileing){
             g.setColor(Color.RED);
-            g.drawString("FPS:"+Game.frames, 10, 10);
+            FontBook.font.returnText(new Vector3D(48,12,0), "FPS:"+Game.frames).Render(g);
         }
         g.dispose();
         bs.show();

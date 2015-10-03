@@ -12,25 +12,28 @@ import java.awt.Graphics;
  *
  * @author Bayjose
  */
-public class TextOutputNode extends BaseNode{
+public class MenuNode extends BaseNode{
     
     private String[] msg;
+    private MenuItem[] options;
+    private String character;
 
-    public TextOutputNode(Vector3D pos, String[] message) {
+    public MenuNode(Vector3D pos, String[] message, MenuItem[] options, String character) {
         super(pos);
         super.initWirePts( new WireConnectionPoint[]{
             new WireConnectionPoint(pos.newInstance().addVector(new Vector3D(-32,0,0)), this),
             new WireConnectionPoint(pos.newInstance().addVector(new Vector3D(+32,0,0)), null),
         });
         this.msg = message;
+        this.options = options;
+        this.character = character;
     }
 
     @Override
     public void Event() {
-        System.out.println("This is a text node, the curent state is:"+super.getPts()[0].isPowered());
         if(super.getPts()[0].isPowered()){
             super.getPts()[1].setPower(true);
-            TextEngine.addMessage(msg);
+            TextEngine.addMessage(new MenuMessage(this.msg, this.options, character));
         }
     }
 

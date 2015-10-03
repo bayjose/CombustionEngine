@@ -1,0 +1,10 @@
+Item:Pocket Watch
+MaxStackSize:1
+Component_Image
+clock.png
+Component_HoverText
+Forged by the gods of the toaster oven.
+Don't let it fall into the hands of the Mole People.
+This dosen't even tell the correct time!
+Component_SubItemArray
+9

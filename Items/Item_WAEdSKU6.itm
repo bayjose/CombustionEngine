@@ -1,0 +1,10 @@
+Item:Pocket Watch
+MaxStackSize:1
+Component_Image
+clock.png
+Component_HoverText
+Forged by the gods of the toaster oven.
+This dosen't even tell time!
+Contains gears.
+Component_SubItemArray
+9
