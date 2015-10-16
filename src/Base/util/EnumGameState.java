@@ -12,7 +12,9 @@ package Base.util;
 public enum EnumGameState {
     //this game state needs to be here, the rest can chage as many times as needed
 //this game state needs to be here, the rest can chage as many times as needed
+    Bootup(),
     Intro(),
     Main(),
-    Test();
+    Test(),
+    Off();
 }

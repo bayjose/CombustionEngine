@@ -97,100 +97,6 @@ public class StringUtils {
         return output;
     }
     
-    private static int getValue(String string){
-        if(string.equals("A")||string.equals("a")){
-            return 26;
-        }
-        if(string.equals("B")||string.equals("b")){
-            return 25;
-        }
-        if(string.equals("C")||string.equals("c")){
-            return 24;
-        }
-        if(string.equals("D")||string.equals("d")){
-            return 23;
-        }
-        if(string.equals("E")||string.equals("e")){
-            return 22;
-        }
-        if(string.equals("F")||string.equals("f")){
-            return 21;
-        }
-        if(string.equals("G")||string.equals("g")){
-            return 20;
-        }
-        if(string.equals("H")||string.equals("h")){
-            return 26;
-        }
-        if(string.equals("I")||string.equals("i")){
-            return 19;
-        }
-        if(string.equals("J")||string.equals("j")){
-            return 18;
-        }
-        if(string.equals("K")||string.equals("k")){
-            return 17;
-        }
-        if(string.equals("L")||string.equals("l")){
-            return 16;
-        }
-        if(string.equals("M")||string.equals("m")){
-            return 15;
-        }
-        if(string.equals("N")||string.equals("n")){
-            return 14;
-        }
-        if(string.equals("O")||string.equals("o")){
-            return 13;
-        }
-        if(string.equals("P")||string.equals("p")){
-            return 12;
-        }
-        if(string.equals("Q")||string.equals("q")){
-            return 11;
-        }
-        if(string.equals("R")||string.equals("r")){
-            return 10;
-        }
-        if(string.equals("S")||string.equals("s")){
-            return 9;
-        }
-        if(string.equals("T")||string.equals("t")){
-            return 8;
-        }
-        if(string.equals("U")||string.equals("u")){
-            return 7;
-        }
-        if(string.equals("V")||string.equals("v")){
-            return 6;
-        }
-        if(string.equals("W")||string.equals("w")){
-            return 5;
-        }
-        if(string.equals("X")||string.equals("x")){
-            return 4;
-        }
-        if(string.equals("Y")||string.equals("y")){
-            return 3;
-        }
-        if(string.equals("Z")||string.equals("Z")){
-            return 2;
-        }
-        return 1;
-    }
-    
-    public static String sortValue(String name){
-        String[] line = name.split(" ");
-        for(int i=0; i<line.length; i++){
-            int[] lineData = new int[line.length];
-            for(int j=0; j<line[i].length(); j++){
-                lineData[j] = getValue(line[i].substring(j, j+1));
-               
-            }
-        }
-        return "";
-    }
-    
     /**
      *
      * @param base The base string to be added onto
@@ -267,5 +173,12 @@ public class StringUtils {
             ex.printStackTrace();
         }
         return out;
+    }
+    
+    public static void printAllLines(String[] data){
+        System.out.println("Printing:"+data.toString()+"-------------");
+        for(int i=0; i<data.length; i++){
+            System.out.println(data[i]);
+        }
     }
 }

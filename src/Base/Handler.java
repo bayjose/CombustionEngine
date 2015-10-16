@@ -18,6 +18,7 @@ import World.Chunk;
 import gui.Gui;
 import gui.Inventory;
 import gui.items.MouseItem;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
@@ -55,9 +56,14 @@ public class Handler {
     public Chunk chunk = new Chunk(0, 0, 32, 32);
     public skyBox skyBox1 = new skyBox("space.jpg");
     
+    private int countDown = 2 * 60;
+    
 //    private Inventory inv = new Inventory(Game.WIDTH/2, Game.HEIGHT/2, this);
     
     public void init(){
+        if(Game.platform.equals("QuadPadPro")){
+            this.egs = EnumGameState.Off;
+        }
         this.cam = new Camera(new Vector3D(0, 0, 0),1, this);
         //load sprite sheets
         this.physicsEngine =  new PhysicsEngine();
@@ -76,6 +82,13 @@ public class Handler {
         if(egs.equals(EnumGameState.Intro)){
             this.intro.tick();
         }
+        
+        if(egs.equals(EnumGameState.Bootup)){
+            if(countDown==0){
+                this.egs = EnumGameState.Intro;
+            }
+            countDown--;
+        }
 
         if(egs.equals(EnumGameState.Main)){
             for(Gui gui: this.gui){
@@ -89,6 +102,14 @@ public class Handler {
     }
       
     public void render(Graphics g){
+        if(egs.equals(EnumGameState.Off)){
+            g.setColor(Color.decode("#3e3e3e"));
+            g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+        }
+        if(egs.equals(EnumGameState.Bootup)){
+            g.setColor(Color.decode("#0079f5"));
+            g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+        }
         if(egs.equals(EnumGameState.Intro)){
             this.intro.Render(g);
 //            this.lightingEngine.render(g);

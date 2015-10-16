@@ -46,7 +46,7 @@ public class TextEngine {
     private boolean promptInteract = false;
     
     public TextEngine(){
-        maxCharactersPerLine = (int)(((mainFont.font.width*mainFont.fontSize)/Game.WIDTH)-0.5f);
+        maxCharactersPerLine = (int)((Game.WIDTH/(mainFont.font.width*(mainFont.fontSize))))-6;
         this.lines = new String[numLines];
         for(int i=0; i<this.numLines; i++){
             this.lines[i] = "";
@@ -127,7 +127,7 @@ public class TextEngine {
                 this.lineTracker = this.lineIndex;
                 if(this.lineIndex<this.numLines){
                     String checkmessage = Data.getFirst().data[this.lineIndex];
-                    System.out.println("Line Loaded:"+this.lineIndex+" :"+checkmessage);
+                    //System.out.println("Line Loaded:"+this.lineIndex+" :"+checkmessage);
                     if(checkmessage.startsWith("/cmd{")){
                         checkmessage = checkmessage.substring(5, checkmessage.length());
                         checkmessage = checkmessage.replaceAll("}", "");
@@ -149,7 +149,7 @@ public class TextEngine {
                     }
                 }else if(this.lineIndex<this.numLines){
                     this.lineIndex++;
-                    this.index = 0;
+                    this.index = 0;   
                 }
             }
         }
