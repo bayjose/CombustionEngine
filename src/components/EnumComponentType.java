@@ -25,6 +25,9 @@ public enum EnumComponentType {
     HoverText(),
     Durability(),
     Collision(),
+    Chunk(),
+    //Conditional componentd
+    TriggerOnCollide(),
     ;
 }
 

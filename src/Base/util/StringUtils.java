@@ -6,14 +6,12 @@
 package Base.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -21,6 +19,7 @@ import java.util.logging.Logger;
  */
 public class StringUtils {
     
+    private static String path = "";
     private static Random r = new Random();
     
     public static String randomExtension(int length){
@@ -113,6 +112,7 @@ public class StringUtils {
         for(int i=0; i<add.length; i++){
             temp[i+base.length]=add[i];
         }
+                
         return temp;
     }
     
@@ -124,6 +124,17 @@ public class StringUtils {
         temp[base.length]=add;
         return temp;
     }
+    
+//     public static String[] removeLine(String[] base, int pos){
+//        if(pos>0 && pos<base.length-1){
+//            String[] temp = new String[base.length-1];
+//            for(int i=0; i<base.length; i++){
+//                temp[i] = base[i];
+//            }
+//            temp[base.length]=add;
+//            return temp;
+//        }
+//    }
     
     public static String unify(String[] data){
         String out = "";
@@ -141,12 +152,20 @@ public class StringUtils {
     public static String[] loadData(String path){
         LinkedList<String> data = new LinkedList<String>();
         try {
-            Scanner in = new Scanner(new File(path));
+            Scanner in = new Scanner(new File(StringUtils.getAbsPath()+path));
             do{
                 data.add(in.nextLine());
             }while(in.hasNext());
-        } catch (FileNotFoundException ex) {
-            
+        } catch (Exception e) {
+            StringUtils.path = "cpu";
+            try{
+                Scanner in = new Scanner(new File(StringUtils.getAbsPath()+path));
+                do{
+                data.add(in.nextLine());
+                }while(in.hasNext());
+            }catch(Exception e2){
+                e2.printStackTrace();
+            }
         }
         String[] outData = new String[data.size()];
         for(int i=0; i<outData.length; i++){
@@ -180,5 +199,22 @@ public class StringUtils {
         for(int i=0; i<data.length; i++){
             System.out.println(data[i]);
         }
+    }
+    
+    public static String getAbsPath(){
+        String absPath;
+        if(path.equals("cpu")){
+            try {
+                absPath = StringUtils.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+                System.out.println("Absolute Path:"+absPath);
+                absPath = absPath.replace("/Magic.jar", "/");
+            } catch (URISyntaxException ex) {
+                ex.printStackTrace();
+                absPath = "";
+            }
+        }else{
+            absPath = "";
+        }
+        return absPath;
     }
 }

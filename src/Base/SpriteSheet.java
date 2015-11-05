@@ -1,5 +1,6 @@
 package Base;
 
+import Base.util.StringUtils;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class SpriteSheet{
    public String path;
    
    public SpriteSheet(int width, int height, int rows, int columns, String path) throws IOException {
+      System.out.println("SpriteSheet path:"+path);
       this.spriteSheet= ImageIO.read(new File(path));
       this.width = width;
       this.height = height;

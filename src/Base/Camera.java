@@ -10,6 +10,7 @@ import Base.input.KeyInput;
 import Entity.Entity;
 import Listener.Console;
 import Listener.Listener;
+import PhysicsEngine.Point;
 import PhysicsEngine.Vector3D;
 import java.awt.Rectangle;
 
@@ -56,17 +57,17 @@ public class Camera {
     
     public void tick(){
         if(freeCam){
-            if(KeyInput.W){
-                this.applyTranslation(new Vector3D(0, 0, 128), 1);
+            if(KeyInput.UP){
+                this.applyTranslation(new Vector3D(0, 10, 0), 1);
             }
-            if(KeyInput.S){
-                this.applyTranslation(new Vector3D(0, 0, -128), 1);
+            if(KeyInput.DOWN){
+                this.applyTranslation(new Vector3D(0, -10, 0), 1);
             }
-            if(KeyInput.A){
-                this.applyTranslation(new Vector3D(100, 0, 0), 1);
+            if(KeyInput.LEFT){
+                this.applyTranslation(new Vector3D(10, 0, 0), 1);
             }
-            if(KeyInput.D){
-                this.applyTranslation(new Vector3D(-100, 0, 0), 1);
+            if(KeyInput.RIGHT){
+                this.applyTranslation(new Vector3D(-10, 0, 0), 1);
             }
             if(KeyInput.Q){
                 this.applyTranslation(new Vector3D(0, 0, -10), 1);
@@ -75,6 +76,7 @@ public class Camera {
                 this.applyTranslation(new Vector3D(0, 0, 10), 1);
             }
         }
+        
         if(this.transition){
             if(this.ticks<this.maxTicks){
                 this.position.increaseVelX(this.translation.getX()/this.maxTicks);
@@ -97,12 +99,12 @@ public class Camera {
     }
     
     public void applyTranslation(Vector3D translation, float ticks){
-        if(!this.transition){
+
             this.transition = true;
             this.translation = translation;
             this.maxTicks = ticks;
             this.ticks = 0;
-        }
+        
     }
     
     public void goTo(Vector3D translation, float ticks){
@@ -152,6 +154,22 @@ public class Camera {
         return this.transition;
     }
             
+    public static boolean pointOnScreen(Point pt){
+        if(pt.getX()<((Game.WIDTH*1.5)-(int)Camera.position.getX())&&pt.getX()>(-(int)Camera.position.getX()-32)){
+            if(pt.getY()<(Game.HEIGHT-(int)Camera.position.getY())&&pt.getY()>(-(int)Camera.position.getY()-32)){
+                return true;
+            }
+        }
+        return false;
+    }
     
+    public static boolean pointOnScreen(int x, int y){
+        if(x<((Game.WIDTH*1.5)-(int)Camera.position.getX())&&x>(-(int)Camera.position.getX()-32)){
+            if(y<(Game.HEIGHT-(int)Camera.position.getY())&&y>(-(int)Camera.position.getY()-32)){
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

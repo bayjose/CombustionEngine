@@ -16,6 +16,9 @@ import Listener.Listener;
 import Physics.Model;
 import PhysicsEngine.Point2D;
 import PhysicsEngine.Vector3D;
+import ScriptingEngine.Profileing;
+import ScriptingEngine.Script;
+import World.LoadTiles;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -40,13 +43,14 @@ public abstract class Game extends Canvas implements Runnable{
     private Thread thread;
     private Random rand = new Random();
     public static Rectangle Screen;
-    public static final boolean devMode = false;
+    
     
     public static int WIDTH, HEIGHT;
 
-    public static final String name = "Game Game";
-    public static final String version = "Version 0.1";
-    public static final String platform = StringUtils.loadData("cfg.txt")[0].replace("Build:", "");
+    public static final String[] cfg = StringUtils.loadData("Game/cfg.txt");
+    public static final String name = cfg[1].replace("Game Name:", "");
+    public static final String version = cfg[2].replace("Version:", "");
+    public static String platform;
     
     public Handler handler;
     public MousePositionLocator mpl;
@@ -57,11 +61,11 @@ public abstract class Game extends Canvas implements Runnable{
     private Exception e = null;
     
     //for the emulator
-    private Rectangle Y = new Rectangle(1047, 115, 32, 32);
-    private Rectangle X = new Rectangle(1047-40, 115+40, 32, 32);
-    private Rectangle A = new Rectangle(1047, 115+80, 32, 32);
-    private Rectangle B = new Rectangle(1047+40, 115+40, 32, 32);
-    private Rectangle On;
+    public static Rectangle Y = new Rectangle(1047, 115, 32, 32);
+    public static Rectangle X = new Rectangle(1047-40, 115+40, 32, 32);
+    public static Rectangle A = new Rectangle(1047, 115+80, 32, 32);
+    public static Rectangle B = new Rectangle(1047+40, 115+40, 32, 32);
+    public static Rectangle On;
             
     
     public static boolean profileing = false;
@@ -85,6 +89,7 @@ public abstract class Game extends Canvas implements Runnable{
         //quadPadPro.assignImageFromSpriteBinder(SpriteBinder.toBufferedImage(SpriteBinder.checkImage("QuadSquadPro.png")));
         //init class vars
         FontBook.Init();
+        LoadTiles.Init();
         handler = new Handler();
         mpl = new MousePositionLocator(handler);
         this.msi = new MouseScroleInput(handler);
@@ -153,7 +158,6 @@ public abstract class Game extends Canvas implements Runnable{
                 frames = 0;
                 updates = 0;
             }
-            
         }
     }
     
@@ -161,34 +165,7 @@ public abstract class Game extends Canvas implements Runnable{
        if(!broken){
             try{
              this.extraTick();
-             if(Game.platform.equals("QuadPadPro")){
-                    if(MouseInput.IsPressed&&MouseInput.Mouse.intersects(Y)){
-                        KeyInput.SPACE = true;
-                    }else{
-                        KeyInput.SPACE = false;
-                    }
-                    if(MouseInput.IsPressed&&MouseInput.Mouse.intersects(X)){
-                        KeyInput.A = true;
-                    }else{
-                        KeyInput.A = false;
-                    }
-                    if(MouseInput.IsPressed&&MouseInput.Mouse.intersects(A)){
-                        KeyInput.W = true;
-                    }else{
-                        KeyInput.W = false;
-                    }
-                    if(MouseInput.IsPressed&&MouseInput.Mouse.intersects(B)){
-                        KeyInput.D = true;
-                    }else{
-                        KeyInput.D = false;
-                    }
-                            
-                    if(this.handler.egs.equals(EnumGameState.Off)){
-                        if(MouseInput.IsPressed && MouseInput.Mouse.intersects(this.On)){
-                            this.handler.egs = EnumGameState.Bootup;
-                        }
-                    }
-             }
+             
             }catch(Exception e){
                 this.renderErrorToScreen(e.getStackTrace());
                 this.e = e;
@@ -218,8 +195,9 @@ public abstract class Game extends Canvas implements Runnable{
         g.setColor(Color.WHITE);
         g.setClip(0, 0, Game.WIDTH, Game.HEIGHT);
         g.fillRect(0, 0, getWidth(), getHeight());
-
-        if(Game.platform.equals("QuadPadPro")){
+        
+        g.translate((int)Camera.position.getX() - Game.WIDTH/2, (int)Camera.position.getY());
+        if(Game.platform.equals("Emulator")){
             Graphics2D g2d = (Graphics2D) g;
             g.translate(176, 48);
             g2d.scale(0.6944, 0.8391);
@@ -236,11 +214,16 @@ public abstract class Game extends Canvas implements Runnable{
         }else{
             extraRender(g);
         }
-        //fps counter
         if(!profileing){
-            FontBook.font.returnText(new Vector3D(48,12,0), "FPS:"+Game.frames).Render(g);
+            FontBook.font.returnText(new Vector3D(48,12,0).addVector(new Vector3D(-(int)Camera.position.getX() + Game.WIDTH/2, -(int)Camera.position.getY(), 0)), "FPS:"+Game.frames).Render(g);
         }
-        
+        if(Handler.bool1){
+            FontBook.font.returnText(new Vector3D(48,32,0).addVector(new Vector3D(-(int)Camera.position.getX() + Game.WIDTH/2, -(int)Camera.position.getY(), 0)), "Scripts Running:"+Profileing.getNumRunningScripts()).Render(g);
+            FontBook.font.returnText(new Vector3D(48,48,0).addVector(new Vector3D(-(int)Camera.position.getX() + Game.WIDTH/2, -(int)Camera.position.getY(), 0)), "Objects:"+Handler.objects.size()).Render(g);
+        }
+        g.translate(-(int)Camera.position.getX() + Game.WIDTH/2, -(int)Camera.position.getY());
+                //fps counter
+   
         g.dispose();
         bs.show();
     }
@@ -279,13 +262,15 @@ public abstract class Game extends Canvas implements Runnable{
     
     public static void main(String[] args) {
 //            new Window(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, name, new BasicGame());
-        String cfg[] = StringUtils.loadData("cfg.txt");
-        String resolution = cfg[0].replace("Build:", "");
-        if(resolution.equals("QuadPadPro")){
-            new Window(1152, 572, name, new BasicGame());
-        }else{
-            new Window(1200, 800, name, new BasicGame());
+        String cfg[] = StringUtils.loadData("Game/cfg.txt");
+        Game.platform = cfg[0].replace("Build:", "");
+        try{
+            String[] gameDim = StringUtils.loadData("Game/Platforms/"+Game.platform+".txt")[0].replace("Resolution:", "").split("x");
+            new Window(Integer.parseInt(gameDim[0]), Integer.parseInt(gameDim[1]), cfg[1].replace("Game Name:", ""), Game.platform, new BasicGame());
+        }catch(Exception e){
+            System.err.println(Game.platform+" is not supported by this game.");
         }
+        
 //        System.out.println("Size:("+Toolkit.getDefaultToolkit().getScreenSize().width+","+Toolkit.getDefaultToolkit().getScreenSize().height+")");
     }
     

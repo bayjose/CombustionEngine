@@ -9,6 +9,7 @@ import Base.Game;
 import Base.Handler;
 import Base.SpriteBinder;
 import Base.SpriteSheet;
+import Base.util.StringUtils;
 import Entity.BasicModel;
 import Entity.Entity;
 import Entity.Models;
@@ -36,17 +37,17 @@ public class FontInput {
     public FontInput(String path){
         this.name = path;
         try {
-            Scanner s1 = new Scanner(new File("Font/"+path+"/properties.txt"));
+            Scanner s1 = new Scanner(new File(StringUtils.getAbsPath()+"Font/"+path+"/properties.txt"));
              width = s1.nextInt();
              height = s1.nextInt(); 
              col = s1.nextInt();
              row = s1.nextInt();
 //            System.out.println("Widht:"+width+" Height:"+height);
-            this.font = new SpriteSheet(width, height, col, row, "Font/"+path+"/font.png");
+            this.font = new SpriteSheet(width, height, col, row, StringUtils.getAbsPath()+"Font/"+path+"/font.png");
             this.characterIndex = new String[col][row];
             
             String TotalCharacters = "";
-            Scanner s2 = new Scanner(new File("Font/"+path+"/index.txt"));
+            Scanner s2 = new Scanner(new File(StringUtils.getAbsPath()+"Font/"+path+"/index.txt"));
             try{
                 for(int i=0; i<128; i++){
                     TotalCharacters= TotalCharacters+s2.nextLine();
@@ -70,7 +71,7 @@ public class FontInput {
     }
     
     public Entity returnText(Vector3D position, String input){
-        position.addVector(new Vector3D(-Game.WIDTH/2, -Game.HEIGHT/2, 0));
+        position.addVector(new Vector3D(0, -Game.HEIGHT/2, 0));
         Entity text = new BasicModel(Models.generateQuad(new Vector3D(position.getX()-((input.length()/2)*width*fontSize), position.getY(), position.getZ()), width*fontSize, height*fontSize));
         for(int i=0; i<input.length(); i++){
             loop:{
@@ -95,11 +96,12 @@ public class FontInput {
                 text.models.add(temp);
             }
         }
+        text.models.set(0, text.getModel().setLockedOnScreen(true));
         return text;
     }
     
     public Entity returnText(Vector3D position, String[] input){
-        position.addVector(new Vector3D(-Game.WIDTH/2, -Game.HEIGHT/2, 0));
+        position.addVector(new Vector3D(0, -Game.HEIGHT/2, 0));
         int biggestLength = 0;
         for(int i=0; i<input.length; i++){
             if(biggestLength<input[i].length()){
@@ -132,11 +134,12 @@ public class FontInput {
                 }
             }
         }
+        text.models.set(0, text.getModel().setLockedOnScreen(true));
         return text;
     }
     
     public Entity returnTextbox(Vector3D position, String[] input, String path){
-        position.addVector(new Vector3D(-Game.WIDTH/2, -Game.HEIGHT/2, 0));
+        position.addVector(new Vector3D(0, -Game.HEIGHT/2, 0));
         int biggestLength = 0;
         for(int i=0; i<input.length; i++){
             if(biggestLength<input[i].length()){
@@ -169,11 +172,12 @@ public class FontInput {
                 }
             }
         }
+        text.models.set(0, text.getModel().setLockedOnScreen(true));
         return text;
     }
     
     public Entity returnTextbox(Vector3D position, String input, String path){
-        position.addVector(new Vector3D(-Game.WIDTH/2, -Game.HEIGHT/2, 0));
+        position.addVector(new Vector3D(0, -Game.HEIGHT/2, 0));
         Entity text = new BasicModel(Models.generateQuad(new Vector3D(position.getX(), position.getY(), position.getZ()), (input.length()+4)*width*fontSize, 2*height*fontSize));
         text.getModel().assignImageFromSpriteBinder(SpriteBinder.toBufferedImage(SpriteBinder.checkImage(path)));
         for(int i=0; i<input.length(); i++){
@@ -198,6 +202,7 @@ public class FontInput {
                 text.models.add(temp);
             }
         }
+        text.models.set(0, text.getModel().setLockedOnScreen(true));
         return text;
     }
     
@@ -215,6 +220,7 @@ public class FontInput {
                            {
                              Model temp = Models.generateQuad(new Vector3D(position.getX()+(i*width*fontSize)-((input.length()/2)*width*fontSize), position.getY(), position.getZ()), width*fontSize, height*fontSize);
                              temp.assignImageFromSpriteBinder(this.font.getImage(y, x));
+                             temp = temp.setLockedOnScreen(true);
                              text[i+1]=(temp);
                            }
                            break loop;
@@ -226,6 +232,7 @@ public class FontInput {
                 text[i+1]=(temp);
             }
         }
+        
         return text;
     }
             

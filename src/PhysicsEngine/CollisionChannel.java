@@ -21,17 +21,17 @@ public class CollisionChannel {
     
     public void tick(){
         clear();
-        this.remove = new RigidBody[]{}; 
     }
     
     public void remove(RigidBody object){
-        this.append(remove, object);
+        this.remove = this.append(remove, object);
     }
     
     public void clear(){
         for(int i=0; i<this.remove.length; i++){
             this.delete(this.remove[i]);
         }
+        this.remove = new RigidBody[]{};
     }
     
     private void delete(RigidBody object){
@@ -43,7 +43,11 @@ public class CollisionChannel {
                     this.collisons[i] = null;
                     offset++;
                 }else{
-                    temp[i+offset] = this.collisons[i];
+                    try{
+                        temp[i-offset] = this.collisons[i];
+                    }catch(ArrayIndexOutOfBoundsException e){
+                        
+                    }
                 }
             }
             this.collisons = temp;
@@ -52,10 +56,10 @@ public class CollisionChannel {
     
     public void append(RigidBody object){
         RigidBody[] temp = new RigidBody[this.collisons.length+1];
-        temp[this.collisons.length] = object;
         for(int i=0; i<this.collisons.length; i++){
             temp[i] = this.collisons[i];
         }
+        temp[this.collisons.length] = object;
         this.collisons = temp;
     }
     
@@ -66,5 +70,9 @@ public class CollisionChannel {
             temp[i] = source[i];
         }
         return temp;
+    }
+
+    public void clearAll() {
+        this.remove = this.collisons;
     }
 }

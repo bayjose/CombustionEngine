@@ -20,6 +20,9 @@ public class RigidBody {
     public Point[] points;
     
     public Color color = Color.BLUE;
+    //if ImageIndex == -2 Invisible
+    //if ImageIndex == -1 Color
+    //if ImageIndex == (any other positive number) apply texture 
     public int ImageIndex = -1;
     
     public Vector3D normal = new Vector3D(0,-1, 0);

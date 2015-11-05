@@ -5,7 +5,6 @@
  */
 package Entity;
 
-import Base.Camera;
 import Base.FontBook;
 import Base.Game;
 import Base.Handler;
@@ -14,8 +13,8 @@ import Base.util.EnumGameState;
 import Physics.Model;
 import PhysicsEngine.Point3D;
 import PhysicsEngine.PrebuiltBodies;
-import PhysicsEngine.RigidUtils;
 import PhysicsEngine.Vector3D;
+import ScriptingEngine.Script;
 import java.awt.Graphics;
 
 /**
@@ -27,16 +26,23 @@ public class Intro extends Entity{
     private Handler handler;
 
     private int curTicks = 0;
-    private final int maxTicks;
+    private int maxTicks = 0;
     private Entity Text;
-        
+    private final boolean devMode = false;
+    
     public Intro(Handler handler) {
         super(Models.generateQuad(new Vector3D(0,0,128), Game.WIDTH, Game.HEIGHT));
-        maxTicks = (4*60)+30;
+        Handler.cam.goTo(new Vector3D(Game.WIDTH/2, 0, 0), 1);
+        if(devMode){
+            maxTicks = 0;
+        }else{
+            maxTicks = (4*60)+30;
+        }
         System.out.println("Max Ticks:"+maxTicks);
 //        LightingEngine.lights.add(new PointLight(Game.WIDTH/2, Game.HEIGHT/2, Game.WIDTH).setBrightness(0.5f));
         super.getModel().assignTexture("Core/intro.png");
-        Model gear = Models.generateQuad(new Vector3D(0, 0, 128), 128, 128, "Core/gear.png");
+        Model gear = Models.generateQuad(new Vector3D(0, 0, 128), 128, 128);
+        gear.assignImageFromSpriteBinder(SpriteBinder.toBufferedImage(SpriteBinder.checkImage("Core/gear.png")));
         this.models.add(gear);
         //people
         Model Josiah = Models.generateQuad(new Vector3D(-((Game.WIDTH/3)), 0, 0), 18*4, 32*4);
@@ -56,8 +62,8 @@ public class Intro extends Entity{
         this.models.add(Peter);
         this.models.add(seanFish);
         this.handler = handler;
-        Handler.cam.goTo(new Vector3D(0, 0, 0), 1);
-        Text = FontBook.fontBig.returnTextbox(new Vector3D(Game.WIDTH/2, (FontBook.fontBig.fontSize*64)-100, 0).inverse(), ""+Game.name, "Core/yes.png");
+        Text = FontBook.fontBig.returnTextbox(new Vector3D(-Game.WIDTH/2, -Game.HEIGHT/6, 0).inverse(), ""+Game.name, "Core/yes.png");
+        
         FontBook.Init();
     }
     //----------------------------------------------------
@@ -71,6 +77,7 @@ public class Intro extends Entity{
                 PhysicsEngine.PhysicsEngine.getChannel("bodies").append(PrebuiltBodies.quad(new Point3D(((i*(size*1.5f))+Game.WIDTH/2)-(numSquares*(size*1.5f))/2, ((j*(size*1.5f))+Game.HEIGHT/2)-(numSquares*(size*1.5f))/2, 0), size));
             }
         }
+        Handler.scripts.add(new Script(Game.cfg[5].replace("Start Script:", "")));
         
     }
     //----------------------------------------------------
@@ -89,6 +96,7 @@ public class Intro extends Entity{
         if(this.curTicks>=this.maxTicks){
             this.remove = true;
             handler.egs = EnumGameState.Main;
+            Handler.cam.goTo(new Vector3D(0, 0, 0), 1);
             Main();
         }
         if(this.curTicks<this.maxTicks){

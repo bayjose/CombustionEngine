@@ -33,10 +33,16 @@ public class ComponentCollision extends Component{
         }
         body = new RigidBody(pts);
         body.Translate((int)x, (int)y, (int)0);
+        body.ImageIndex = -2;
         PhysicsEngine.PhysicsEngine.getChannel("bodies").append(body);
-        RigidUtils.RotateZOnlyPoints(body, (int)(Math.random()*360));
+//        RigidUtils.RotateZOnlyPoints(body, (int)(Math.random()*360));
     }
 
+    @Override
+    public void tick(){
+        
+    }
+    
     @Override
     String[] save() {
         return this.LoadedData;

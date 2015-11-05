@@ -9,6 +9,7 @@ package Base.input;
 import Base.Camera;
 import Base.Game;
 import Base.Handler;
+import Base.util.EnumGameState;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -62,11 +63,36 @@ public class MouseInput implements MouseListener{
         else{
             
         }
+        if(Game.platform.equals("Emulator")){
+                    if(MouseInput.IsPressed&&MouseInput.Mouse.intersects(Game.Y)){
+                        KeyInput.SPACE = true;
+                    }
+                    if(MouseInput.IsPressed&&MouseInput.Mouse.intersects(Game.X)){
+                        KeyInput.A = true;
+                    }
+                    if(MouseInput.IsPressed&&MouseInput.Mouse.intersects(Game.A)){
+                        KeyInput.W = true;
+                    }
+                    if(MouseInput.IsPressed&&MouseInput.Mouse.intersects(Game.B)){
+                        KeyInput.D = true;
+                    }
+                            
+                    if(this.handler.egs.equals(EnumGameState.Off)){
+                        if(MouseInput.IsPressed && MouseInput.Mouse.intersects(Game.On)){
+                            this.handler.egs = EnumGameState.Bootup;
+                        }
+                    }
+             }
     }
 
     public void mouseReleased(MouseEvent e) {
         IsPressed=false;
         IsRightClick=false;
+        KeyInput.W = false;
+        KeyInput.S = false;
+        KeyInput.A = false;
+        KeyInput.D = false;
+        KeyInput.SPACE = false;
         MousePositionLocator.enableShake=false;
     }
 

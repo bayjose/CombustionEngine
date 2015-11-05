@@ -52,6 +52,10 @@ public class KeyInput extends KeyAdapter{
 
     public static boolean SPACE = false;
     public static boolean ESC = false;
+    public static boolean UP = false;
+    public static boolean DOWN = false;
+    public static boolean LEFT = false;
+    public static boolean RIGHT = false;
             
     public KeyInput(Handler handler){
         this.handler = handler;
@@ -238,6 +242,18 @@ public class KeyInput extends KeyAdapter{
             if(key == KeyEvent.VK_ESCAPE){
                 KeyInput.ESC = true;
             }
+            if(key == KeyEvent.VK_UP){
+                KeyInput.UP = true;
+            }
+            if(key == KeyEvent.VK_DOWN){
+                KeyInput.DOWN = true;
+            }
+            if(key == KeyEvent.VK_LEFT){
+                KeyInput.LEFT = true;
+            }
+            if(key == KeyEvent.VK_RIGHT){
+                KeyInput.RIGHT = true;
+            }
 
     }
     
@@ -266,6 +282,18 @@ public class KeyInput extends KeyAdapter{
         }
         if(key == KeyEvent.VK_ESCAPE){
             KeyInput.ESC = false;
+        }
+        if (key == KeyEvent.VK_UP) {
+            KeyInput.UP = false;
+        }
+        if (key == KeyEvent.VK_DOWN) {
+            KeyInput.DOWN = false;
+        }
+        if (key == KeyEvent.VK_LEFT) {
+            KeyInput.LEFT = false;
+        }
+        if (key == KeyEvent.VK_RIGHT) {
+            KeyInput.RIGHT = false;
         }
     }
     

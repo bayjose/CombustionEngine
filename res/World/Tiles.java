@@ -16,16 +16,11 @@ import components.ComponentImage;
 public class Tiles {
 
     public static Tile getTile(String type, int x, int y){
-        if(type.equals("air")){
-            return new Tile(x, y, new Component[]{});
+        for(int i=0; i<LoadTiles.tiles.length; i++){
+            if(LoadTiles.tiles[i].name.equals(type)){
+                return new Tile(type, x, y, LoadTiles.tiles[i].components);
+            }
         }
-        if(type.equals("dirt")){
-            return new Tile(x, y, new Component[]{
-                new ComponentImage(new String[]{"Tiles/dirt.png"}),
-                  new ComponentCollision(new String[]{"-16 -16 0", "16 16 0", "-16 32 0"})
-            });
-        }
-        
-        return new Tile(x, y, new Component[]{new ComponentImage(new String[]{"Core/error.png"})});
+        return new Tile("", x, y, new Component[]{new ComponentImage(new String[]{"Core/error.png"})});
     }
 }

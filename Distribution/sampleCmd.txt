@@ -1,0 +1,8 @@
+This is a sample of all of the commands that have been implemented
+this first one adds a new message to the index of loaded messages. 
+-/cmd{add-msg nameOfFile.txt}
+or
+-/cmd{add-msg nameOfFile.txt nameOfCharacter}
+nameOfFile.txt is the argument. 
+It will add the name.txt file to the list of loaded messages. 
+/cmd{add-msg Script_intro.txt}

@@ -5,6 +5,7 @@
  */
 package itemmaker;
 
+import Base.Game;
 import Base.SpriteBinder;
 import Base.Window;
 import Base.util.StringUtils;
@@ -446,7 +447,7 @@ public class ItemEditor extends javax.swing.JFrame {
             }else{
                 useLighting = false;
             }
-        new Window(this.getWidth(), this.getHeight(), "Preview of:"+this.NameField.getText(), new ItemGame(this.getWidth()/2, this.getHeight()/2,ItemHandler.loadItem(""+this.ItemID.getText()), useLighting));
+        new Window(this.getWidth(), this.getHeight(), "Preview of:"+this.NameField.getText(), Game.platform, new ItemGame(this.getWidth()/2, this.getHeight()/2,ItemHandler.loadItem(""+this.ItemID.getText()), useLighting));
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed

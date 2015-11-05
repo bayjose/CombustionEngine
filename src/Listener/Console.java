@@ -5,6 +5,8 @@
  */
 package Listener;
 
+import Base.Handler;
+import ScriptingEngine.Script;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -26,6 +28,9 @@ public class Console {
         updateArray(msg);
         Console.cal.getTime();
         System.out.println("Console Recieved at "+(sdf.format(cal.getTime()))+" |Message["+msg+"]");
+        if(msg.contains("load:")){
+            Handler.scripts.add(new Script(msg.replace("load:", "")+".txt"));
+        }
     }
     
     private static void updateArray(String msg){

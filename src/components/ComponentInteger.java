@@ -16,7 +16,6 @@ public class ComponentInteger extends ComponentData{
     public ComponentInteger(String[] data) {
         super(EnumComponentType.Integer, data);
         this.Int = Integer.parseInt(data[0]);
-        System.out.println("Data loaded:"+this.Int);
     }
 
     @Override

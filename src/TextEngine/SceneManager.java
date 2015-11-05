@@ -38,7 +38,7 @@ public class SceneManager {
         BaseNode pt4 = (BaseNode)(objects.get(3));
         objects.add(new Wire(pt3.getPts()[0], pt1.getPts()[0]));
         objects.add(new Wire(pt1.getPts()[1], pt4.getPts()[0]));
-        this.scenes.add(new Scene("intro", objects));
+//        this.scenes.add(new Scene("intro", objects));
     }
     
     public static void setScene(String name){

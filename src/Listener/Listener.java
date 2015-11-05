@@ -20,14 +20,16 @@ public abstract class Listener {
     }
     public abstract void Event();
     public boolean checkSound(String msg){
-        if(msg.equals(this.msg)){
-            this.MessageRecieved = true;
-            Event();
-            if(!repeatable){
-                this.remove = true;
-                return true;
-            }else{
-               return false; 
+        if(msg!=null){
+            if(msg.equals(this.msg)){
+                this.MessageRecieved = true;
+                Event();
+                if(!repeatable){
+                    this.remove = true;
+                    return true;
+                }else{
+                   return false; 
+                }
             }
         }
         return false;

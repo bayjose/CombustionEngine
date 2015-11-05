@@ -1,0 +1,3 @@
+Tile Name:Laboratory Floor
+Component_Image
+labFloor.png

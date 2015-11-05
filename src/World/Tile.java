@@ -5,7 +5,12 @@
  */
 package World;
 
+import Base.Camera;
+import Base.Game;
 import components.Component;
+import components.ComponentCollision;
+import components.ComponentString;
+import components.ComponentUtils;
 import java.awt.Graphics;
 
 /**
@@ -15,10 +20,12 @@ import java.awt.Graphics;
 public class Tile {
     
     public Component[] components;
+    public String name;
     public int x, y;
     
-    public Tile(int x, int y, Component[] components){
+    public Tile(String name, int x, int y, Component[] components){
         this.components = components;
+        this.name = name;
         this.x=x;
         this.y=y;
     }
@@ -30,8 +37,12 @@ public class Tile {
     }
     
     public void render(Graphics g){
-        for(Component component: this.components){
-            component.render(g, x, y);
+        if(this.x<((Game.WIDTH*1.5)-(int)Camera.position.getX())&&this.x>(-(int)Camera.position.getX()-32)){
+            if(this.y<(Game.HEIGHT-(int)Camera.position.getY())&&this.y>(-(int)Camera.position.getY()-32)){
+                for(Component component: this.components){
+                    component.render(g, x, y);
+                }
+            }
         }
     }
 }

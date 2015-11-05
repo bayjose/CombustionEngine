@@ -40,7 +40,7 @@ public class DisplayBox extends Entity{
 
     public void update() {
         for(int i=0; i<this.models.size(); i++){
-            this.models.get(i).offset = new Vector3D(this.offsets[i].getX()+(-Camera.position.getX()+Game.WIDTH/2), this.offsets[i].getY()-Camera.position.getY(), this.offsets[i].getZ()+Camera.position.getZ()+Handler.cam.optimalRender);
+            this.models.get(i).offset = new Vector3D(this.offsets[i].getX()+(Game.WIDTH/2), this.offsets[i].getY(), this.offsets[i].getZ()+Handler.cam.optimalRender);
         }
     }
 

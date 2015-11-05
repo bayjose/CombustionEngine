@@ -1,0 +1,8 @@
+Tile Name:Carpet
+Component_Image
+carpet.png
+Component_Collision
+0 0 0
+0 32 0
+32 32 0
+32 0 0

@@ -94,6 +94,11 @@ public class ComponentDecoder {
             if(id.equals(EnumComponentType.HoverText.toString())){
                return new ComponentHoverText(parsedData); 
             }
+            
+            if(id.equals(EnumComponentType.Collision.toString())){
+               return new ComponentCollision(parsedData); 
+            }
+
 
             System.err.println("Component:"+id+" was not recognised.");
         }

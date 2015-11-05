@@ -158,7 +158,11 @@ public class RigidUtils {
             if(Handler.bool1){
                 g.drawPolygon(obj.getCollision());
             }else{
-                g.fillPolygon(obj.getCollision());
+                if(obj.ImageIndex == -2){
+                    
+                }else if(obj.ImageIndex == -1){
+                    g.fillPolygon(obj.getCollision());
+                }
             }
             g.translate((int)-obj.x, (int)-obj.y);
             g.drawLine((int)obj.x, (int)obj.y, (int)(obj.x+(obj.normal.getZ()*10)), (int)(obj.y+(obj.normal.getZ()*10)));
