@@ -28,7 +28,7 @@ public class Intro extends Entity{
     private int curTicks = 0;
     private int maxTicks = 0;
     private Entity Text;
-    private final boolean devMode = false;
+    private final boolean devMode = true;
     
     public Intro(Handler handler) {
         super(Models.generateQuad(new Vector3D(0,0,128), Game.WIDTH, Game.HEIGHT));
@@ -62,7 +62,7 @@ public class Intro extends Entity{
         this.models.add(Peter);
         this.models.add(seanFish);
         this.handler = handler;
-        Text = FontBook.fontBig.returnTextbox(new Vector3D(-Game.WIDTH/2, -Game.HEIGHT/6, 0).inverse(), ""+Game.name, "Core/yes.png");
+        Text = FontBook.fontBig.returnTextbox(new Vector3D(0, -Game.HEIGHT/5, 0).inverse(), ""+Game.name, "Core/yes.png");
         
         FontBook.Init();
     }

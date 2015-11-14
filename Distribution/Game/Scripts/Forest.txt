@@ -1,0 +1,9 @@
+//Load the Forest
+cmd_addMessage:(x) (y) (z)
+cmd_loadEntity:forest at:0 -2698 0 
+cmd_pause:2
+cmd_moveCam:0 2694 0 420
+cmd_pause:9
+cmd_addMessage:The warm glow of light pulls you closer.
+
+

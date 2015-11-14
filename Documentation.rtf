@@ -24,5 +24,62 @@ delays the next command from being interpreted for (time) seconds. \
 \
 cmd_loadScript: String\
 loads a new script file of the name String\
+//Variables\
+define-int:name = 1\
+define- takes a type, the types are float, int, boolean, and string. Then a name is given to represent this type, by whatever follows the : in this example the variable\'92s name is name. The value of name is determined by what follows the = sign in this instance, the value of name = 1; If you give the engine the wrong type for the variable, the script will crash when it is being interpreted. Here are a list of all of the types you can define. \
+define-int:playerAge = 16\
+define-float:pi = 3.14159\
+define-boolean:isThisACoolEngine = false\
+define-String:whatAreTurtles = Turtles are food\
+\
+When you want to evaluate a variable, put it in ()\
+so cmd_print:(whatAreTurtles) would print \'93Turtles are food\'94\
+however cmd_print:whatAreTurtles, would print whatAreTurtles\
+\
+You can use these operators to do math and comparison\
+(+ var1 var2) add the values, you can use floats and ints\
+(- var1 var2) subtract the values, you can use floats and ints\
+(* var1 var2) multiply the values, you can use floats and ints\
+(/ var1 var2) divide the values, you can use floats and ints\
+\
+(= var1 var2) compare the values, you can use any variable type\
+(> var1 var2) compare the values, you can use any variable type\
+(< var1 var2) compare the values, you can use any variable type\
+(! var1 var2) compare the values, you can use any variable type\
+\
+These functions can be nested within each other, as follows\
+cmd_print:(+ (+ (playerAge) (pi)) 1) would return 20.14159\
+\
+To set a variable you use the set- command, where the portion of the command after the - is the name of a variable\
+cmd_print:(playerAge) prints 16\
+set-playerAge = 4 sets the variable playerAge to 4\
+cmd_print:(playerAge) will now print 4\
+\
+
+\b Debug\
+
+\b0 Todo - code today\
+- Add function to print the interpreted script to an interpreted file, the interpreted script is any line that comes out of the interpreter\
+- 1 print name of script on first line\
+- print all variables in the order they were added\
+- print the body of the script, with the ref-expr:x in the code\
+- print all expressions that this script has, \
+\
+
+\b How the interpreter works
+\b0 \
+- first code is broken up into sections\
+- main section is anything that is not in a statement\
+- statements are identified by the portion of code \'93)\{\'93 this can follow if:()\{ or for:()\{\
+- these statements are then replaced with a linear command, like ref-expr:1 to refer to expression 1\
+- Note -ref-expr: is a line that the interpreter creates itself, it should not be used as a command in scripts created by the user.\
+- Expressions are broken up in the following way\
+- Guard  first line of statement, the conditional to run the rest of the statement - in the ()\
+- Body  The code in \{\} Note that if a statement is within another statement, it in its entirety will have been replaced with ref-expr:x where x is its number in the list, and thus a new reference will be sent to the interpreter, this allows for the code to be interpreted in a way that visually is:\
+     - top to bottom, inside out\
+- End - what the code should do after interpretation, if its an if statement, break, if its a for loop, loop, and wait for the Guard to return false, then override the loop and force a break. \
+\
+\
+\
 \
 }

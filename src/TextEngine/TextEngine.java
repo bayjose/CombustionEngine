@@ -24,6 +24,7 @@ import java.util.LinkedList;
  * @author Bayjose
  */
 public class TextEngine {
+
     private boolean Debug = false;
     // Data
     private static LinkedList<Message> Data = new LinkedList<Message>();
@@ -199,5 +200,9 @@ public class TextEngine {
     
     public static FontInput getFont(){
         return mainFont;
+    }
+    
+    public static void clear() {
+        Data.clear();
     }
 }

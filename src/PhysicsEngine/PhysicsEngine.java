@@ -31,6 +31,7 @@ public class PhysicsEngine {
     
     
     public PhysicsEngine(){
+        System.out.println("--------------------------------------------------");
         if(channels.length<=0){
             String[] channelNames = StringUtils.loadData("Game/PhysicsEngine.txt");
             System.out.println("Initializing Channels.");
@@ -48,12 +49,6 @@ public class PhysicsEngine {
     
     public void tick(){
         time++;
-        if(Game.profileing){
-            if(numBods!=PhysicsEngine.getChannel("bodies").collisons.length){
-                System.out.println(PhysicsEngine.getChannel("bodies").collisons.length);
-            }
-            numBods = PhysicsEngine.getChannel("bodies").collisons.length;
-        }
         
         for(int i=0; i<PhysicsEngine.channels.length; i++){
             PhysicsEngine.channels[i].tick();

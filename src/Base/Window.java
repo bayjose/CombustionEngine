@@ -6,6 +6,7 @@ package Base;
 
 import Base.util.StringUtils;
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 
@@ -15,12 +16,24 @@ import javax.swing.JFrame;
  */
 public class Window {
     
+    public JFrame frame;
+    
     public Window(int w, int h, String title, String platform, Game game){
-        game.setPreferredSize(new Dimension(w, h));
-        game.setMaximumSize(new Dimension(w, h));
-        game.setMinimumSize(new Dimension(w, h));
+
+            game.setPreferredSize(new Dimension(w, h));
+            game.setMaximumSize(new Dimension(w, h));
+            game.setMinimumSize(new Dimension(w, h));
+
         
-        JFrame frame = new JFrame(title);
+        try{
+            frame = new JFrame(title);
+            //try to launch with a header
+        }catch(HeadlessException e){
+            frame = new JFrame();
+            frame.setUndecorated(true);
+            frame.setSize(new Dimension(w, h));
+            frame.setLocationRelativeTo(null);
+        }
         frame.add(game);
         System.out.println("Running on:"+platform);
         if(platform.equals("Console")||platform.equals("RaspberryPi")){

@@ -6,6 +6,7 @@
 package Listener;
 
 import Base.Handler;
+import PhysicsEngine.Vector3D;
 import ScriptingEngine.Script;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,6 +31,14 @@ public class Console {
         System.out.println("Console Recieved at "+(sdf.format(cal.getTime()))+" |Message["+msg+"]");
         if(msg.contains("load:")){
             Handler.scripts.add(new Script(msg.replace("load:", "")+".txt"));
+        }
+        if(msg.contains("clear")){
+            Handler.scripts.clear();
+            Handler.cam.cancelTranslation();
+            Handler.cam.goTo(new Vector3D(0,0,0), 1);
+            Handler.objects.clear();
+            TextEngine.TextEngine.clear();
+            PhysicsEngine.PhysicsEngine.Reset();
         }
     }
     

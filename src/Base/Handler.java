@@ -52,7 +52,7 @@ public class Handler {
     //various Engines
     public LightingEngine lightingEngine = new LightingEngine();
     public PhysicsEngine physicsEngine;
-    public TextEngine textEngine = new TextEngine();
+    public static TextEngine textEngine = new TextEngine();
     public SceneManager sceneManager = new SceneManager();    
     public static Chunk chunk = new Chunk(100, 100, 21, 41);
     public static LinkedList<Script> scripts = new LinkedList<Script>();
@@ -135,7 +135,7 @@ public class Handler {
             for (Object object : Handler.objects) {
                 object.render(g);
             }
-            this.textEngine.render(g);
+            
 //            this.lightingEngine.render(g);
             for(Gui gui: this.gui){
                 gui.render(g);

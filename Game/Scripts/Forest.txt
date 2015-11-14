@@ -1,0 +1,33 @@
+define-boolean:continue = false
+
+//Cut from here
+
+
+
+define-int:ThisIsTwentyFive = (+ 10 (- (* 4 (/ 8 2)) 1))
+cmd_print:(= ThisIsTwentyFive 1)
+
+if:(Same?){
+	cmd_print:This worked
+}
+
+if:(continue){
+    cmd_print:This should be in 0
+    if:(continue){
+        cmd_print:This should be in 1
+        if:(continue){
+            cmd_print:This should be in 2
+        }
+    }
+    if:(continue){
+        cmd_print:This should be in 3
+    }
+}
+
+if:(continue){
+    cmd_print:This should be in 4
+    if:(continue){
+        cmd_print:This should be in 5
+    }
+}
+//To here

@@ -1,6 +1,3 @@
-cmd_Print:”two”
-cmd_loadLevel:hallway
-cmd_moveCam:-256 -256 0 120
-cmd_Pause:2
-cmd_Print:Toaster oven
+cmd_addMessage:2
+
 

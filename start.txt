@@ -1,0 +1,6 @@
+#!/bin/bash
+#QuadPodPrOS
+
+echo “Combustion Engine Version 1.0”
+xinit (-)(-) :1
+java -jar /Users/Bayjose/NetBeansProjects/RPGEngine/Distribution/Magic.jar

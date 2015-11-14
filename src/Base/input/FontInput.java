@@ -43,6 +43,7 @@ public class FontInput {
              col = s1.nextInt();
              row = s1.nextInt();
 //            System.out.println("Widht:"+width+" Height:"+height);
+             System.out.println("Font:"+StringUtils.getAbsPath()+"Font/"+path+"/properties.txt");
             this.font = new SpriteSheet(width, height, col, row, StringUtils.getAbsPath()+"Font/"+path+"/font.png");
             this.characterIndex = new String[col][row];
             

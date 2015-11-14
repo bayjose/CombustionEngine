@@ -18,7 +18,7 @@ public class SpriteSheet{
    public String path;
    
    public SpriteSheet(int width, int height, int rows, int columns, String path) throws IOException {
-      System.out.println("SpriteSheet path:"+path);
+//      System.out.println("SpriteSheet path:"+path);
       this.spriteSheet= ImageIO.read(new File(path));
       this.width = width;
       this.height = height;

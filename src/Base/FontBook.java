@@ -22,6 +22,7 @@ public class FontBook {
     }
     
     public static void Init(){
+        System.out.println("--------------------------------------------------");
         FontBook.font.fontSize = 0.5f;
         FontBook.fontMed.fontSize = 1.25f;
         FontBook.fontBig.fontSize = 3f;

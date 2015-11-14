@@ -7,17 +7,14 @@ import Base.input.KeyInput;
 import Base.input.MousePositionLocator;
 import Base.input.MouseInput;
 import Base.input.MouseScroleInput;
-import Base.util.EnumGameState;
 import Base.util.StringUtils;
 import Entity.Entity;
 import Entity.Models;
 import Listener.Console;
 import Listener.Listener;
 import Physics.Model;
-import PhysicsEngine.Point2D;
 import PhysicsEngine.Vector3D;
 import ScriptingEngine.Profileing;
-import ScriptingEngine.Script;
 import World.LoadTiles;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -46,6 +43,7 @@ public abstract class Game extends Canvas implements Runnable{
     
     
     public static int WIDTH, HEIGHT;
+    private static Window window;
 
     public static final String[] cfg = StringUtils.loadData("Game/cfg.txt");
     public static final String name = cfg[1].replace("Game Name:", "");
@@ -138,13 +136,16 @@ public abstract class Game extends Canvas implements Runnable{
         int frames = 0;
         while(running){
             long now = System.nanoTime(); 
-            delta += (now - lastTime)/ns;
+            delta += ((now - lastTime)/ns);
+ 
             lastTime=now;
             while(delta >= 1){
                 tick();
                 updates++;
                 delta--;
             }
+            
+            
             render();
             frames++;
             
@@ -165,6 +166,7 @@ public abstract class Game extends Canvas implements Runnable{
        if(!broken){
             try{
              this.extraTick();
+             
              
             }catch(Exception e){
                 this.renderErrorToScreen(e.getStackTrace());
@@ -223,7 +225,7 @@ public abstract class Game extends Canvas implements Runnable{
         }
         g.translate(-(int)Camera.position.getX() + Game.WIDTH/2, -(int)Camera.position.getY());
                 //fps counter
-   
+        Handler.textEngine.render(g);
         g.dispose();
         bs.show();
     }
@@ -262,13 +264,15 @@ public abstract class Game extends Canvas implements Runnable{
     
     public static void main(String[] args) {
 //            new Window(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, name, new BasicGame());
+        System.out.println("--------------------------------------------------");
         String cfg[] = StringUtils.loadData("Game/cfg.txt");
         Game.platform = cfg[0].replace("Build:", "");
         try{
             String[] gameDim = StringUtils.loadData("Game/Platforms/"+Game.platform+".txt")[0].replace("Resolution:", "").split("x");
-            new Window(Integer.parseInt(gameDim[0]), Integer.parseInt(gameDim[1]), cfg[1].replace("Game Name:", ""), Game.platform, new BasicGame());
+            window = new Window(Integer.parseInt(gameDim[0]), Integer.parseInt(gameDim[1]), cfg[1].replace("Game Name:", ""), Game.platform, new BasicGame());
         }catch(Exception e){
             System.err.println(Game.platform+" is not supported by this game.");
+            e.printStackTrace();
         }
         
 //        System.out.println("Size:("+Toolkit.getDefaultToolkit().getScreenSize().width+","+Toolkit.getDefaultToolkit().getScreenSize().height+")");
