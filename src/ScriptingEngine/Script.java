@@ -9,11 +9,12 @@ import Base.Camera;
 import Base.Game;
 import Base.Handler;
 import Base.util.StringUtils;
+import Listener.Console;
+import Listener.Listener;
 import Object.ObjectLoader;
 import PhysicsEngine.Point2D;
 import PhysicsEngine.Vector3D;
 import java.util.LinkedList;
-import java.util.function.Predicate;
 
 /**
  *
@@ -60,6 +61,15 @@ public class Script {
         this.vars.add(new VarBoolean("loop", "false"));
         //Determine the statements
         this.findStatements(data);
+        
+        Console.listeners.add(new Listener("script") {
+            @Override
+            public void Event() {
+                dumpHeap();
+                this.repeatable = true;
+            }
+        });
+        
     }
     
     public void tick(){
@@ -123,7 +133,7 @@ public class Script {
             return;
         }
         //turn anything that needs to be evaluated into its evlauated version before continuing. 
-        data = InterprateCode(data);
+        data = Interpreter.InterprateCode(data, this.vars);
         //looks for define-(type)
         //creates a variable of type (type) with the value of the string after the = sign
         if(data.startsWith("set-")){
@@ -147,10 +157,9 @@ public class Script {
         if(data.startsWith("define-")){
             data.replaceAll(" ", "");
             data = data.replaceAll("define-", "");
-            String varName = data.split(":")[1].split("=")[0];
+            String varName = data.split(":")[1].split("=")[0].replaceAll(" ", "");
             String varData = data.split(":")[1].split("=")[1];
             if(this.findVar(varName) == null){
-                System.out.println("Variable initialized");
                 if(data.startsWith("int")){
                     this.vars.add(new VarInt(varName, varData));
                 }else if(data.startsWith("String")){
@@ -171,7 +180,8 @@ public class Script {
         if(data.startsWith("if:")){
             data = data.replaceAll(" ", "");
             //if the if statement returns true, continue, else skip to next }
-            String conditional = data.split(":")[1].replace("{", "").replace(")", "");
+            System.err.println("If Conditional:"+(data.split(":")[1].replace("{", "")));
+            String conditional = Interpreter.InterprateCode(data.split(":")[1].replace("{", ""), this.vars);
             Variable tempVar  = this.findVar(conditional);
             if(tempVar!=null){
                 conditional = tempVar.data.replaceAll(" ", ""); 
@@ -196,6 +206,9 @@ public class Script {
             if(data.startsWith("loadLevel")){
                 LoadLevel.LoadLevel(data);
             }
+            if(data.startsWith("console")){
+                Console.sendOut(data.replace("console:", ""));
+            }
             if(data.startsWith("loadEntity")){
                 ObjectLoader.LoadObject(data);
             }
@@ -217,7 +230,7 @@ public class Script {
             }
         }else if(data.startsWith("ref-expr")){
             //ref-expr commands that have been added by the interpreter
-            this.evaluateEvaluation(Integer.parseInt(data.replace("ref-expr:", "")));
+            this.evaluateEvaluation(Integer.parseInt(data.replace("ref-expr:", "")), 0);
         }else{
             System.out.println("Unrecognised Command:"+data);
         }
@@ -244,266 +257,7 @@ public class Script {
     }
     
     //Maths
-    public String InterprateCode(String data){
-        String answer = data;
-        if(data.contains("(")&&data.contains(")")){
-            String[] EvaluateMe = data.split("\\(");
-            for(int i=EvaluateMe.length-1; i>=0; i--){
-                if(i==0){
-                    return EvaluateMe[0];
-                }
-//                System.out.println("EvaluateMe:"+"["+i+"/"+(EvaluateMe.length-1)+"]"+EvaluateMe[i]);
-                
-                boolean interprate = false;
-                for (EnumAction value : EnumAction.values()) {
-                    if (EvaluateMe[i].startsWith(value.character)) {
-                        interprate = true;
-                        break;
-                    }  
-                }
-                
-                if(interprate){
-                    
-                   String eval = EvaluateMe[i];
-                   String secondPart = "";
-                   if(EvaluateMe[i].contains(")")){
-                        eval = EvaluateMe[i].substring(0, EvaluateMe[i].indexOf(")"));
-                        secondPart = EvaluateMe[i].replace(eval, "").replaceFirst("\\)", "");
-                   }
-                   EnumAction action = EnumAction.ADD;
-                   for(int j = 0; j<EnumAction.values().length; j++){
-//                       System.out.println("is"+eval+" = "+EnumAction.values()[j].character);
-                        if(eval.contains(EnumAction.values()[j].character)){
-                            eval = eval.replace(EnumAction.values()[j].character, "");
-                            action = EnumAction.values()[j];
-                        }
-                   }
-                   String[] EvaluatedData = eval.split(" ");
-
-                   Variable tempVar1 = this.findVar(EvaluatedData[1]);
-                   Variable tempVar2 = this.findVar(EvaluatedData[2]);
-                   String var1 = EvaluatedData[1];
-                   String var2 = EvaluatedData[2];
-                   if(tempVar1 != null){
-                       var1 = tempVar1.data.replaceAll(" ", "");
-                   }else{
-                       if(var1.contains(".")){
-                           tempVar1 = new VarFloat("", var1);
-                       }else{
-                           tempVar1 = new VarInt("", var1);
-                       }
-                   }
-                   if(tempVar2 != null){
-                       var2 = tempVar2.data.replaceAll(" ", "");
-                   }else{
-                       if(var2.contains(".")){
-                           tempVar2 = new VarFloat("", var2);
-                       }else{
-                           tempVar2 = new VarInt("", var2);
-                       }
-                   }
-                   
-//                   System.out.println("The action for the expression:"+eval);
-//                   System.out.println("is:"+action.toString());
-//                   System.out.println("Obj1:"+tempVar1.data+" Obj2:"+tempVar2.data);
-                   
-                   if(action.equals(EnumAction.ADD)){
-                       String theAnswer = "";
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+(Integer.parseInt(var1)+Integer.parseInt(var2));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+(Float.parseFloat(var1)+Integer.parseInt(var2));
-                           }
-                       }
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+(Integer.parseInt(var1)+Float.parseFloat(var2));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+(Float.parseFloat(var1)+Float.parseFloat(var2));
-                           }
-                       }
-                       EvaluateMe[i-1] = EvaluateMe[i-1] + theAnswer + secondPart;
-                   }
-                   
-                   if(action.equals(EnumAction.SUB)){
-                       String theAnswer = "";
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+(Integer.parseInt(var1)-Integer.parseInt(var2));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+(Float.parseFloat(var1)-Integer.parseInt(var2));
-                           }
-                       }
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+(Integer.parseInt(var1)-Float.parseFloat(var2));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+(Float.parseFloat(var1)-Float.parseFloat(var2));
-                           }
-                       }
-                       EvaluateMe[i-1] = EvaluateMe[i-1] + theAnswer + secondPart;
-                   }
-                   
-                   if(action.equals(EnumAction.MUL)){
-                       String theAnswer = "";
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+(Integer.parseInt(var1)*Integer.parseInt(var2));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+(Float.parseFloat(var1)*Integer.parseInt(var2));
-                           }
-                       }
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+(Integer.parseInt(var1)*Float.parseFloat(var2));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+(Float.parseFloat(var1)*Float.parseFloat(var2));
-                           }
-                       }
-                       EvaluateMe[i-1] = EvaluateMe[i-1] + theAnswer + secondPart;
-                   }
-                   
-                   if(action.equals(EnumAction.DIV)){
-                       String theAnswer = "";
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+(Integer.parseInt(var1)/Integer.parseInt(var2));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+(Float.parseFloat(var1)/Integer.parseInt(var2));
-                           }
-                       }
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+(Integer.parseInt(var1)/Float.parseFloat(var2));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+(Float.parseFloat(var1)/Float.parseFloat(var2));
-                           }
-                       }
-                       EvaluateMe[i-1] = EvaluateMe[i-1] + theAnswer + secondPart;
-                   }
-                   
-                   if(action.equals(EnumAction.GRT)){
-                       String theAnswer = "";
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+((Integer.parseInt(var1)>Integer.parseInt(var2)));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+((Float.parseFloat(var1)>Integer.parseInt(var2)));
-                           }
-                       }
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+((Integer.parseInt(var1)>Float.parseFloat(var2)));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+((Float.parseFloat(var1)>Float.parseFloat(var2)));
-                           }
-                       }
-                       EvaluateMe[i-1] = EvaluateMe[i-1] + theAnswer + secondPart;
-                   }
-                   
-                   if(action.equals(EnumAction.LES)){
-                       String theAnswer = "";
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+((Integer.parseInt(var1)<Integer.parseInt(var2)));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+((Float.parseFloat(var1)<Integer.parseInt(var2)));
-                           }
-                       }
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+((Integer.parseInt(var1)<Float.parseFloat(var2)));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+((Float.parseFloat(var1)<Float.parseFloat(var2)));
-                           }
-                       }
-                       EvaluateMe[i-1] = EvaluateMe[i-1] + theAnswer + secondPart;
-                   }
-                   
-                   if(action.equals(EnumAction.EQL)){
-                       String theAnswer = "";
-//                       System.err.println("Obj1:"+tempVar1.data+" Obj2:"+tempVar2.data);
-                       theAnswer = ""+(tempVar1.data.equals(tempVar2.data));
-                       EvaluateMe[i-1] = EvaluateMe[i-1] + theAnswer + secondPart;
-                   }
-                   
-                   if(action.equals(EnumAction.NOTEQL)){
-                       String theAnswer = "";
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+((Integer.parseInt(var1)!=Integer.parseInt(var2)));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarInt){
-                               theAnswer = ""+((Float.parseFloat(var1)!=Integer.parseInt(var2)));
-                           }
-                       }
-                       if(tempVar1 instanceof VarInt){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+((Integer.parseInt(var1)!=Float.parseFloat(var2)));
-                           }
-                       }
-                       if(tempVar1 instanceof VarFloat){
-                           if(tempVar2 instanceof VarFloat){
-                               theAnswer = ""+((Float.parseFloat(var1)!=Float.parseFloat(var2)));
-                           }
-                       }
-                       EvaluateMe[i-1] = EvaluateMe[i-1] + theAnswer + secondPart;
-                   }
-                }else{
-                    //not a math function so just get Variable
-                    Variable var = this.findVar(EvaluateMe[i].replaceAll("\\)", ""));
-                    
-                    if(var!=null){
-                        return EvaluateMe[i-1] + var.data;
-                    }else{
-                        String print = (EvaluateMe[i-1]+ EvaluateMe[i]);
-                        return print;
-                    }
-                }
-            }
-            
-        }
-        return answer;
-    }
+    
     
     public void findStatements(String[] data){
         LinkedList<Point2D> cut = new LinkedList<Point2D>();
@@ -580,22 +334,49 @@ public class Script {
         return false;
     }
     
-    public void evaluateEvaluation(int i){
+    public void evaluateEvaluation(int i, int itteration){
         Statement eval = this.statements.get(i);
         //if statements
-//        System.out.println("Evaluateing:"+i+": "+this.InterprateCode(eval.guard));
+//        System.out.println("Evaluateing:"+i+": "+this.Interpreter.InterprateCode(eval.guard));
         int inindex = this.index;
-        if(this.InterprateCode(eval.guard).replaceAll(" ", "").equals("true")){
+        System.out.println("Statement Guard:"+eval.guard);
+        if(Interpreter.InterprateCode(eval.guard, this.vars).replaceAll(" ", "").equals("true")){
             for(int j = 0; j<eval.body.length; j++){
                 this.InterperateScript(eval.body[j]);
                 this.index = inindex;
             }
             
             if(eval.end.equals(EnumEnd.LOOP)){
-                evaluateEvaluation(i);
+                System.out.println("Itteration:"+itteration);
+                evaluateEvaluation(i, itteration+1);
             }
         }
     }
+    
+    
+    //debug stuff
+    public void dumpHeap(){
+        System.out.println("--------------------"+this.name+"--------------------");
+        System.out.println("--------------------Variables--------------------");
+        for(int i=0; i<this.vars.size(); i++){
+            System.out.println("Name:"+this.vars.get(i).name+" Type:"+this.vars.get(i).evt.name()+" Value:"+this.vars.get(i).data);
+        }
+        System.out.println("--------------------Script--------------------");
+        for(int i=0; i<this.data.length; i++){
+            System.out.println(this.data[i]);
+        }
+        System.out.println("--------------------Statements--------------------");
+        for(int i=0; i<this.statements.size(); i++){
+            System.out.println("Index:"+i+" Conditional:"+this.statements.get(i).guard+" topLevel:"+this.statements.get(i).internal);
+            for(int j=0; j<this.statements.get(i).body.length; j++){
+                System.out.println(this.statements.get(i).body[j]);
+            }
+            System.out.println("End:"+this.statements.get(i).end);
+        }
+        
+    }
+    
+    
     
 }
 

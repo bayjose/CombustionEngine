@@ -1,65 +1,18 @@
-define-int: count = 0
+define-int:count= 0
 define-int:loopsToRun=18
 define-int:spacing = 10
 define-float:float = 12.9
 define-String:Nuggets = I like nuggets. 
 define-boolean:loop = true
 
+//Init stuff
+cmd_console:free cam
+
 //Load the Forest
 cmd_loadEntity:forest at:128 -2048 0 
-
-cmd_print:(loop)
-
 if:(loop){
-cmd_addMessage:”If Returned True”
-if:(false){
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
+	cmd_addMessage:”If Returned True”
 }
-if:(loop){
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
-cmd_addMessage:”If Returned True”
-}
-}
-
-cmd_addMessage:”Test of Counting”
-set-count = (+ count 1)
-cmd_loadEntity:desk at:(* spacing count) (* spacing count) 0
-cmd_print:”Iteration (count)”
-cmd_pause:2
-cmd_addMessage:(count)
-set-count = (+ count 1)
-cmd_loadEntity:desk at:(* spacing count) (* spacing count) 0
-cmd_print:”Iteration (count)”
-cmd_pause:2
-cmd_addMessage:(count)
-set-count = (+ count 1)
-cmd_loadEntity:desk at:(* spacing count) (* spacing count) 0
-cmd_print:”Iteration (count)”
-cmd_pause:2
-cmd_addMessage:(count)
-set-count = (+ count 1)
-cmd_loadEntity:desk at:(* spacing count) (* spacing count) 0
-cmd_print:”Iteration (count)”
-cmd_pause:2
-cmd_addMessage:(count)
-set-count = (+ count 1)
-cmd_loadEntity:desk at:(* spacing count) (* spacing count) 0
-cmd_print:”Iteration (count)”
-cmd_pause:2
-cmd_addMessage:(count)
 
 cmd_addMessage:”Addition”(count)
 
@@ -106,11 +59,13 @@ cmd_addMessage:(+ (+ 12 8) (+ 15 5))
 
 cmd_loadLevel:room
 cmd_addMessage:Welcome
-for(< (count) (loopsToRun)){
+for:(< (count) (loopsToRun)){
  set-count = (+ count 1)
- cmd_loadEntity:desk at:(* 10 count) (* 10 count) 0
- cmd_print:”Iteration (count)”
- pause 2
+ cmd_loadEntity:desk at:(* spacing count) (* spacing count) 0
+ cmd_addMessage:desk at:(* spacing count) (* spacing count) 0
+ set-spacing = (+ spacing 10)
+ cmd_print:”For loop Iteration" (count)”
+ cmd_pause:2
 }
 cmd_addMessage:(Nuggets)
 

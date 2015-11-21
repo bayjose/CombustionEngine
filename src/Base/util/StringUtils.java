@@ -218,6 +218,16 @@ public class StringUtils {
         }
         return absPath;
     }
+
+    public static int countMatches(String data, String string) {
+        int index = 0;
+        for(int i=0; i<data.length(); i++){
+            if((data.charAt(i)+"").equals(string)){
+                index++;
+            }
+        }
+        return index;
+    }
     
     
 }

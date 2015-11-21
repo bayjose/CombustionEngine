@@ -3,4 +3,4 @@ Game Name:Edaxerum
 Version:0.1
 Preview Icon:fish.png
 Default Font:mainGameFont
-Start Script:Forest.txt
+Start Script:Main.txt

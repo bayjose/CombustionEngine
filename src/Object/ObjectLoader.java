@@ -32,7 +32,7 @@ public class ObjectLoader {
         if(data.contains("at:")){
             name = data.split(" at:")[0].replace(" at:", "");
             posData = data.split(" at:")[1].replace(" at:", "").split(" ");
-            position = new Vector3D(Integer.parseInt(posData[0]), Integer.parseInt(posData[1]), Integer.parseInt(posData[2]));
+            position = new Vector3D((int)Float.parseFloat(posData[0]), (int)Float.parseFloat(posData[1]), (int)Float.parseFloat(posData[2]));
             data = name+".txt";
             objectData = StringUtils.loadData("Game/Entity/"+data);
         }else{

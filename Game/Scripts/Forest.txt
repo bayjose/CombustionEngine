@@ -5,11 +5,15 @@ define-boolean:continue = false
 
 
 define-int:ThisIsTwentyFive = (+ 10 (- (* 4 (/ 8 2)) 1))
-cmd_print:(= ThisIsTwentyFive 1)
 
-if:(Same?){
-	cmd_print:This worked
-}
+
+//test of for loop
+define-int:count = 100;
+
+cmd_addMessage:(> (count) 0)
+cmd_addMessage:”If Returned”(+ (count) 0)
+set-count = (- (count) 1)
+
 
 if:(continue){
     cmd_print:This should be in 0

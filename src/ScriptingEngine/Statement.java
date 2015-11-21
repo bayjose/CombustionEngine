@@ -5,6 +5,8 @@
  */
 package ScriptingEngine;
 
+import Base.Game;
+
 /**
  *
  * @author Bayjose
@@ -30,10 +32,12 @@ public class Statement {
         if(prefix.equals("for")){
             this.end = EnumEnd.LOOP;
         }
-        System.out.println("--------------------------");
-        System.out.println(this.end.toString()+" "+this.guard+" "+this.internal);
-        for(int i=0; i<this.body.length; i++){
-            System.out.println(body[i]);
+        if(Game.profileing){
+            System.out.println("--------------------------");
+            System.out.println(this.end.toString()+" "+this.guard+" "+this.internal);
+            for(int i=0; i<this.body.length; i++){
+                System.out.println(body[i]);
+            }
         }
     }
     
