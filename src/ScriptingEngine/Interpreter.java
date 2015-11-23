@@ -7,6 +7,8 @@ package ScriptingEngine;
 
 import Base.util.StringUtils;
 import PhysicsEngine.Point2D;
+import components.Component;
+import components.ComponentDecoder;
 import java.util.LinkedList;
 
 /**
@@ -40,18 +42,26 @@ public class Interpreter {
         
         //When an variable is called, ex (camX) NOT (+ x camX)
         EvaluateAVariable:{
-            String internals = middle.replaceAll("\\(", "").replaceAll("\\)", "");
-            for(int i=0; i<vars.size(); i++){
-                if(vars.get(i).name.equals(internals)){
-                    theAnswer = beginning + vars.get(i).data + end;
-                    if(theAnswer.contains("(")||theAnswer.contains(")")){
-//                        System.out.println("Answer To Revaluate:"+theAnswer);
-                        return InterprateCode(theAnswer, vars);
-                    }else{
-                        data = theAnswer;
-                        break Overall;
+            if(!middle.contains(" ")){
+                String internals = middle.replaceAll("\\(", "").replaceAll("\\)", "");
+                for(int i=0; i<vars.size(); i++){
+                    if(vars.get(i).name.equals(internals)){
+                        theAnswer = beginning + vars.get(i).data + end;
+                        if(theAnswer.contains("(")||theAnswer.contains(")")){
+                            return InterprateCode(theAnswer, vars);
+                        }else{
+                            while(true){
+                                if(theAnswer.startsWith(" ")){
+                                    theAnswer = theAnswer.replaceFirst(" ", "");
+                                }else{
+                                    break;
+                                }
+                            }
+                            data = theAnswer;
+                            break Overall;
+                        }
+
                     }
-                    
                 }
             }
         }
@@ -120,7 +130,7 @@ public class Interpreter {
         }
         for(int i=0; i<cuts.size(); i++){
             for(int j=(int)cuts.get(i).getX(); j<(int)cuts.get(i).getY()+1; j++){
-                if(!outData[j].contains("force-ref-expr:")){
+                if(!outData[j].contains("force-")){
                     if(debug){
                         System.out.println("Cutting:"+outData[j]);
                     }
@@ -153,5 +163,74 @@ public class Interpreter {
             }
         }
         return out;
+    }
+    
+    public static Component[] loadComponents(String path){
+        String[] objectData;
+        objectData = StringUtils.loadData(path);
+        try {
+            LinkedList<Component> components = new LinkedList<Component>();
+
+            //loop through the data and look for "Compoent_"
+            String[] componentData = new String[]{};
+            //just for first time
+            boolean searching = true;
+            for(int i=0; i<objectData.length; i++){
+                loop:{
+                    if(objectData[i].startsWith("Component_")&&searching==true){
+                        searching = false;
+                        componentData = StringUtils.addLine(componentData, objectData[i]);
+                        break loop;
+                    }
+                    if(searching==false){
+                        if(objectData[i].startsWith("Component_")){
+                            //populateing a Component LinkedList with the component data gathered from the text file,
+                            //and interperated in the ComponentDecoder class
+                            System.out.println("Component:"+objectData[i]);
+                            components.add(ComponentDecoder.Decode(componentData));
+                            componentData = new String[]{};
+                            componentData = StringUtils.addLine(componentData, objectData[i]);
+                        }else{
+                            componentData = StringUtils.addLine(componentData, objectData[i]);
+                        }
+                    }
+                }
+            }
+            //so last component is added too
+//            System.out.println(componentData[0]);
+            components.add(ComponentDecoder.Decode(componentData));
+            
+            Component[] itemComponents = new Component[components.size()];
+            for(int i=0; i<itemComponents.length; i++){
+                itemComponents[i] = components.get(i);
+            }
+            //last part of file, combine all data together to form SUPERDATA (the item)
+            return itemComponents;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Component[]{};
+    }
+    
+    public static boolean isInternal(int i, String[] data){
+        int countdown = 0;
+        for(int j=0; j<data.length; j++){
+
+                if(data[j].contains("){")){
+                    countdown++;
+                }
+                if(data[j].contains("}")){
+                    countdown--;
+                }
+                if(i == j){
+                    if(countdown <= 1){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+        }
+        return false;
     }
 }

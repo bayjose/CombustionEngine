@@ -25,6 +25,9 @@ public class Object {
         this.name = name;
         this.x=x;
         this.y=y;
+        for(Component component: this.components){
+            component.onInit(x, y);
+        }
     }
     
     public void tick(){
@@ -34,12 +37,12 @@ public class Object {
     }
     
     public void render(Graphics g){
-//        if(this.x<((Game.WIDTH*1.5)-(int)Camera.position.getX())&&this.x>(-(int)Camera.position.getX()-32)){
-//            if(this.y<(Game.HEIGHT-(int)Camera.position.getY())&&this.y>(-(int)Camera.position.getY()-32)){
+        if(this.x<((Game.WIDTH*1.5)-(int)Camera.position.getX())&&this.x>(-(int)Camera.position.getX()-32)){
+            if(this.y<(Game.HEIGHT-(int)Camera.position.getY())&&this.y>(-(int)Camera.position.getY()-32)){
                 for(Component component: this.components){
                     component.render(g, x, y);
                 }
-//            }
-//        }
+            }
+        }
     }
 }

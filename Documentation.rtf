@@ -2,19 +2,28 @@
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \margl1440\margr1440\vieww15740\viewh8400\viewkind0
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\qc\partightenfactor0
 
-\f0\fs24 \cf0 cmd_loadLevel: String\
-takes a level to load\
-\
-cmd_loadEntity: String\
-takes an entity to load, an entity is a list of components\
-\
+\f0\b\fs48 \cf0 BayScript\
+
+\fs24 Created by Bailey Sostek 2015-2016
+\fs48 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 Commands
+\b0\fs24 \
 cmd_print: String\
 Prints anything after the colon in the statement\
 \
-cmd_addMessage: String\
+cmd_console:String\
+Sends everything after the : to the Console/Listener system\
+\
+cmd_addMessage: String 
+\i (from String)
+\i0 \
 adds a new message to the in game text interpreter\
+
+\i (from String) - Optional field, the person saying line String can be specified by adding (from String) where String is their character
+\i0 \
 \
 cmd_moveCam: int x int y int z int time\
 translates the camera from its current position to the position of x,y,z relative to its current location, in time ticks. (60 ticks = 1 second)\
@@ -24,60 +33,222 @@ delays the next command from being interpreted for (time) seconds. \
 \
 cmd_loadScript: String\
 loads a new script file of the name String\
-//Variables\
-define-int:name = 1\
-define- takes a type, the types are float, int, boolean, and string. Then a name is given to represent this type, by whatever follows the : in this example the variable\'92s name is name. The value of name is determined by what follows the = sign in this instance, the value of name = 1; If you give the engine the wrong type for the variable, the script will crash when it is being interpreted. Here are a list of all of the types you can define. \
-define-int:playerAge = 16\
-define-float:pi = 3.14159\
-define-boolean:isThisACoolEngine = false\
-define-String:whatAreTurtles = Turtles are food\
 \
-When you want to evaluate a variable, put it in ()\
+cmd_loadLevel: String\
+takes a level to load\
+\
+cmd_loadEntity: String (at: x y z) 
+\i (rot: x y z)
+\i0 \
+takes an entity to load, an entity is a list of components\
+(at: x y z)  - Optional field, will place entity(String) at position X Y Z\
+
+\i (rot: x y z) - Optional field, will rotate entity(String) by X Y Z degrees\
+\
+
+\b\fs48 Collision channel stuff
+\fs24 \
+
+\b0 cmd_createChannel:String\
+String represents the name of channel to add, all collisions are held in channels\
+\
+cmd_setActiveChannel:String\
+String represents the channel to be set to active, whenever add or remove are called, they are applied to the currently loaded channel, Only one channel can be loaded at a time\
+\
+cmd_addToChannel:Object\
+Object is the collision component to be added to the channel in memory\
+
+\i0 \
+
+\i cmd_removeFromChannel:Object\
+Object is the collision component to be removed from the channel in memory\
+\
+cmd_clearChannel\
+Clears the currently loadedChannel\
+\
+(@ bd)
+\i0 \
+\
+
+\b\fs48 Variables
+\b0 \
+
+\fs24 define-int:name = 1\
+define- takes a type, the types are float, int, boolean, and string. Then a name is given to represent this type, by whatever follows the : in this example the variable\'92s name is name. The value of name is determined by what follows the = sign in this instance, the value of name = 1; If you give the engine the wrong type for the variable, the script will crash when it is being interpreted. Here are a list of all of the types you can define. \
+define-
+\b int
+\b0 :playerAge = 16\
+define-
+\b float
+\b0 :pi = 3.14159\
+define-
+\b boolean
+\b0 :isThisACoolEngine = false\
+define-
+\b String
+\b0 :whatAreTurtles = Turtles are food\
+\
+
+\b\fs48 Evaluating Variables
+\b0\fs24 \
+
+\b When you want to evaluate a variable, put it in ()
+\b0 \
 so cmd_print:(whatAreTurtles) would print \'93Turtles are food\'94\
 however cmd_print:whatAreTurtles, would print whatAreTurtles\
 \
 You can use these operators to do math and comparison\
-(+ var1 var2) add the values, you can use floats and ints\
-(- var1 var2) subtract the values, you can use floats and ints\
-(* var1 var2) multiply the values, you can use floats and ints\
-(/ var1 var2) divide the values, you can use floats and ints\
+(
+\b +
+\b0  var1 var2) add the values, you can use floats and ints\
+(
+\b -
+\b0  var1 var2) subtract the values, you can use floats and ints\
+(
+\b *
+\b0  var1 var2) multiply the values, you can use floats and ints\
+(
+\b /
+\b0  var1 var2) divide the values, you can use floats and ints\
 \
-(= var1 var2) compare the values, you can use any variable type\
-(> var1 var2) compare the values, you can use any variable type\
-(< var1 var2) compare the values, you can use any variable type\
-(! var1 var2) compare the values, you can use any variable type\
+(
+\b =
+\b0  var1 var2) compare the values, you can use any variable type\
+(
+\b >
+\b0  var1 var2) compare the values, you can use any variable type\
+(
+\b < 
+\b0 var1 var2) compare the values, you can use any variable type\
+(
+\b !
+\b0  var1 var2) compare the values, you can use any variable type\
+\
+(
+\b key
+\b0  
+\i space
+\i0  true) compare the state of the key signified by the text \'93space\'94 with true or false (true = pressed)\
+Ex. (
+\b key
+\b0  
+\i leftmouse
+\i0  true) (
+\b key
+\b0  
+\i rightmouse
+\i0  true) \
 \
 These functions can be nested within each other, as follows\
 cmd_print:(+ (+ (playerAge) (pi)) 1) would return 20.14159\
 \
+
+\b\fs48 Setting Variables
+\b0\fs24 \
 To set a variable you use the set- command, where the portion of the command after the - is the name of a variable\
 cmd_print:(playerAge) prints 16\
 set-playerAge = 4 sets the variable playerAge to 4\
 cmd_print:(playerAge) will now print 4\
 \
 
-\b Debug\
+\b\fs48 Addressing Subscript Variables\
 
-\b0 Todo - code today\
-- Add function to print the interpreted script to an interpreted file, the interpreted script is any line that comes out of the interpreter\
-- 1 print name of script on first line\
+\b0\fs24 Scripts are objects, they themselves contain the typical component array that has been seen in the item system that is used other places in the Combustion Engine. In most cases, Games written in this language should have a main game script that has looping and persisting set to true. This will create a script in memory, that will have Tick and render called ~60 times per second. When adding something like a player controller, you may want to add a controllScript, This would contain a bunch of If statements that say if the if is pressed, than move the position of the player by x. 
+\b To address these variables, call the name of the main script, Main, then a \'93.\'94 then the name of the next script, or the name of a variable. Example set-Main.Player.x = (+ (Main.Player.x) 1) will increase the players x by one. 
+\b0 Components are a variable type, so they can be added to a scrip, then have their sub variables manipulated. For example a Component_Collision has an array of points, and a rotX rotY rotZ int variable. These variables can be called by addressing them in a similar way. Type: (Main Script).(Any Subscripts).(name of Component).(Name Of Var)\
+\
+
+\b\fs48 Predefined Variables
+\b0 \
+
+\b\fs24 x
+\b0 - int of the current X position of the script\
+
+\b y
+\b0 - int of the current Y position of the script\
+
+\b z
+\b0 - int of the current Z position of the script\
+
+\b camX
+\b0 - int of the current X position of the camera\
+
+\b camY
+\b0 - int of the current Y position of the camera\
+
+\b camZ
+\b0 - int of the current Z position of the camera\
+
+\b mouseX
+\b0 - int of the current X position of the mouse\
+
+\b mouseY
+\b0 - int of the current Y position of the mouse\
+
+\b persist
+\b0 - weather the script should stay around after it has been interpreted. (false by default)\
+
+\b loop
+\b0  - weather the script should loop, after it has been interpreted. This will only ever matter if persist = true\
+
+\b this
+\b0  - String containing the name of the script in the interpreter\
+\
+
+\b\fs48 Debug
+\b0\fs24 \
+- If a script is not behaving as expected, add the line 
+\b cmd_console:script:(this)
+\b0  and the console will print the following. \
+- print name of script on first line\
 - print all variables in the order they were added\
 - print the body of the script, with the ref-expr:x in the code\
 - print all expressions that this script has, \
 \
 
-\b How the interpreter works
-\b0 \
+\b\fs48 How the interpreter works
+\b0\fs24 \
 - first code is broken up into sections\
 - main section is anything that is not in a statement\
 - statements are identified by the portion of code \'93)\{\'93 this can follow if:()\{ or for:()\{\
 - these statements are then replaced with a linear command, like ref-expr:1 to refer to expression 1\
-- Note -ref-expr: is a line that the interpreter creates itself, it should not be used as a command in scripts created by the user.\
+- Note -ref-expr: is a line that the interpreter creates itself, it should 
+\b not be used as a command in scripts created by the user
+\b0 .\
 - Expressions are broken up in the following way\
-- Guard  first line of statement, the conditional to run the rest of the statement - in the ()\
-- Body  The code in \{\} Note that if a statement is within another statement, it in its entirety will have been replaced with ref-expr:x where x is its number in the list, and thus a new reference will be sent to the interpreter, this allows for the code to be interpreted in a way that visually is:\
+- 
+\b Guard
+\b0   first line of statement, the conditional to run the rest of the statement - in the ()\
+- 
+\b Body
+\b0   The code in \{\} Note that if a statement is within another statement, it in its entirety will have been replaced with ref-expr:x where x is its number in the list, and thus a new reference will be sent to the interpreter, this allows for the code to be interpreted in a way that visually is:\
      - top to bottom, inside out\
 - End - what the code should do after interpretation, if its an if statement, break, if its a for loop, loop, and wait for the Guard to return false, then override the loop and force a break. \
+\
+
+\b\fs48 Conditional Statements
+\b0\fs24 \
+
+\b if
+\b0 :()\{\
+    cmd_print:If returned true\
+\}\
+
+\i\b\fs48 Initialize
+\i0\b0\fs24 \
+\
+
+\i\b\fs48 Methods
+\i0\b0\fs24 \
+\
+
+\b\fs48 Component Integration
+\b0\fs24 \
+\
+\
+\
+\
+\
 \
 \
 \

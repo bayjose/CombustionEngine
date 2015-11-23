@@ -54,7 +54,7 @@ public class Handler {
     public PhysicsEngine physicsEngine;
     public static TextEngine textEngine = new TextEngine();
     public SceneManager sceneManager = new SceneManager();    
-    public static Chunk chunk = new Chunk(100, 100, 21, 41);
+    public static Chunk chunk = new Chunk(0, 0, 1, 1);
     public static LinkedList<Script> scripts = new LinkedList<Script>();
     public static LinkedList<Object> objects = new LinkedList<Object>();
     
@@ -116,6 +116,7 @@ public class Handler {
     }
       
     public void render(Graphics g){
+        
         if(egs.equals(EnumGameState.Off)){
             g.setColor(Color.decode("#3e3e3e"));
             g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
@@ -135,7 +136,11 @@ public class Handler {
             for (Object object : Handler.objects) {
                 object.render(g);
             }
-            
+            if(scripts.size()>0){
+                {
+                    scripts.getFirst().render(g);
+                }
+            }
 //            this.lightingEngine.render(g);
             for(Gui gui: this.gui){
                 gui.render(g);

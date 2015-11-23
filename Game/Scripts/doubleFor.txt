@@ -1,0 +1,14 @@
+define-int:scale = 34
+define-int:size = 0
+define-int:i = 0
+define-int:j = 0
+for:(< (i) (size)){
+	for:(< (j) (size)){
+		cmd_loadEntity:square at:(* i scale) (* j scale) 0
+		set-j = (+ j 1)
+	}
+	set-j=0
+	set-i = (+ i 1)
+}
+
+

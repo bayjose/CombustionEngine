@@ -1,0 +1,30 @@
+set-persist=true
+set-loop=true
+define-int:scale = 45
+
+init:{
+set-y=256
+define-int:index = 0
+	for:(< index 32){
+	Component_Collision{
+		(+ 0 (* index scale)) (+ -70 (* index scale)) 0
+		(+ 25 (* index scale)) (+ 0 (* index scale)) 0
+		(+ 35 (* index scale)) (+ 50 (* index scale)) 0
+		(+ 0 (* index scale)) (+ -10 (* index scale)) 0
+		(+ -35 (* index scale)) (+ 50 (* index scale)) 0
+		(+ -25 (* index scale)) (+ 0 (* index scale)) 0
+	}
+	set-index=(+ index 1)
+	}
+	Component_Image{
+		forest.png
+	}
+cmd_console:script:(this)
+cmd_addMessage:Player loaded
+}
+
+initCollision:{
+	cmd_createChannel:ships
+	cmd_setChannel:ships
+}
+

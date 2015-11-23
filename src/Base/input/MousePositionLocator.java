@@ -25,7 +25,8 @@ public class MousePositionLocator implements MouseMotionListener{
     }
     
     public void mouseDragged(MouseEvent e) {
-
+        MouseLocation.x = e.getX();
+        MouseLocation.y = e.getY();
     }
 
     

@@ -3,10 +3,11 @@ define-int:loopsToRun=18
 define-int:spacing = 10
 define-float:float = 12.9
 define-String:Nuggets = I like nuggets. 
-define-boolean:loop = true
+define-boolean:loop =true
 
 //Init stuff
-cmd_console:free cam
+//cmd_console:free cam
+//cmd_console:script:(this)
 
 //Load the Forest
 cmd_loadEntity:forest at:128 -2048 0 

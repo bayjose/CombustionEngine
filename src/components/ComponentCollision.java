@@ -27,7 +27,7 @@ public class ComponentCollision extends Component{
         Point[] pts = new Point[this.LoadedData.length];
         for(int i=0; i<pts.length; i++){
             String[] ptData = this.LoadedData[i].split(" ");
-            pts[i] = new Point3D(Integer.parseInt(ptData[0]), Integer.parseInt(ptData[1]), Integer.parseInt(ptData[2]));
+            pts[i] = new Point3D((int)Float.parseFloat(ptData[0]), (int)Float.parseFloat(ptData[1]), (int)Float.parseFloat(ptData[2]));
 //            System.out.println((Integer.parseInt(ptData[0])+x)+" "+(Integer.parseInt(ptData[1])+y)+" "+Integer.parseInt(ptData[2]));
             
         }

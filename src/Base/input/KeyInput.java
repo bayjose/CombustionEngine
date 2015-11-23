@@ -48,6 +48,7 @@ public class KeyInput extends KeyAdapter{
     public static boolean V = false;
     public static boolean W = false;
     public static boolean X = false;
+    public static boolean Y = false;
     public static boolean Z = false;
 
     public static boolean SPACE = false;
@@ -295,6 +296,119 @@ public class KeyInput extends KeyAdapter{
         if (key == KeyEvent.VK_RIGHT) {
             KeyInput.RIGHT = false;
         }
+    }
+    
+    public static boolean getKey(String keyValue){
+        keyValue = keyValue.toUpperCase();
+        if(keyValue.equals("A")){
+            return KeyInput.A;
+        }
+        if(keyValue.equals("B")){
+            return KeyInput.B;
+        }
+        if(keyValue.equals("C")){
+            return KeyInput.C;
+        }
+        if(keyValue.equals("D")){
+            return KeyInput.D;
+        }
+        if(keyValue.equals("E")){
+            return KeyInput.E;
+        }
+        if(keyValue.equals("F")){
+            return KeyInput.F;
+        }
+        if(keyValue.equals("G")){
+            return KeyInput.G;
+        }
+        if(keyValue.equals("H")){
+            return KeyInput.H;
+        }
+        if(keyValue.equals("I")){
+            return KeyInput.I;
+        }
+        if(keyValue.equals("J")){
+            return KeyInput.J;
+        }
+        if(keyValue.equals("K")){
+            return KeyInput.K;
+        }
+        if(keyValue.equals("L")){
+            return KeyInput.L;
+        }
+        if(keyValue.equals("M")){
+            return KeyInput.M;
+        }
+        if(keyValue.equals("N")){
+            return KeyInput.N;
+        }
+        if(keyValue.equals("O")){
+            return KeyInput.O;
+        }
+        if(keyValue.equals("P")){
+            return KeyInput.P;
+        }
+        if(keyValue.equals("Q")){
+            return KeyInput.Q;
+        }
+        if(keyValue.equals("R")){
+            return KeyInput.R;
+        }
+        if(keyValue.equals("S")){
+            return KeyInput.S;
+        }
+        if(keyValue.equals("T")){
+            return KeyInput.T;
+        }
+        if(keyValue.equals("U")){
+            return KeyInput.U;
+        }
+        if(keyValue.equals("V")){
+            return KeyInput.V;
+        }
+        if(keyValue.equals("W")){
+            return KeyInput.W;
+        }
+        if(keyValue.equals("X")){
+            return KeyInput.X;
+        }
+        if(keyValue.equals("Y")){
+            return KeyInput.Y;
+        }
+        if(keyValue.equals("Z")){
+            return KeyInput.Z;
+        }
+        
+        //utilites
+        if(keyValue.equals("SPACE")){
+            return KeyInput.SPACE;
+        }
+        if(keyValue.equals("ESC")){
+            return KeyInput.ESC;
+        }
+        if(keyValue.equals("UP")){
+            return KeyInput.UP;
+        }
+        if(keyValue.equals("DOWN")){
+            return KeyInput.DOWN;
+        }
+        if(keyValue.equals("LEFT")){
+            return KeyInput.LEFT;
+        }
+        if(keyValue.equals("RIGHT")){
+            return KeyInput.RIGHT;
+        }
+        //mouse
+        if(keyValue.equals("LEFTMOUSE")){
+            return MouseInput.IsPressed;
+        }
+        if(keyValue.equals("RIGHTMOUSE")){
+            return MouseInput.IsPressed&&MouseInput.IsRightClick;
+        }
+        
+        
+        System.err.println("[KeyInput] key:"+keyValue+" was not recognised.");
+        return false;
     }
     
 }

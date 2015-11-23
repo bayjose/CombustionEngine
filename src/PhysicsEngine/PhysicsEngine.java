@@ -53,7 +53,9 @@ public class PhysicsEngine {
         for(int i=0; i<PhysicsEngine.channels.length; i++){
             PhysicsEngine.channels[i].tick();
         }
-        
+        for(int i=0; i<PhysicsEngine.getChannel("bodies").collisons.length; i++){
+            RigidUtils.RotateZOnlyPoints(PhysicsEngine.getChannel("bodies").collisons[i], Math.toRadians(1));
+        }
         PhysicsEngine.collision.setColor(Color.BLUE);
          if(KeyInput.W){
              RigidUtils.Move(PhysicsEngine.collision.normal.multiplyVector(new Vector3D(5, 5, 0)), PhysicsEngine.collision);

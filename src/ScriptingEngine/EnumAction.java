@@ -5,6 +5,8 @@
  */
 package ScriptingEngine;
 
+import Base.input.KeyInput;
+
 /**
  *
  * @author Bayjose
@@ -17,7 +19,9 @@ public enum EnumAction {
     GRT(">"),
     LES("<"),
     EQL("="),
-    NOT("!");
+    NOT("!"),
+    HIT("#"),
+    KEY("key");
     
     
     protected String character;
@@ -55,6 +59,10 @@ public enum EnumAction {
         
         if(action.equals(this.NOT)){
             return (!var1.equals(var2))+"";
+        }
+        
+        if(action.equals(this.KEY)){
+            return ((KeyInput.getKey(var1)+"").equals(var2))+"";
         }
         
         return "Unrecognised Action";

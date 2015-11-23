@@ -22,6 +22,7 @@ public class StringUtils {
     
     private static String path = "";
     private static Random r = new Random();
+    private static LoadedFile lastFile = new LoadedFile("", new String[]{});
     
     public static String randomExtension(int length){
         String[] characters = new String[62];
@@ -151,6 +152,9 @@ public class StringUtils {
     }
     
     public static String[] loadData(String path){
+        if(path.equals(StringUtils.lastFile.id)){
+            return StringUtils.lastFile.data;
+        }
         LinkedList<String> data = new LinkedList<String>();
         try {
             Scanner in = new Scanner(new File(StringUtils.getAbsPath()+path));
@@ -164,6 +168,7 @@ public class StringUtils {
                 do{
                 data.add(in.nextLine());
                 }while(in.hasNext());
+                in.close();
             }catch(Exception e2){
                 e2.printStackTrace();
             }
@@ -172,6 +177,7 @@ public class StringUtils {
         for(int i=0; i<outData.length; i++){
             outData[i] = data.get(i);
         }
+        lastFile = new LoadedFile(path, outData);
         return outData;
     }
     
@@ -230,4 +236,13 @@ public class StringUtils {
     }
     
     
+}
+class LoadedFile{
+    public String id;
+    public String[] data;
+    
+    public LoadedFile(String id, String[] data){
+        this.id = id;
+        this.data = data;
+    }
 }
