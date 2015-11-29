@@ -8,9 +8,12 @@ package PhysicsEngine;
 import Base.Camera;
 import Base.Game;
 import Base.Handler;
+import Base.SpriteBinder;
 import Base.util.DistanceCalculator;
 import PhysicsEngine.RigidBody;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Polygon;
 
 /**
@@ -162,10 +165,20 @@ public class RigidUtils {
                     
                 }else if(obj.ImageIndex == -1){
                     g.fillPolygon(obj.getCollision());
+                }else{
+                    Polygon p = obj.getCollision();
+                    Graphics2D g2d  = (Graphics2D)g;
+                    g2d.setClip(p);
+                        g2d.rotate(Math.toDegrees(obj.angleY));
+                            g.drawImage(SpriteBinder.loadedImages.get(obj.ImageIndex).getImage(), obj.getInitialCollision().x, obj.getInitialCollision().y, obj.getInitialCollision().width,obj.getInitialCollision().height, null);
+                        g2d.rotate(Math.toDegrees(-obj.angleY));
+                    g2d.setClip(null);
                 }
             }
             g.translate((int)-obj.x, (int)-obj.y);
-            g.drawLine((int)obj.x, (int)obj.y, (int)(obj.x+(obj.normal.getZ()*10)), (int)(obj.y+(obj.normal.getZ()*10)));
+            if(Handler.bool1){
+                g.drawLine((int)obj.x, (int)obj.y, (int)(obj.x+(obj.normal.getZ()*10)), (int)(obj.y+(obj.normal.getZ()*10)));
+            }
         }
     }
     

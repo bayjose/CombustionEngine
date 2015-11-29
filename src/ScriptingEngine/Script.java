@@ -153,7 +153,7 @@ public class Script {
                     }
                     for(conditionalComponent component: this.components){
                         if(component.init){
-                            component.component.tick(Integer.parseInt(this.findVar("x").data), Integer.parseInt(this.findVar("y").data));
+                            component.component.tick((int)Float.parseFloat(this.findVar("x").data), (int)Float.parseFloat(this.findVar("y").data));
                         }
                     }
                 }else{
@@ -235,13 +235,13 @@ public class Script {
                this.components.get(componentIndex).init= true;
                //initialize everything
                this.components.get(componentIndex).setComponent(vars);
-               this.components.get(componentIndex).component.onInit(Integer.parseInt(this.findVar("x").data), Integer.parseInt(this.findVar("y").data));
+               this.components.get(componentIndex).component.onInit((int)Float.parseFloat(this.findVar("x").data), (int)Float.parseFloat(this.findVar("y").data));
             }else{
                this.components.addLast(new conditionalComponent(false, this.components.get(componentIndex).componentData));
                this.components.getLast().init= true;
                //initialize everything
                this.components.getLast().setComponent(vars);
-               this.components.getLast().component.onInit(Integer.parseInt(this.findVar("x").data), Integer.parseInt(this.findVar("y").data));
+               this.components.getLast().component.onInit((int)Float.parseFloat(this.findVar("x").data), (int)Float.parseFloat(this.findVar("y").data));
             }
             index++;
             return;
@@ -291,13 +291,22 @@ public class Script {
             }
             if(data.startsWith("moveCam")){
                 String[] camData = data.replace("moveCam:", "").split(" ");
-                Handler.cam.applyTranslation(new Vector3D(Integer.parseInt(camData[0]), Integer.parseInt(camData[1]), Integer.parseInt(camData[2])), Integer.parseInt(camData[3]));
+                Handler.cam.applyTranslation(new Vector3D((int)Float.parseFloat(camData[0]),(int)Float.parseFloat(camData[1]), (int)Float.parseFloat(camData[2])), (int)Float.parseFloat(camData[3]));
+            }
+            if(data.startsWith("setCam")){
+                String[] camData = data.replace("setCam:", "").split(" ");
+                Handler.cam.goTo(new Vector3D((int)Float.parseFloat(camData[0]),(int)Float.parseFloat(camData[1]), (int)Float.parseFloat(camData[2])), (int)Float.parseFloat(camData[3]));
             }
             if(data.startsWith("pause")){
                 this.delay = (int)(Float.parseFloat(data.replace("pause:", "")) * 60.0f);
             }
             if(data.startsWith("loadScript")){
                this.subscripts.addFirst(new Script(data.replace("loadScript:", "")+".txt")); 
+            }
+            //collision Channels
+            if(data.startsWith("createChannel")){
+                System.err.println("Yo it got here");
+                PhysicsEngine.PhysicsEngine.addChannel(data.replace("createChannel:", ""));
             }
         }else if(data.startsWith("ref-expr")){
             //ref-expr commands that have been added by the interpreter
@@ -312,7 +321,7 @@ public class Script {
             if(!eval.name.equals("init")){
                 for(int j = 0; j<eval.body.length; j++){
                     this.InterperateScript(eval.body[j]);
-                    System.out.println("Evaluateing:"+eval.body[j]);
+//                    System.out.println("Evaluateing:"+eval.body[j]);
                     this.index = inindex;
                 }
             }else{
@@ -329,7 +338,7 @@ public class Script {
             return;
         }else{
             //all unrecognised commands go here, maybe method refrences
-//            System.out.println("Unrecognised Command:"+data);
+            System.out.println("Unrecognised Command:"+data);
         }
         }
         index++;
@@ -584,7 +593,7 @@ public class Script {
     public void render(Graphics g){
         for(conditionalComponent component: this.components){
             if(component.init){
-                component.component.render(g, Integer.parseInt(this.findVar("x").data), Integer.parseInt(this.findVar("y").data));
+                component.component.render(g, (int)Float.parseFloat(this.findVar("x").data), (int)Float.parseFloat(this.findVar("y").data));
             }
         }
     }

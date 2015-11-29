@@ -8,6 +8,7 @@ package PhysicsEngine;
 import Base.Camera;
 import Base.Game;
 import Base.Handler;
+import Base.SpriteBinder;
 import Base.input.KeyInput;
 import Base.util.StringUtils;
 import static PhysicsEngine.PhysicsEngine.channels;
@@ -20,6 +21,7 @@ import java.util.LinkedList;
  * @author Bayjose
  */
 public class PhysicsEngine {
+    public static String activeChannel = "bodies";
     public static CollisionChannel[] channels;
 //    public static LinkedList<RigidBody> bullets = new LinkedList<RigidBody>();
     public static RigidBody collision ;
@@ -32,16 +34,8 @@ public class PhysicsEngine {
     
     public PhysicsEngine(){
         System.out.println("--------------------------------------------------");
-        if(channels.length<=0){
-            String[] channelNames = StringUtils.loadData("Game/PhysicsEngine.txt");
-            System.out.println("Initializing Channels.");
-            channels = new CollisionChannel[channelNames.length - 1];
-            for (int i = 1; i < channelNames.length; i++) {
-                channels[i - 1] = new CollisionChannel(channelNames[i], new RigidBody[]{});
-                System.out.println("Initialized Collision Channel:" + channelNames[i]);
-            }
-            System.out.println("Done.");
-        }
+        Reset();
+        SpriteBinder.checkImage("ship.png");
         PhysicsEngine.collision = new RigidBody(new Point[]{new Point2D(0, -70), new Point2D(25, 0), new Point2D(35, 50), new Point2D(0, -10), new Point2D(-35, 50), new Point2D(-25, 0)});
         PhysicsEngine.collision.Translate((Game.WIDTH/2), (Game.HEIGHT/2),0);
         PhysicsEngine.addToChannel("bodies", PhysicsEngine.collision);
@@ -53,9 +47,9 @@ public class PhysicsEngine {
         for(int i=0; i<PhysicsEngine.channels.length; i++){
             PhysicsEngine.channels[i].tick();
         }
-        for(int i=0; i<PhysicsEngine.getChannel("bodies").collisons.length; i++){
-            RigidUtils.RotateZOnlyPoints(PhysicsEngine.getChannel("bodies").collisons[i], Math.toRadians(1));
-        }
+//        for(int i=0; i<PhysicsEngine.getChannel("bodies").collisons.length; i++){
+//            RigidUtils.RotateZOnlyPoints(PhysicsEngine.getChannel("bodies").collisons[i], Math.toRadians(1));
+//        }
         PhysicsEngine.collision.setColor(Color.BLUE);
          if(KeyInput.W){
              RigidUtils.Move(PhysicsEngine.collision.normal.multiplyVector(new Vector3D(5, 5, 0)), PhysicsEngine.collision);
@@ -68,7 +62,13 @@ public class PhysicsEngine {
          }   
          if(KeyInput.D){
             RigidUtils.RotateZOnlyPoints(PhysicsEngine.collision, Math.toRadians(5));
-         }  
+         }
+         if(KeyInput.Q){
+            RigidUtils.RotateYOnlyPoints(PhysicsEngine.collision, Math.toRadians(-5));
+         }
+         if(KeyInput.E){
+            RigidUtils.RotateYOnlyPoints(PhysicsEngine.collision, Math.toRadians(5));
+         } 
          if(KeyInput.SPACE){
              RigidBody temp = PrebuiltBodies.quad(new Point2D(PhysicsEngine.collision.points[0].getX()+(PhysicsEngine.collision.x), PhysicsEngine.collision.points[0].getY()+(PhysicsEngine.collision.y)), 6);
              temp.normal = PhysicsEngine.collision.normal;
@@ -108,13 +108,12 @@ public class PhysicsEngine {
     public void Render(Graphics g){
         for(int i=0; i<PhysicsEngine.channels.length; i++){
             PhysicsEngine.channels[i].clear();
+            for(RigidBody obj: PhysicsEngine.channels[i].collisons){
+                RigidUtils.Render(obj, g);
+            }
         }
-        for(RigidBody obj: PhysicsEngine.getChannel("bodies").collisons){
-            RigidUtils.Render(obj, g);
-        }
-        for(RigidBody obj: PhysicsEngine.getChannel("bullets").collisons){
-            RigidUtils.Render(obj, g);
-        }
+        
+        
         RigidUtils.Render(this.collision, g);
     }
     
@@ -125,6 +124,26 @@ public class PhysicsEngine {
                 return;
             }
         }
+    }
+    
+    public static void addToActiveChannel(RigidBody object){
+        for(int i=0; i<channels.length; i++){
+            if(channels[i].name.equals(PhysicsEngine.activeChannel)){
+//                channels[i].append(object);
+                return;
+            }
+        }
+    }
+    
+    
+    public static void addChannel(String name){
+        CollisionChannel[] newChannels = new CollisionChannel[PhysicsEngine.channels.length+1];
+        for(int i=0; i<newChannels.length-1; i++){
+            newChannels[i] = PhysicsEngine.channels[i];
+        }
+        newChannels[newChannels.length-1] = new CollisionChannel(name, new RigidBody[]{});
+        PhysicsEngine.activeChannel = name;
+        PhysicsEngine.channels = newChannels;
     }
     
     public static CollisionChannel getChannel(String name){
@@ -143,7 +162,8 @@ public class PhysicsEngine {
                 return channels[i];
             }
         }
-        return null;
+        PhysicsEngine.addChannel(name);
+        return getChannel(name);
     }
     
     public Color randomColor(){
@@ -154,6 +174,7 @@ public class PhysicsEngine {
         PhysicsEngine.channels = new CollisionChannel[0];
         if(channels.length<=0){
             String[] channelNames = StringUtils.loadData("Game/PhysicsEngine.txt");
+            channelNames = StringUtils.addLine(channelNames, "bodies");
             System.out.println("Initializing Channels.");
             channels = new CollisionChannel[channelNames.length - 1];
             for (int i = 1; i < channelNames.length; i++) {

@@ -29,7 +29,7 @@ public class Camera {
     
     private float speed = 0.1f;
     
-    public static final float viewRange = 2048;
+    public static final float viewRange = 128;
     public static final float optimalRender = 0;
     
     //all translation stuff
@@ -109,6 +109,10 @@ public class Camera {
     
     public void goTo(Vector3D translation, float ticks){
        if(!this.transition){
+            if(ticks == 0){
+                Camera.position = translation.addVector(new Vector3D(+(Game.WIDTH/2), 0, 0));
+                return;
+            }
             this.transition = true;
             this.translation = new Vector3D(translation.getX() - (Camera.position.getX()-(Game.WIDTH/2)), translation.getY() - Camera.position.getY(), translation.getZ() - Camera.position.getZ());
             this.maxTicks = ticks;

@@ -28,6 +28,9 @@ adds a new message to the in game text interpreter\
 cmd_moveCam: int x int y int z int time\
 translates the camera from its current position to the position of x,y,z relative to its current location, in time ticks. (60 ticks = 1 second)\
 \
+cmd_setCam: int x int y int z int time\
+sets the camera\'92s position to x,y,z in time ticks. (60 ticks = 1 second)\
+\
 cmd_pause: float time\
 delays the next command from being interpreted for (time) seconds. \
 \
@@ -51,6 +54,7 @@ takes an entity to load, an entity is a list of components\
 
 \b0 cmd_createChannel:String\
 String represents the name of channel to add, all collisions are held in channels\
+When this command is called, the active channel is automatically set to String\
 \
 cmd_setActiveChannel:String\
 String represents the channel to be set to active, whenever add or remove are called, they are applied to the currently loaded channel, Only one channel can be loaded at a time\
@@ -65,10 +69,8 @@ Object is the collision component to be removed from the channel in memory\
 \
 cmd_clearChannel\
 Clears the currently loadedChannel\
-\
-(@ bd)
+
 \i0 \
-\
 
 \b\fs48 Variables
 \b0 \
@@ -170,6 +172,19 @@ cmd_print:(playerAge) will now print 4\
 \b z
 \b0 - int of the current Z position of the script\
 
+\b persist
+\b0 - weather the script should stay around after it has been interpreted. (false by default)\
+
+\b loop
+\b0  - weather the script should loop, after it has been interpreted. This will only ever matter if persist = true\
+
+\b this
+\b0  - String containing the name of the script in the interpreter\
+\
+
+\b\fs48 Global Variables
+\b0\fs24 \
+
 \b camX
 \b0 - int of the current X position of the camera\
 
@@ -185,14 +200,9 @@ cmd_print:(playerAge) will now print 4\
 \b mouseY
 \b0 - int of the current Y position of the mouse\
 
-\b persist
-\b0 - weather the script should stay around after it has been interpreted. (false by default)\
-
-\b loop
-\b0  - weather the script should loop, after it has been interpreted. This will only ever matter if persist = true\
-
-\b this
-\b0  - String containing the name of the script in the interpreter\
+\b activeChannel
+\b0  - String representing the current collision channel in use\
+\
 \
 
 \b\fs48 Debug
@@ -228,14 +238,12 @@ cmd_print:(playerAge) will now print 4\
 
 \b\fs48 Conditional Statements
 \b0\fs24 \
-
-\b if
-\b0 :()\{\
+If the evaluation of condition returns true, then the internal data is processed. 
+\b \
+if
+\b0 :(condition)\{\
     cmd_print:If returned true\
-\}\
-
-\i\b\fs48 Initialize
-\i0\b0\fs24 \
+\}I\
 \
 
 \i\b\fs48 Methods
@@ -245,6 +253,27 @@ Methods are created by typing a String(name), followed by \'93
 \b0 \'93 to signify the opening of the method, and \'93
 \b \}
 \b0 \'94 to close the method.\
+Here is a sample method.\
+\
+createWorld:\{\
+	Component_Image\{\
+		world.png\
+	\}\
+	cmd_addMessage:\'94Hello World\'94\
+\}\
+\
+This method is called in the following way, \
+ref-method:createWorld\
+\
+
+\i\b\fs48 Initialize\
+
+\i0\b0\fs24 Initialization is done with a special method. \
+This method is auto run after it has been created, when the file is being interpreted for the first time. \
+init:\{\
+	//Anything in here is run on initialization\
+\}\
+\
 
 \b\fs48 Component Integration
 \b0\fs24 \

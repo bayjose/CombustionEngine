@@ -33,4 +33,8 @@ public class RegisteredImage {
         }
         return null;
     }
+    
+    public Image getImage(){
+        return this.image;
+    }
 }

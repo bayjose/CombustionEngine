@@ -35,7 +35,7 @@ public abstract class ItemSlot extends Gui{
     
     
     public ItemSlot(int x, int y) {
-        super(x, y);
+        super(new Rectangle(x, y, 40, 40));
         this.slot = SpriteBinder.checkImage("slot.png");
     }
 
@@ -47,11 +47,11 @@ public abstract class ItemSlot extends Gui{
     }
 
     public void render(Graphics g) {
-        g.drawImage(slot, this.collision.x, this.collision.y, null);
+        g.drawImage(slot, this.bounds.x, this.bounds.y, null);
         if(this.contence!=null){
             if(this.contence.item!=null){
                 this.contence.render(g);
-                if(MousePositionLocator.MouseLocation.intersects(this.collision)){
+                if(MousePositionLocator.MouseLocation.intersects(this.bounds)){
                     Entity temp = FontBook.font.returnTextbox(new Vector3D(MousePositionLocator.MouseLocation.x, (MousePositionLocator.MouseLocation.y)+32, 0), ""+this.contence.item.name, "metalbg.png");
                     temp.Render(g);
                     try{
@@ -61,7 +61,7 @@ public abstract class ItemSlot extends Gui{
                     }
                 }
                 if(this.contence!=null&&this.contence.item!=null){
-                    Entity count = FontBook.numberFont.returnText(new Vector3D(this.collision.x+20,this.collision.y+30, 0), ""+this.contence.getCount());
+                    Entity count = FontBook.numberFont.returnText(new Vector3D(this.bounds.x+20,this.bounds.y+30, 0), ""+this.contence.getCount());
                     count.Render(g);
                 }
             }
@@ -69,7 +69,7 @@ public abstract class ItemSlot extends Gui{
         
         if(Handler.bool1){
             g.setColor(new Color(0, 128, 128, 128));
-            g.fillRect(this.collision.x, this.collision.y, this.collision.width, this.collision.height);
+            g.fillRect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
         }
         
     }
@@ -87,7 +87,7 @@ public abstract class ItemSlot extends Gui{
     }
     
     public void onClick(Rectangle rect){
-       if(this.collision.intersects(rect)&&!MouseInput.IsRightClick){
+       if(this.bounds.intersects(rect)&&!MouseInput.IsRightClick){
            loop:{
                 if(this.contence!=null&&MouseItem.MouseItem==null){
                     if(ExtraConditional(MouseItem.MouseItem)){
@@ -100,8 +100,8 @@ public abstract class ItemSlot extends Gui{
                 if(this.contence==null&&MouseItem.MouseItem!=null){
                     if(ExtraConditional(MouseItem.MouseItem)){
                         this.contence = MouseItem.MouseItem;
-                        this.contence.collision.x = this.collision.x+4;
-                        this.contence.collision.y = this.collision.y+4;
+                        this.contence.collision.x = this.bounds.x+4;
+                        this.contence.collision.y = this.bounds.y+4;
                         MouseItem.MouseItem.item.onAdded();
                         MouseItem.MouseItem = null;
                         onItemEnter();
@@ -118,8 +118,8 @@ public abstract class ItemSlot extends Gui{
                                 MouseItem.MouseItem = stack1;
                                 this.contence.item.onAdded();
                                 onItemEnter();
-                                this.contence.collision.x = this.collision.x+4;
-                                this.contence.collision.y = this.collision.y+4;
+                                this.contence.collision.x = this.bounds.x+4;
+                                this.contence.collision.y = this.bounds.y+4;
                                 break loop;
                             }
                         }else{
@@ -131,8 +131,8 @@ public abstract class ItemSlot extends Gui{
                                     MouseItem.MouseItem = stack1;
                                     this.contence.item.onAdded();
                                     onItemEnter();
-                                    this.contence.collision.x = this.collision.x+4;
-                                    this.contence.collision.y = this.collision.y+4;
+                                    this.contence.collision.x = this.bounds.x+4;
+                                    this.contence.collision.y = this.bounds.y+4;
                                     break loop;
                                 }
                             }
@@ -179,8 +179,8 @@ public abstract class ItemSlot extends Gui{
     
     public void setItem(Item item, int count){
         this.contence = new ItemStack(item,count);
-        this.contence.collision.x = this.collision.x+4;
-        this.contence.collision.y = this.collision.y+4;
+        this.contence.collision.x = this.bounds.x+4;
+        this.contence.collision.y = this.bounds.y+4;
     }
 
 }

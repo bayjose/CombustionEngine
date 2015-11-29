@@ -34,8 +34,8 @@ public class Window {
             frame.setSize(new Dimension(w, h));
             frame.setLocationRelativeTo(null);
         }
-        frame.add(game);
-        System.out.println("Running on:"+platform);
+            frame.add(game);
+            System.out.println("Running on:"+platform);
         if(platform.equals("Console")||platform.equals("RaspberryPi")){
             frame.setUndecorated(true);
             frame.setSize(new Dimension(w, h));

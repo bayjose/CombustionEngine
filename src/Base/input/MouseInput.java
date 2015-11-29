@@ -63,6 +63,9 @@ public class MouseInput implements MouseListener{
         else{
             
         }
+        for(int i=0; i<handler.gui.size(); i++){
+            handler.gui.get(i).onClick(Mouse);
+        }
         if(Game.platform.equals("Emulator")){
                     if(MouseInput.IsPressed&&MouseInput.Mouse.intersects(Game.Y)){
                         KeyInput.SPACE = true;

@@ -5,10 +5,10 @@
  */
 package components;
 
+import Base.SpriteBinder;
 import PhysicsEngine.Point;
 import PhysicsEngine.Point3D;
 import PhysicsEngine.RigidBody;
-import PhysicsEngine.RigidUtils;
 
 /**
  *
@@ -25,6 +25,7 @@ public class ComponentCollision extends Component{
     @Override
     public void onInit(int x, int y){
         Point[] pts = new Point[this.LoadedData.length];
+        
         for(int i=0; i<pts.length; i++){
             String[] ptData = this.LoadedData[i].split(" ");
             pts[i] = new Point3D((int)Float.parseFloat(ptData[0]), (int)Float.parseFloat(ptData[1]), (int)Float.parseFloat(ptData[2]));
@@ -33,8 +34,9 @@ public class ComponentCollision extends Component{
         }
         body = new RigidBody(pts);
         body.Translate((int)x, (int)y, (int)0);
-        body.ImageIndex = -2;
-        PhysicsEngine.PhysicsEngine.getChannel("bodies").append(body);
+        body.ImageIndex = -1;
+        System.out.println("Adding body to:"+PhysicsEngine.PhysicsEngine.activeChannel);
+        PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).append(body);
 //        RigidUtils.RotateZOnlyPoints(body, (int)(Math.random()*360));
     }
 

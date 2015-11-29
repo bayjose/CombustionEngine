@@ -7,6 +7,7 @@ package PhysicsEngine;
 
 import java.awt.Color;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 
 /**
  *
@@ -34,10 +35,12 @@ public class RigidBody {
     public float Scale = 1;
     
     private Polygon collision;
+    private final Rectangle initialCollision;
     
     public RigidBody(Point[] points){
         this.points = points;
         RigidUtils.Update(this);
+        initialCollision = this.getCollision().getBounds();
     }
     
     public Polygon getCollision(){
@@ -46,6 +49,10 @@ public class RigidBody {
     
     public void setCollision(Polygon polygon){
         this.collision = polygon;
+    }
+    
+    public Rectangle getInitialCollision(){
+        return new Rectangle((int)(this.initialCollision.x * this.Scale), (int)(this.initialCollision.y * this.Scale), (int)(this.initialCollision.width * this.Scale), (int)(this.initialCollision.height * this.Scale));
     }
     
     public RigidBody Translate(float x, float y, float z){

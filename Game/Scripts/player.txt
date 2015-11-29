@@ -1,30 +1,44 @@
 set-persist=true
 set-loop=true
-define-int:scale = 45
+
+//speed variable
+define-int:speed = 5
 
 init:{
 set-y=256
-define-int:index = 0
-	for:(< index 32){
-	Component_Collision{
-		(+ 0 (* index scale)) (+ -70 (* index scale)) 0
-		(+ 25 (* index scale)) (+ 0 (* index scale)) 0
-		(+ 35 (* index scale)) (+ 50 (* index scale)) 0
-		(+ 0 (* index scale)) (+ -10 (* index scale)) 0
-		(+ -35 (* index scale)) (+ 50 (* index scale)) 0
-		(+ -25 (* index scale)) (+ 0 (* index scale)) 0
-	}
-	set-index=(+ index 1)
-	}
-	Component_Image{
-		forest.png
-	}
+cmd_createChannel:ships
+cmd_setChannel:ships
+Component_Collision{
+0 -70 0
+25 0 0 
+35 50 0
+0 -10 0
+-35 50 0
+-25 0 0 
+}
+Component_Image{
+square.png
+}
+cmd_createChannel:(this)
 cmd_console:script:(this)
 cmd_addMessage:Player loaded
+//cmd_loadScript:doubleFor
 }
 
-initCollision:{
-	cmd_createChannel:ships
-	cmd_setChannel:ships
+if:(key w true){
+	set-y=(- y speed)
 }
+
+if:(key s true){
+	set-y=(+ y speed)
+}
+if:(key a true){
+	set-x=(- x speed)
+}
+
+if:(key d true){
+	set-x=(+ x speed)
+}
+
+//cmd_setCam:(+ (* x -1) 600) (+ (* y -1) 400) 0 0
 

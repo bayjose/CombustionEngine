@@ -16,12 +16,11 @@ import java.awt.Rectangle;
  * @author Bayjose
  */
 public abstract class Gui {
-    public Rectangle collision = new Rectangle(0, 0, 40, 40);
+    public Rectangle bounds;
     public boolean remove=false;
     
-    public Gui(int x, int y){
-        this.collision.x=x;
-        this.collision.y=y;
+    public Gui(Rectangle bounds){
+        this.bounds = bounds;
     }
     
     public abstract void tick();

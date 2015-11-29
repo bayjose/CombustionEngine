@@ -1,3 +1,2 @@
-Collision Channels to make
-bodies
+—The lines below are channels that will be created in the physics engine—
 bullets

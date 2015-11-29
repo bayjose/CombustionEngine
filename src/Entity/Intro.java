@@ -32,10 +32,10 @@ public class Intro extends Entity{
     
     public Intro(Handler handler) {
         super(Models.generateQuad(new Vector3D(0,0,128), Game.WIDTH, Game.HEIGHT));
-        Handler.cam.goTo(new Vector3D(Game.WIDTH/2, 0, 0), 1);
         if(devMode){
             maxTicks = 0;
         }else{
+            Handler.cam.goTo(new Vector3D(Game.WIDTH/2, 0, 0), 0);
             maxTicks = (4*60)+30;
         }
         System.out.println("Max Ticks:"+maxTicks);
@@ -78,6 +78,8 @@ public class Intro extends Entity{
             }
         }
         Handler.scripts.add(new Script(Game.cfg[5].replace("Start Script:", "")));
+        //reset the camera
+        Handler.cam.goTo(new Vector3D(0, 0, 0), 0);
         
     }
     //----------------------------------------------------

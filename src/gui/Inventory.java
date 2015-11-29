@@ -37,7 +37,7 @@ public class Inventory extends Gui{
     public Entity gauntlet;
 
     public Inventory(int x, int y, Handler handler) {
-        super(x, y);
+        super(new Rectangle(x,y,40,40));
         this.row=4;
         this.col=12;
         this.storrage = new ItemSlot[row][col];
