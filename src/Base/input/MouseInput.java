@@ -59,8 +59,8 @@ public class MouseInput implements MouseListener{
         //left click
         if(!IsRightClick){
             //mouse stuff
-            for(int i=0; i<handler.gui.size(); i++){
-                this.handler.gui.get(i).onClick(Mouse);
+            for(int i=0; i<Handler.gui.size(); i++){
+                Handler.gui.get(i).onClick(Mouse);
             }
         }
         //right click

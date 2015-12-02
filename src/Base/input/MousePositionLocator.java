@@ -29,8 +29,8 @@ public class MousePositionLocator implements MouseMotionListener{
     public void mouseDragged(MouseEvent e) {
         MouseLocation.x = e.getX()-(int)Camera.position.getX()+Game.WIDTH/2;
         MouseLocation.y = e.getY()-(int)Camera.position.getY();
-        for(int i = 0; i<handler.gui.size(); i++){
-            handler.gui.get(i).onDrag();
+        for(int i = 0; i<Handler.gui.size(); i++){
+            Handler.gui.get(i).onDrag();
         }
     }
 

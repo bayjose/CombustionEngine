@@ -47,7 +47,7 @@ public class Handler {
     public MouseItem mouseItem = new MouseItem();
 //    private Item firstItem = new Item(new Component[]{new ComponentImage(new String[]{"picaxe.png"}),new ComponentColor(new String[]{"#550066"}), new ComponentDurability(new String[]{0+"", 2500+""}), new ComponentLight(new String[]{0+"", 0+"", 128+""})});
     
-    public LinkedList<Gui> gui = new LinkedList<Gui>();
+    public static LinkedList<Gui> gui = new LinkedList<Gui>();
     //various Engines
     public LightingEngine lightingEngine = new LightingEngine();
     public PhysicsEngine physicsEngine;
@@ -101,8 +101,13 @@ public class Handler {
         }
 
         if(egs.equals(EnumGameState.Main)){
-            for(Gui gui: this.gui){
-                gui.tick();
+            for(Gui gui: Handler.gui){
+                if(!gui.remove){
+                    gui.tick();
+                }else{
+                    System.out.println("Removing gui");
+                    Handler.gui.remove(gui);
+                }
             }
             MouseItem.tick();  
             chunk.tick();
@@ -142,8 +147,12 @@ public class Handler {
                 }
             }
 //            this.lightingEngine.render(g);
-            for(Gui gui: this.gui){
-                gui.render(g);
+            try{
+                for(Gui gui: Handler.gui){
+                    gui.render(g);
+                }
+            }catch(Exception e){
+                
             }
         }
     }

@@ -146,14 +146,14 @@ public abstract class Game extends Canvas implements Runnable{
             while(delta >= 1){
                 tick();
                 updates++;
-                render();
-                frames++;
+//                render();
+//                frames++;
                 delta--;
             }
             
             
-//            render();
-//            frames++;
+            render();
+            frames++;
             
             if(System.currentTimeMillis() - timer > 1000){
                 timer += 1000;

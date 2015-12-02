@@ -46,9 +46,13 @@ public class FileViewer extends Gui{
     public void tick() {
         this.bar.tick();
         int offset = (int)-(((16*this.contence.length)-bounds.height) * this.bar.getIndex());
-        for(int i=0; i<contence.length; i++){
-            this.contence[i].yOffset = offset;
-            this.contence[i].tick();
+        try{
+            for(int i=0; i<contence.length; i++){
+                this.contence[i].yOffset = offset;
+                this.contence[i].tick();
+            }
+        }catch(Exception e){
+            
         }
     }
 
@@ -96,7 +100,7 @@ public class FileViewer extends Gui{
         this.subDirectories.add(directory+"/");
     }
     
-    private String getPath(){
+    public String getPath(){
         String out = "";
         for(int i=0; i<this.subDirectories.size(); i++){
             out = out + this.subDirectories.get(i);
