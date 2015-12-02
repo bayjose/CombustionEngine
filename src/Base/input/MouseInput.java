@@ -39,6 +39,10 @@ public class MouseInput implements MouseListener{
          
     }
 
+    public void doubleClick(){
+        
+    }
+    
     public void mousePressed(MouseEvent e) {
         Mouse.x=(e.getX()-(int)Camera.position.getX()+Game.WIDTH/2);
         Mouse.y=(e.getY()-(int)Camera.position.getY());
@@ -62,9 +66,6 @@ public class MouseInput implements MouseListener{
         //right click
         else{
             
-        }
-        for(int i=0; i<handler.gui.size(); i++){
-            handler.gui.get(i).onClick(Mouse);
         }
         if(Game.platform.equals("Emulator")){
                     if(MouseInput.IsPressed&&MouseInput.Mouse.intersects(Game.Y)){

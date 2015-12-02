@@ -8,6 +8,7 @@ package gui.buttons;
 
 import Base.Handler;
 import Base.Handler;
+import Base.SpriteBinder;
 import Base.input.MouseInput;
 import Base.input.MouseInput;
 import Base.input.MousePositionLocator;
@@ -21,22 +22,20 @@ import java.awt.Rectangle;
  */
 public abstract class Button {
     String title;
-    Handler H;
     private boolean specialRender=false;
     private boolean RunEvent=false;
     private Rectangle rect;
     private int x, y;
     
-    public Button(String title, Handler handler, int x, int y, int sizeX, int sizeY){
+    public Button(String title, int x, int y, int sizeX, int sizeY){
         this.title=title;
-        this.H=handler;
         this.rect = new Rectangle(x, y, sizeX, sizeY);
         this.x=x;
         this.y=y;
     }
     public void checkForOvverlap(Rectangle rect){
         if(rect.intersects(this.rect)){
-            this.Event(H);
+            this.Event();
         }
     }
     public String GetTitle(){
@@ -44,16 +43,16 @@ public abstract class Button {
     }
     public void Render(Graphics g){
 //
-//        H.di.drawImage("gui/"+this.title+"_button.png", x, y, g);
-//        if(MousePositionLocator.MouseLocation.intersects(rect)&&MouseInput.IsPressed==false){
-//            H.di.drawImage("gui/"+this.title+"_button_hover.png", x, y, g);
-//        }
-//        if(MousePositionLocator.MouseLocation.intersects(rect)&&MouseInput.IsPressed){
-//            H.di.drawImage("gui/"+this.title+"_button_pressed.png", x, y, g);
-//        }
+        g.drawImage(SpriteBinder.checkImage("Core/gui/"+this.title+"_button.png"), x, y, null);
+        if(MousePositionLocator.MouseLocation.intersects(rect)&&MouseInput.IsPressed==false){
+            g.drawImage(SpriteBinder.checkImage("Core/gui/"+this.title+"_button_hover.png"), x, y, null);
+        }
+        if(MousePositionLocator.MouseLocation.intersects(rect)&&MouseInput.IsPressed){
+            g.drawImage(SpriteBinder.checkImage("Core/gui/"+this.title+"_button_pressed.png"), x, y, null);
+        }
 ////        g.setColor(Color.red);
 ////        g.drawRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
     }
-    public abstract void Event(Handler handler);
+    public abstract void Event();
 
 }

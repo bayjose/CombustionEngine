@@ -6,17 +6,24 @@
 package gui.buttons;
 
 import Base.Handler;
+import gui.FileViewer;
 
 /**
  *
  * @author Bayjose
  */
-public abstract class BasicButton extends Button{
+public class UpDir extends Button{
 
-    public BasicButton(String title) {
-        super(title, 0, 0, 32, 32);
+    FileViewer dir;
+    
+    public UpDir(FileViewer dir, int x, int y) {
+        super("upDir", x, y, 64, 16);
+        this.dir = dir;
     }
-
-    public abstract void Event(Handler handler);
+    
+    @Override
+    public void Event() {
+        dir.upDir();
+    }
     
 }

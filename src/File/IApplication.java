@@ -5,10 +5,12 @@
  */
 package File;
 
+import gui.Gui;
+
 /**
  *
  * @author Bailey
  */
 public interface IApplication {
-    public void Launch();
+    public void Launch(String name, Gui parent);
 }

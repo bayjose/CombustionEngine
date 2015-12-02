@@ -3,20 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui.buttons;
+package File;
 
-import Base.Handler;
+import gui.FileViewer;
+import gui.Gui;
 
 /**
  *
  * @author Bayjose
  */
-public abstract class BasicButton extends Button{
+public class OpenDirectory implements IApplication{
 
-    public BasicButton(String title) {
-        super(title, 0, 0, 32, 32);
+    @Override
+    public void Launch(String name, Gui parent) {
+        ((FileViewer)parent).changeDir(name);
     }
-
-    public abstract void Event(Handler handler);
     
 }

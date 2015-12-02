@@ -12,6 +12,7 @@ package File;
 public enum EnumFileType {
     Script(".txt", "Core/gui/folder/Text.png", new DummyApplication()),
     PortableNetworkGraphic(".png", "Core/gui/folder/Image.png", new DummyApplication()),
+    Folder(".folder", "Core/gui/folder/Folder.png", new OpenDirectory()),
     FileNotFound("", "Core/error.png", new DummyApplication());
     
     protected String extension;
@@ -25,11 +26,13 @@ public enum EnumFileType {
     }
     
     public static EnumFileType getFile(String extension){
-        for(int i=0; i<EnumFileType.values().length; i++){
-            System.out.println("is:"+extension+" = "+EnumFileType.values()[i].extension);
+        for(int i=0; i<EnumFileType.values().length-1; i++){
             if(extension.contains(EnumFileType.values()[i].extension)){
                return EnumFileType.values()[i];
             }
+        }
+        if(!extension.contains(".")){
+            return Folder;
         }
         return EnumFileType.FileNotFound;
     }

@@ -49,33 +49,41 @@ takes an entity to load, an entity is a list of components\
 \i (rot: x y z) - Optional field, will rotate entity(String) by X Y Z degrees\
 \
 
-\b\fs48 Collision channel stuff
+\i0\b\fs48 Collision channel stuff
 \fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\b0 cmd_createChannel:String\
+\b0 \cf0 cmd_createChannel:String\
 String represents the name of channel to add, all collisions are held in channels\
 When this command is called, the active channel is automatically set to String\
-\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\i \cf0 \
 cmd_setActiveChannel:String\
 String represents the channel to be set to active, whenever add or remove are called, they are applied to the currently loaded channel, Only one channel can be loaded at a time\
-\
+forma\
 cmd_addToChannel:Object\
 Object is the collision component to be added to the channel in memory\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\i0 \
+\i0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\i cmd_removeFromChannel:Object\
+\i \cf0 cmd_removeFromChannel:Object\
 Object is the collision component to be removed from the channel in memory\
 \
 cmd_clearChannel\
 Clears the currently loadedChannel\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\i0 \
+\i0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\b\fs48 Variables
+\b\fs48 \cf0 Variables
 \b0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\fs24 define-int:name = 1\
+\fs24 \cf0 define-int:name = 1\
 define- takes a type, the types are float, int, boolean, and string. Then a name is given to represent this type, by whatever follows the : in this example the variable\'92s name is name. The value of name is determined by what follows the = sign in this instance, the value of name = 1; If you give the engine the wrong type for the variable, the script will crash when it is being interpreted. Here are a list of all of the types you can define. \
 define-
 \b int
@@ -90,11 +98,13 @@ define-
 \b String
 \b0 :whatAreTurtles = Turtles are food\
 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\b\fs48 Evaluating Variables
+\b\fs48 \cf0 Evaluating Variables
 \b0\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\b When you want to evaluate a variable, put it in ()
+\b \cf0 When you want to evaluate a variable, put it in ()
 \b0 \
 so cmd_print:(whatAreTurtles) would print \'93Turtles are food\'94\
 however cmd_print:whatAreTurtles, would print whatAreTurtles\
@@ -144,8 +154,9 @@ Ex. (
 These functions can be nested within each other, as follows\
 cmd_print:(+ (+ (playerAge) (pi)) 1) would return 20.14159\
 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\b\fs48 Setting Variables
+\b\fs48 \cf0 Setting Variables
 \b0\fs24 \
 To set a variable you use the set- command, where the portion of the command after the - is the name of a variable\
 cmd_print:(playerAge) prints 16\
@@ -154,16 +165,19 @@ cmd_print:(playerAge) will now print 4\
 \
 
 \b\fs48 Addressing Subscript Variables\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\b0\fs24 Scripts are objects, they themselves contain the typical component array that has been seen in the item system that is used other places in the Combustion Engine. In most cases, Games written in this language should have a main game script that has looping and persisting set to true. This will create a script in memory, that will have Tick and render called ~60 times per second. When adding something like a player controller, you may want to add a controllScript, This would contain a bunch of If statements that say if the if is pressed, than move the position of the player by x. 
+\b0\fs24 \cf0 Scripts are objects, they themselves contain the typical component array that has been seen in the item system that is used other places in the Combustion Engine. In most cases, Games written in this language should have a main game script that has looping and persisting set to true. This will create a script in memory, that will have Tick and render called ~60 times per second. When adding something like a player controller, you may want to add a controllScript, This would contain a bunch of If statements that say if the if is pressed, than move the position of the player by x. 
 \b To address these variables, call the name of the main script, Main, then a \'93.\'94 then the name of the next script, or the name of a variable. Example set-Main.Player.x = (+ (Main.Player.x) 1) will increase the players x by one. 
 \b0 Components are a variable type, so they can be added to a scrip, then have their sub variables manipulated. For example a Component_Collision has an array of points, and a rotX rotY rotZ int variable. These variables can be called by addressing them in a similar way. Type: (Main Script).(Any Subscripts).(name of Component).(Name Of Var)\
 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\b\fs48 Predefined Variables
+\b\fs48 \cf0 Predefined Variables
 \b0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\b\fs24 x
+\b\fs24 \cf0 x
 \b0 - int of the current X position of the script\
 
 \b y
@@ -181,11 +195,13 @@ cmd_print:(playerAge) will now print 4\
 \b this
 \b0  - String containing the name of the script in the interpreter\
 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\b\fs48 Global Variables
+\b\fs48 \cf0 Global Variables
 \b0\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\b camX
+\b \cf0 camX
 \b0 - int of the current X position of the camera\
 
 \b camY
@@ -204,8 +220,9 @@ cmd_print:(playerAge) will now print 4\
 \b0  - String representing the current collision channel in use\
 \
 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\b\fs48 Debug
+\b\fs48 \cf0 Debug
 \b0\fs24 \
 - If a script is not behaving as expected, add the line 
 \b cmd_console:script:(this)
@@ -267,15 +284,17 @@ ref-method:createWorld\
 \
 
 \i\b\fs48 Initialize\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\i0\b0\fs24 Initialization is done with a special method. \
+\i0\b0\fs24 \cf0 Initialization is done with a special method. \
 This method is auto run after it has been created, when the file is being interpreted for the first time. \
 init:\{\
 	//Anything in here is run on initialization\
 \}\
 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\b\fs48 Component Integration
+\b\fs48 \cf0 Component Integration
 \b0\fs24 \
 \
 \

@@ -5,13 +5,14 @@
  */
 package File;
 
+import Base.Handler;
 import Base.SpriteBinder;
 import Base.input.MousePositionLocator;
+import gui.FileViewer;
 import gui.Gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -25,13 +26,16 @@ public class VisualFile extends Gui{
     public final int initialY;
     public int yOffset = 0;
     
-    public VisualFile(int x, int y, String name) {
-        super(new Rectangle(x,y,110,80));
+    public FileViewer parent;
+    
+    public VisualFile(int x, int y, String name, FileViewer parent) {
+        super(new Rectangle(x,y,110,16));
         name = name.replaceAll("\\\\", "/");
         this.name = name.split("/")[name.split("/").length-1];
         this.type = EnumFileType.getFile(name);
         this.filePath = name;
         this.initialY = y;
+        this.parent = parent;
     }
 
     @Override
@@ -47,12 +51,16 @@ public class VisualFile extends Gui{
         g.drawRect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
         g.drawString(this.name, this.bounds.x+2, this.bounds.y+14);
         g.drawImage(SpriteBinder.checkImage(this.type.image), (this.bounds.x+this.bounds.width)-14, this.bounds.y, 16, 16, null);
+        if(Handler.bool1){
+            g.setColor(Color.red);
+            g.drawRect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
+        }
     }
     
     @Override
     public void onClick(Rectangle rect){
         if(MousePositionLocator.MouseLocation.intersects(this.bounds)){
-            this.type.app.Launch();
+            this.type.app.Launch(this.name, parent);
         }
     }
     

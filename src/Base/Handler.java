@@ -5,9 +5,7 @@
 package Base;
 
 import Base.util.EnumGameState;
-import Base.util.StringUtils;
 import Entity.Intro;
-import Entity.skyBox;
 import Lighting.LightingEngine;
 import Physics.RenderModels;
 import PhysicsEngine.PhysicsEngine;
@@ -17,14 +15,12 @@ import TextEngine.SceneManager;
 import TextEngine.TextEngine;
 import World.Chunk;
 import gui.Gui;
-import gui.Inventory;
 import gui.items.MouseItem;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
 import Object.Object;
 import gui.FileViewer;
-import gui.ScrollBar;
 import java.awt.Rectangle;
 /**
  *
@@ -77,6 +73,8 @@ public class Handler {
         this.renderModels = new RenderModels();
         this.intro = new Intro(this);
         SceneManager.setScene("intro");
+        this.gui.add(new FileViewer(new Rectangle(0, 16, 128, Game.HEIGHT-16), "res/"));
+        this.gui.add(new FileViewer(new Rectangle(128, 16, 128, Game.HEIGHT-16), "Game/"));
     }
     
     public void tick(){

@@ -6,6 +6,7 @@
 package File;
 
 import Base.Handler;
+import gui.Gui;
 
 /**
  *
@@ -14,8 +15,8 @@ import Base.Handler;
 public class DummyApplication implements IApplication{
 
     @Override
-    public void Launch() {
-        TextEngine.TextEngine.addMessage(new String[]{"This is a dummy application, so it dose nothing."});
+    public void Launch(String name, Gui parent) {
+        TextEngine.TextEngine.addMessage(new String[]{"This is a dummy application, so it dose nothing.", "File:"+name});
     }
     
 }

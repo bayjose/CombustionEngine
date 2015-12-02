@@ -125,7 +125,6 @@ public abstract class Game extends Canvas implements Runnable{
 ////        for(int i=0; i<32; i++){
 //            SpriteBinder.printRigidBody(PhysicsEngine.PhysicsEngine.collision, Color.BLACK);
 ////        }
-        handler.gui.add(new FileViewer(new Rectangle(0, 0, 128, Game.HEIGHT), "res/"));
         return;
     }
     
