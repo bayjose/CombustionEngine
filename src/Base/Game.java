@@ -16,6 +16,7 @@ import Physics.Model;
 import PhysicsEngine.Vector3D;
 import ScriptingEngine.Profileing;
 import World.LoadTiles;
+import gui.FileViewer;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -121,9 +122,10 @@ public abstract class Game extends Canvas implements Runnable{
     }
     
     public void postInit(){
-//        for(int i=0; i<32; i++){
-            SpriteBinder.printRigidBody(PhysicsEngine.PhysicsEngine.collision, Color.BLACK);
-//        }
+////        for(int i=0; i<32; i++){
+//            SpriteBinder.printRigidBody(PhysicsEngine.PhysicsEngine.collision, Color.BLACK);
+////        }
+        handler.gui.add(new FileViewer(new Rectangle(0, 0, 128, Game.HEIGHT), "res/"));
         return;
     }
     

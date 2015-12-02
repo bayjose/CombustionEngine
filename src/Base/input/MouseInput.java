@@ -40,8 +40,8 @@ public class MouseInput implements MouseListener{
     }
 
     public void mousePressed(MouseEvent e) {
-        Mouse.x=(e.getX()/this.handler.cam.zoom);
-        Mouse.y=(e.getY()/this.handler.cam.zoom);
+        Mouse.x=(e.getX()-(int)Camera.position.getX()+Game.WIDTH/2);
+        Mouse.y=(e.getY()-(int)Camera.position.getY());
     
         IsPressed=true;
         IsRightClick=false;

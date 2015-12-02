@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
 import Object.Object;
+import gui.FileViewer;
 import gui.ScrollBar;
 import java.awt.Rectangle;
 /**
@@ -76,7 +77,6 @@ public class Handler {
         this.renderModels = new RenderModels();
         this.intro = new Intro(this);
         SceneManager.setScene("intro");
-        gui.add(new ScrollBar(new Rectangle(100, 100, 4, 512)));
     }
     
     public void tick(){

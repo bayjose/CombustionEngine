@@ -4,6 +4,8 @@
  */
 package Base.input;
 
+import Base.Camera;
+import Base.Game;
 import Base.Handler;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -25,14 +27,17 @@ public class MousePositionLocator implements MouseMotionListener{
     }
     
     public void mouseDragged(MouseEvent e) {
-        MouseLocation.x = e.getX();
-        MouseLocation.y = e.getY();
+        MouseLocation.x = e.getX()-(int)Camera.position.getX()+Game.WIDTH/2;
+        MouseLocation.y = e.getY()-(int)Camera.position.getY();
+        for(int i = 0; i<handler.gui.size(); i++){
+            handler.gui.get(i).onDrag();
+        }
     }
 
     
     public void mouseMoved(MouseEvent e) {
-        MouseLocation.x = e.getX();
-        MouseLocation.y = e.getY();
+        MouseLocation.x = e.getX()-(int)Camera.position.getX()+Game.WIDTH/2;
+        MouseLocation.y = e.getY()-(int)Camera.position.getY();
 
     }
     

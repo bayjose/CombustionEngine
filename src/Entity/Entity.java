@@ -6,7 +6,6 @@
 
 package Entity;
 
-import Base.Handler;
 import Physics.GravityHandler;
 import Physics.Model;
 import PhysicsEngine.Vector3D;

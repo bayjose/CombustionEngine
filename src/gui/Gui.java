@@ -29,4 +29,8 @@ public abstract class Gui {
     public void onClick(Rectangle rect){
        return; 
     }
+    
+    public void onDrag(){
+        return;
+    }
 }

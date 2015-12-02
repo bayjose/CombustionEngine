@@ -12,7 +12,7 @@ import Base.Handler;
  *
  * @author Bayjose
  */
-public abstract class Point {
+public class Point {
     private float x, y, z;
     float scale = 1;
     

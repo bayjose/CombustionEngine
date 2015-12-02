@@ -6,7 +6,6 @@
 
 package Base;
 
-import Base.util.StringUtils;
 import PhysicsEngine.RigidBody;
 import PhysicsEngine.RigidUtils;
 import java.awt.Color;
@@ -18,10 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
 
 /**
  *this is a file that contains all the loaded sprites 
@@ -34,7 +30,7 @@ public class SpriteBinder {
     public static LinkedList<RegisteredImage> loadedImages = new LinkedList<RegisteredImage>();
     
     public static void init(){
-
+        
     }
     
     public static Image checkImage(String id){
@@ -150,12 +146,13 @@ public class SpriteBinder {
         RigidUtils.Update(body);
         g.translate(-w/2, -h/2+8);
         
-        try {
-            // Save as new image
-            ImageIO.write(combined, "PNG", new File("/Users/Bayjose/NetBeansProjects/RPGEngine/res", "screenshots/combined"+Math.random()+".png"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        
+//        try {
+//            // Save as new image
+//            ImageIO.write(combined, "PNG", new File(StringUtils.getAbsPath(), "screenshots/combined"+Math.random()+".png"));
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
         RigidUtils.RotateZOnlyPoints(body, roty);
         g.dispose();
     }

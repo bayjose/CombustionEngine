@@ -170,7 +170,7 @@ public class StringUtils {
                 }while(in.hasNext());
                 in.close();
             }catch(Exception e2){
-                e2.printStackTrace();
+//                e2.printStackTrace();
             }
         }
         String[] outData = new String[data.size()];

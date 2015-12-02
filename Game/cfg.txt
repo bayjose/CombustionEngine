@@ -1,6 +1,10 @@
-Build:Mac
+Build:Win
 Game Name:Edaxerum
+
 Version:0.1
+
 Preview Icon:game.png
+
 Default Font:mainGameFont
+
 Start Script:player.txt

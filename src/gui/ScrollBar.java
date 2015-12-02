@@ -5,9 +5,11 @@
  */
 package gui;
 
+import Base.Handler;
 import Base.SpriteBinder;
 import Base.input.MouseInput;
 import Base.input.MousePositionLocator;
+import Base.input.MouseScroleInput;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -19,7 +21,9 @@ import java.awt.Rectangle;
 public class ScrollBar extends Gui{
 
     private int curentPos = 0;
-    private int currentIndex = 0;        
+    private int currentIndex = 0;    
+    
+    private boolean track = false;
     
     private final int barHeight = 128;
         
@@ -30,7 +34,20 @@ public class ScrollBar extends Gui{
 
     @Override
     public void tick() {
+        if(!MouseInput.IsPressed){
+            this.track = false;
+        }
         
+        if(this.track){
+            this.curentPos = (MousePositionLocator.MouseLocation.y - this.bounds.y)-this.barHeight/2;
+//            this.curentPos += MouseScroleInput.scrollIndex;
+            if((this.curentPos)>(this.bounds.height-barHeight)){
+                this.curentPos = (this.bounds.height-barHeight);
+            }
+            if(this.curentPos<0){
+                this.curentPos = 0;
+            }
+        }
     }
     
     @Override
@@ -42,18 +59,26 @@ public class ScrollBar extends Gui{
         g.setColor(Color.decode("#656565"));
         g.drawRect(bounds.x+15, bounds.y, 1, bounds.height);
         g.drawImage(SpriteBinder.checkImage("Core/gui/folder/scrollBar.png"), this.bounds.x, this.bounds.y+this.curentPos, 16, this.barHeight, null);
+        if(Handler.bool1){
+            g.setColor(Color.blue);
+            g.drawRect(MousePositionLocator.MouseLocation.x, MousePositionLocator.MouseLocation.y, MousePositionLocator.MouseLocation.width, MousePositionLocator.MouseLocation.height);
+            System.out.println(MousePositionLocator.MouseLocation.x+" "+MousePositionLocator.MouseLocation.y);
+            g.setColor(Color.ORANGE);
+            g.drawRect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
+        }
     }
     
     @Override
     public void onClick(Rectangle rect){
         if(rect.intersects(this.bounds)){
-            this.curentPos = (MouseInput.Mouse.y - this.bounds.y)-this.barHeight/2;
-            if((this.curentPos)>(this.bounds.height-barHeight)){
-                this.curentPos = (this.bounds.height-barHeight);
-            }
-            if(this.curentPos<0){
-                this.curentPos = 0;
-            }
+            this.track = true;
+        }
+    }
+    
+    @Override
+    public void onDrag(){
+        if(MousePositionLocator.MouseLocation.intersects(this.bounds)){
+            this.track = true;
         }
     }
     
