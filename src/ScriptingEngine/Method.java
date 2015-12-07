@@ -6,6 +6,7 @@
 package ScriptingEngine;
 
 import Base.Game;
+import java.util.LinkedList;
 
 /**
  *
@@ -15,11 +16,13 @@ public class Method {
     public String name;
     public String[] body;
     public boolean internal = false;
+    private Variable[] vars;
     
-    public Method(String name, String[] body, boolean internal){
+    public Method(String name, Variable[] vars, String[] body, boolean internal){
         this.name = name;
         this.body = body;
         this.internal = internal;
+        this.vars = vars;
     }
     
 }

@@ -16,17 +16,22 @@ public enum EnumAction {
     SUB("-"),
     MUL("*"),
     DIV("/"),
+    HIT("#"),
+    KEY("key"),
+    //Logic
+    OR("|"),
+    AND("&"),
     GRT(">"),
     LES("<"),
     EQL("="),
     NOT("!"),
-    HIT("#"),
-    KEY("key");
+    ;
     
     
     protected String character;
     
     public String Action(EnumAction action, String var1, String var2){
+//        System.out.println("Var 1:"+var1+" Var 2:"+var2);
         if(action.equals(this.ADD)){
             return (Float.parseFloat(var1) + Float.parseFloat(var2))+"";
         }
@@ -63,6 +68,14 @@ public enum EnumAction {
         
         if(action.equals(this.KEY)){
             return ((KeyInput.getKey(var1)+"").equals(var2))+"";
+        }
+        
+        if(action.equals(this.AND)){
+            return (Boolean.valueOf(var1)&&Boolean.valueOf(var2))+"";
+        }
+        
+        if(action.equals(this.OR)){
+            return (Boolean.valueOf(var1) || Boolean.valueOf(var2))+"";
         }
         
         return "Unrecognised Action";

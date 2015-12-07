@@ -1,5 +1,6 @@
 set-persist=true
 set-loop=true
+define-boolean:shouldMove = true
 
 //speed variable
 define-int:speed = 5
@@ -25,6 +26,7 @@ cmd_addMessage:Player loaded
 //cmd_loadScript:doubleFor
 }
 
+move:{
 if:(key w true){
 	set-y=(- y speed)
 }
@@ -39,6 +41,10 @@ if:(key a true){
 if:(key d true){
 	set-x=(+ x speed)
 }
+}
+if:(shouldMove){
+	ref-method:move
+}
 
-//cmd_setCam:(+ (* x -1) 600) (+ (* y -1) 400) 0 0
+cmd_setCam:(+ (* x -1) 600) (+ (* y -1) 400) 0 0
 

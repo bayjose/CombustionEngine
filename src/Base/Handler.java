@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import Object.Object;
 import gui.FileViewer;
 import java.awt.Rectangle;
+import java.util.HashMap;
 /**
  *
  * @author Bayjose
@@ -56,6 +57,8 @@ public class Handler {
     public static Chunk chunk = new Chunk(0, 0, 1, 1);
     public static LinkedList<Script> scripts = new LinkedList<Script>();
     public static LinkedList<Object> objects = new LinkedList<Object>();
+    
+    
     
     private int countDown = 2 * 60;
     

@@ -6,10 +6,18 @@
 
 \f0\b\fs48 \cf0 BayScript\
 
-\fs24 Created by Bailey Sostek 2015-2016
-\fs48 \
+\fs24 Created by Bailey Sostek 2015-2016\
+\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
-\cf0 Commands
+
+\fs48 \cf0 Intro\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b0\fs24 \cf0 	Bay script is a scripting language that was written and developed bay Bailey Sostek in late 2015, after his first term at Worcester Polytechnic Institute. After Completing Brian Moriarty\'92s class on the game development, Bailey had learned about scripting languages such as Lua and JavaScript. The idea of a language which was compiled at runtime fascinated Bailey, and after learning that many successful video games such as World Of Warcraft used such languages, Bailey was inspired to make his own language to work with the CombustionEngine (2D java game engine developed by Bailey Sostek) Bailey could have used a prebuilt scripting language such as JavaScript, especially because he was writing the game engine in Java, however with an interpreter for a language which was entirely text based, the interpreter functions could be perfected and have the  operations ported to any other language in the future, plus Bailey liked a challenge. After Completing the class, Accelerated Introduction to Program Design, Bailey was well versed in the computer language known as, Racked. Racket was a functional programming language int the Scheme family, with among with more widely used Functional Programming languages such as Common Lisp. Racket used a liberal interpreter for math operations, where the operation being carried out was specified by a character at the start of an operation, and then continued by the two object that the operation should be executed on following. This was an interesting and straight forward way of creating math functions, so it was put into Bayscript. You will see that math and variable operations are done in this same fashion in Bayscript. This program design class also showed Bailey about Macros, where a piece of code can be translated into different code with an operation. This fascinated Bailey, so he incorporated several interpreter executed macros into the language. All statements (Ex if, for, 
+\i while
+\i0 ) are macroed in such a way that they are converted into one line operations that the interpreter then reconstructs at line runtime. 
+\b\fs48 \
+Commands
 \b0\fs24 \
 cmd_print: String\
 Prints anything after the colon in the statement\
@@ -48,35 +56,32 @@ takes an entity to load, an entity is a list of components\
 
 \i (rot: x y z) - Optional field, will rotate entity(String) by X Y Z degrees\
 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\i0\b\fs48 Collision channel stuff
+\i0\b\fs48 \cf0 Collision channel stuff
 \fs24 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
 \b0 \cf0 cmd_createChannel:String\
 String represents the name of channel to add, all collisions are held in channels\
 When this command is called, the active channel is automatically set to String\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\i \cf0 \
+\i \
 cmd_setActiveChannel:String\
 String represents the channel to be set to active, whenever add or remove are called, they are applied to the currently loaded channel, Only one channel can be loaded at a time\
 forma\
 cmd_addToChannel:Object\
 Object is the collision component to be added to the channel in memory\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\i0 \cf0 \
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\i0 \
 
-\i \cf0 cmd_removeFromChannel:Object\
+\i cmd_removeFromChannel:Object\
 Object is the collision component to be removed from the channel in memory\
 \
 cmd_clearChannel\
 Clears the currently loadedChannel\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\i0 \cf0 \
+\i0 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
 \b\fs48 \cf0 Variables
@@ -125,16 +130,34 @@ You can use these operators to do math and comparison\
 \
 (
 \b =
-\b0  var1 var2) compare the values, you can use any variable type\
+\b0  var1 var2) compare the values, you can use any variable type   
+\b Equal 
+\b0 \
 (
 \b >
-\b0  var1 var2) compare the values, you can use any variable type\
+\b0  var1 var2) compare the values, you can use any variable type   
+\b Greater Than
+\b0 \
 (
 \b < 
-\b0 var1 var2) compare the values, you can use any variable type\
+\b0 var1 var2) compare the values, you can use any variable type   
+\b Less Than
+\b0 \
 (
 \b !
-\b0  var1 var2) compare the values, you can use any variable type\
+\b0  var1 var2) compare the values, you can use any variable type    
+\b Is Not
+\b0 \
+(
+\b | 
+\b0 var1 var2) compare the values, you can use any variable type    
+\b Or
+\b0 \
+(
+\b &
+\b0  var1 var2) compare the values, you can use any variable type   
+\b And
+\b0 \
 \
 (
 \b key
@@ -238,10 +261,15 @@ cmd_print:(playerAge) will now print 4\
 - first code is broken up into sections\
 - main section is anything that is not in a statement\
 - statements are identified by the portion of code \'93)\{\'93 this can follow if:()\{ or for:()\{\
-- these statements are then replaced with a linear command, like ref-expr:1 to refer to expression 1\
+- these statements are then replaced with a linear command, like ref-expr:1 short for, refer to expression 1\
 - Note -ref-expr: is a line that the interpreter creates itself, it should 
 \b not be used as a command in scripts created by the user
 \b0 .\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b\fs28 \cf0 Expressions
+\b0\fs24 \
 - Expressions are broken up in the following way\
 - 
 \b Guard
@@ -251,9 +279,18 @@ cmd_print:(playerAge) will now print 4\
 \b0   The code in \{\} Note that if a statement is within another statement, it in its entirety will have been replaced with ref-expr:x where x is its number in the list, and thus a new reference will be sent to the interpreter, this allows for the code to be interpreted in a way that visually is:\
      - top to bottom, inside out\
 - End - what the code should do after interpretation, if its an if statement, break, if its a for loop, loop, and wait for the Guard to return false, then override the loop and force a break. \
+
+\b\fs28 \
+Components
+\b0\fs24 \
 \
 
-\b\fs48 Conditional Statements
+\b\fs28 Methods
+\b0\fs24 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\b\fs48 \cf0 Conditional Statements
 \b0\fs24 \
 If the evaluation of condition returns true, then the internal data is processed. 
 \b \
@@ -262,8 +299,9 @@ if
     cmd_print:If returned true\
 \}I\
 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\i\b\fs48 Methods
+\i\b\fs48 \cf0 Methods
 \i0\b0\fs24 \
 Methods are created by typing a String(name), followed by \'93
 \b :\{

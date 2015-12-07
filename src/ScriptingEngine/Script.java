@@ -315,7 +315,13 @@ public class Script {
             return;
         }else if(data.startsWith("ref-method")){
             //ref-expr commands that have been added by the interpreter
-            Method eval = this.methods.get(Integer.parseInt(data.replace("ref-method:", "")));
+            Method eval;
+            try{
+                eval = this.findMethod(data.replace("ref-method:", ""));
+            }catch(MethodNotFoundException e){
+                index++;
+                return;
+            }
             int inindex = this.index;
 //            System.out.println("Evaluateing:"+eval.name);
             if(!eval.name.equals("init")){
@@ -441,7 +447,7 @@ public class Script {
                         statementBody = StringUtils.addLine(statementBody, data[j]);
                         if(countdown == 1){
                             if(data[j].contains(":{")){
-                                statementBody[statementBody.length-1] = "ref-method:"+(statementIndex+index);
+                                statementBody[statementBody.length-1] = "ref-method:"+methodName;
                             }
                         }
                     }
@@ -460,10 +466,11 @@ public class Script {
                 boolean isInternal = Interpreter.isInternal(i, data);
                 if(isInternal){
                     cut.add(new Point2D(startIndex, endIndex));
-                    this.data[endIndex] = "}force-ref-method:"+this.methods.size();
+                    this.data[endIndex] = "}force-ref-method:"+methodName;
                 }
                 //type can have tabs and spaces in front of it
-                this.methods.add(new Method(methodName, statementBody, isInternal));
+                //the variable array will be populated with anything inside of the [] after a method name and the : variable elemetns will be separated with ,s 
+                this.methods.add(new Method(methodName, new Variable[]{}, statementBody, isInternal));
                 index++;
             }
         }
@@ -596,6 +603,14 @@ public class Script {
                 component.component.render(g, (int)Float.parseFloat(this.findVar("x").data), (int)Float.parseFloat(this.findVar("y").data));
             }
         }
+    }
+    public Method findMethod(String name) throws MethodNotFoundException{
+        for(Method method : this.methods){
+            if(method.name.equals(name)){
+                return method;
+            }
+        }
+        throw new MethodNotFoundException(name);
     }
     
     

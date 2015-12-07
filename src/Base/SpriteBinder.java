@@ -16,6 +16,7 @@ import java.awt.Polygon;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import javax.imageio.ImageIO;
 
@@ -27,6 +28,7 @@ public class SpriteBinder {
     //current resources.png file in the dir you are looking at
     
     public static Image preview;
+    public static HashMap<String, Image> objects = new HashMap<String, Image>();
     public static LinkedList<RegisteredImage> loadedImages = new LinkedList<RegisteredImage>();
     
     public static void init(){
@@ -40,6 +42,7 @@ public class SpriteBinder {
                 return SpriteBinder.loadedImages.get(i).image;
             }
         }
+        
         RegisteredImage temp = new RegisteredImage(id);
         SpriteBinder.loadedImages.add(temp);
         return temp.image;
@@ -65,7 +68,7 @@ public class SpriteBinder {
      * @author http://stackoverflow.com/questions/13605248/java-converting-image-to-bufferedimage
      * Converts a given Image into a BufferedImage
      *
-     * @param img The Image to be converted
+     * @param img The Image to be converted`
      * @return The converted BufferedImage
      */
     public static BufferedImage toBufferedImage(Image img) {
