@@ -36,9 +36,11 @@ public class PhysicsEngine {
         System.out.println("--------------------------------------------------");
         Reset();
         SpriteBinder.checkImage("ship.png");
-        PhysicsEngine.collision = new RigidBody(new Point[]{new Point2D(0, -70), new Point2D(25, 0), new Point2D(35, 50), new Point2D(0, -10), new Point2D(-35, 50), new Point2D(-25, 0)});
+        SpriteBinder.checkImage("SamWinters.jpg");
+        PhysicsEngine.collision =PrebuiltBodies.quad(new Point2D(Game.WIDTH/2, Game.HEIGHT/2), 512);
         PhysicsEngine.collision.Translate((Game.WIDTH/2), (Game.HEIGHT/2),0);
         PhysicsEngine.addToChannel("bodies", PhysicsEngine.collision);
+        PhysicsEngine.collision.ImageIndex = SpriteBinder.checkImageID("SamWinters.jpg");
     }
     
     public void tick(){
@@ -52,22 +54,22 @@ public class PhysicsEngine {
 //        }
         PhysicsEngine.collision.setColor(Color.BLUE);
          if(KeyInput.W){
-             RigidUtils.Move(PhysicsEngine.collision.normal.multiplyVector(new Vector3D(5, 5, 0)), PhysicsEngine.collision);
-         }
+            RigidUtils.RotateXOnlyPoints(PhysicsEngine.collision, Math.toRadians(-1));
+         }   
          if(KeyInput.S){
-             RigidUtils.Move(PhysicsEngine.collision.normal.multiplyVector(new Vector3D(-5, -5, 0)), PhysicsEngine.collision);
+            RigidUtils.RotateXOnlyPoints(PhysicsEngine.collision, Math.toRadians(1));
          }
          if(KeyInput.A){
-            RigidUtils.RotateZOnlyPoints(PhysicsEngine.collision, Math.toRadians(-5));
+            RigidUtils.RotateZOnlyPoints(PhysicsEngine.collision, Math.toRadians(-1));
          }   
          if(KeyInput.D){
-            RigidUtils.RotateZOnlyPoints(PhysicsEngine.collision, Math.toRadians(5));
+            RigidUtils.RotateZOnlyPoints(PhysicsEngine.collision, Math.toRadians(1));
          }
          if(KeyInput.Q){
-            RigidUtils.RotateYOnlyPoints(PhysicsEngine.collision, Math.toRadians(-5));
+            RigidUtils.RotateYOnlyPoints(PhysicsEngine.collision, Math.toRadians(-1));
          }
          if(KeyInput.E){
-            RigidUtils.RotateYOnlyPoints(PhysicsEngine.collision, Math.toRadians(5));
+            RigidUtils.RotateYOnlyPoints(PhysicsEngine.collision, Math.toRadians(1));
          } 
          if(KeyInput.SPACE){
              RigidBody temp = PrebuiltBodies.quad(new Point2D(PhysicsEngine.collision.points[0].getX()+(PhysicsEngine.collision.x), PhysicsEngine.collision.points[0].getY()+(PhysicsEngine.collision.y)), 6);

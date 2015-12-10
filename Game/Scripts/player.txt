@@ -27,18 +27,18 @@ cmd_addMessage:Player loaded
 }
 
 move:{
-if:(key w true){
+if:(key up true){
 	set-y=(- y speed)
 }
 
-if:(key s true){
+if:(key down true){
 	set-y=(+ y speed)
 }
-if:(key a true){
+if:(key left true){
 	set-x=(- x speed)
 }
 
-if:(key d true){
+if:(key right true){
 	set-x=(+ x speed)
 }
 }

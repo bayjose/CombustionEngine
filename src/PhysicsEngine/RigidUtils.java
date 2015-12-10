@@ -148,6 +148,9 @@ public class RigidUtils {
         int[] ypts = new int[tempPts.length];
         for(int i=0; i<tempPts.length; i++){
             obj.Scale =  (DistanceCalculator.CalculateXDifferenceF((obj.z+tempPts[i].getZ())+Camera.position.getZ(), Camera.position.getZ()+Camera.position.getZ())+Camera.viewRange)/(Camera.optimalRender+Camera.viewRange);
+            if(obj.Scale<0){
+                obj.Scale = 0;
+            }
             xpts[i]=(int)(tempPts[i].getX() * obj.Scale);
             ypts[i]=(int)(tempPts[i].getY() * obj.Scale);
         }
@@ -177,7 +180,7 @@ public class RigidUtils {
             }
             g.translate((int)-obj.x, (int)-obj.y);
             if(Handler.bool1){
-                g.drawLine((int)obj.x, (int)obj.y, (int)(obj.x+(obj.normal.getZ()*10)), (int)(obj.y+(obj.normal.getZ()*10)));
+                g.drawLine((int)obj.x, (int)obj.y, (int)(obj.x+(obj.normal.getX()*10)), (int)(obj.y+(obj.normal.getX()*10)));
             }
         }
     }
