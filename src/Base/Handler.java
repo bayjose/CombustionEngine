@@ -22,7 +22,6 @@ import java.util.LinkedList;
 import Object.Object;
 import gui.FileViewer;
 import java.awt.Rectangle;
-import java.util.HashMap;
 /**
  *
  * @author Bayjose
@@ -77,7 +76,7 @@ public class Handler {
         this.intro = new Intro(this);
         SceneManager.setScene("intro");
 //        this.gui.add(new FileViewer(new Rectangle(0, 16, 128, Game.HEIGHT-16), "res/"));
-//        this.gui.add(new FileViewer(new Rectangle(128, 16, 128, Game.HEIGHT-16), "Game/"));
+        this.gui.add(new FileViewer(new Rectangle(0, 16, 128, Game.HEIGHT-16), "Game/"));
     }
     
     public void tick(){

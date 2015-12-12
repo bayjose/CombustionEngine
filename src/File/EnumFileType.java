@@ -10,7 +10,7 @@ package File;
  * @author Bayjose
  */
 public enum EnumFileType {
-    Script(".txt", "Core/gui/folder/Text.png", new DummyApplication()),
+    Script(".txt", "Core/gui/folder/Text.png", new ScriptViewer()),
     PortableNetworkGraphic(".png", "Core/gui/folder/Image.png", new PictureViewer()),
     Folder(".folder", "Core/gui/folder/Folder.png", new OpenDirectory()),
     FileNotFound("", "Core/error.png", new DummyApplication());

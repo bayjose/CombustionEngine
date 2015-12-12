@@ -6,21 +6,19 @@
 package File;
 
 import Base.Handler;
-import Base.SpriteBinder;
-import gui.FileViewer;
+import ScriptingEngine.Script;
 import gui.Gui;
-import gui.PhotoViewer;
+import gui.GuiScriptViewer;
 
 /**
  *
  * @author Bayjose
  */
-public class PictureViewer implements IApplication{
+public class ScriptViewer implements IApplication{
 
     @Override
     public void Launch(String name, Gui parent) {
-//        TextEngine.TextEngine.addMessage(new String[]{""+name});
-        Handler.gui.add(new PhotoViewer(256, 0, SpriteBinder.checkImage(name)));
+        Handler.gui.add(new GuiScriptViewer(new Script(name)));
     }
     
 }

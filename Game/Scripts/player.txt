@@ -3,7 +3,7 @@ set-loop=true
 define-boolean:shouldMove = true
 
 //speed variable
-define-int:speed = 5
+define-int:speed = 4
 
 init:{
 set-y=256
@@ -28,10 +28,10 @@ cmd_texture:0 SamWinters.jpg
 
 move:{
 if:(key a true){
-	cmd_rotate:0 ccw -5
+	cmd_rotate:0 ccw 3
 }
 if:(key d true){
-	cmd_rotate:0 cw 5
+	cmd_rotate:0 cw 3
 }
 if:(key w true){
 	cmd_move:0 ~(speed) ~(speed) 0
@@ -62,7 +62,8 @@ if:(key right true){
 if:(shouldMove){
 	ref-method:move
 }
+if:(key space true){
 cmd_setCam:(+ (* x -1) (halfScreenWidth)) (+ (* y -1) (halfScreenHeight)) 0 0
-
+}
 
 //cmd_addMessage:Current Channel:(activeChannel) has #(activeChannelSize) bodies in it.
