@@ -8,6 +8,7 @@ package ScriptingEngine;
 import Base.Camera;
 import Base.Game;
 import Base.Handler;
+import Base.SpriteBinder;
 import Base.input.MouseInput;
 import Base.input.MousePositionLocator;
 import Base.util.StringUtils;
@@ -15,6 +16,7 @@ import Listener.Console;
 import Listener.Listener;
 import Object.ObjectLoader;
 import PhysicsEngine.Point2D;
+import PhysicsEngine.RigidUtils;
 import PhysicsEngine.Vector3D;
 import components.Component;
 import components.ComponentDecoder;
@@ -57,16 +59,6 @@ public class Script {
         this.vars.add(new VarInt("x", "0"));
         this.vars.add(new VarInt("y", "0"));
         this.vars.add(new VarInt("z", "0"));
-        
-        this.vars.add(new VarInt("camX", ""+(int)Camera.position.getX()));
-        this.vars.add(new VarInt("camY", ""+(int)Camera.position.getY()));
-        this.vars.add(new VarInt("camZ", ""+(int)Camera.position.getZ()));
-        
-        this.vars.add(new VarInt("mouseX", ""+(MousePositionLocator.MouseLocation.x-(Game.WIDTH/2))));
-        this.vars.add(new VarInt("mouseY", ""+MousePositionLocator.MouseLocation.y));
-        this.vars.add(new VarBoolean("leftClick", ""+MouseInput.IsPressed));
-        this.vars.add(new VarBoolean("rightClick", ""+MouseInput.IsPressed));
-        
         this.vars.add(new VarBoolean("persist", "false"));
         this.vars.add(new VarString("this", ""+name));
         /*
@@ -100,7 +92,7 @@ public class Script {
                 }
             }
         }
-        
+        //needed to compile the code enough so that it is able to compile line by line when it is interpreted during runtime. 
         this.findComponents(data);
         this.findStatements(data);
         this.findMethods(data);
@@ -119,14 +111,6 @@ public class Script {
     public void tick(){
         //always first, directly in the tick method
         
-        this.setVar("camX", ""+(int)Camera.position.getX());
-        this.setVar("camY", ""+(int)Camera.position.getY());
-        this.setVar("camZ", ""+(int)Camera.position.getZ());
-        this.setVar("mouseX", ""+(MousePositionLocator.MouseLocation.x-(Game.WIDTH/2)));
-        this.setVar("mouseY", ""+MousePositionLocator.MouseLocation.y);
-        this.setVar("leftClick", ""+MouseInput.IsPressed);
-        this.setVar("rightClick", ""+MouseInput.IsPressed);
-        
         if(index >= this.data.length){
             remove = !(Boolean.parseBoolean(this.findVar("persist").data));
             if(remove){
@@ -135,10 +119,11 @@ public class Script {
                 return;
             }
             if(Boolean.parseBoolean(this.findVar("loop").data) == true){
+                //repeat interpretation
                 this.index = 0;
-//                this.data = StringUtils.loadData("Game/Scripts/"+name);
             }
         }
+        //if there is no delay, interpret line[index] otherwise rest for this tick
         if(delay<=0){
             for(; index<this.data.length;){
                 if(delay<=0){
@@ -305,8 +290,78 @@ public class Script {
             }
             //collision Channels
             if(data.startsWith("createChannel")){
-                System.err.println("Yo it got here");
                 PhysicsEngine.PhysicsEngine.addChannel(data.replace("createChannel:", ""));
+            }
+            if(data.startsWith("rotate")){
+                int specificBody = (int)Float.parseFloat(data.replace("rotate:", "").split(" ")[0].replaceAll(" ", ""));
+                String dim = data.replace("rotate:", "").split(" ")[1];
+                float degrees = Float.parseFloat(data.replace("rotate:", "").split(" ")[2].replaceAll(" ", ""));
+                degrees = (float)Math.toRadians(degrees);
+                if(specificBody < PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons.length){
+                    if(dim.equalsIgnoreCase("x")){
+                        RigidUtils.RotateXOnlyPoints(PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons[specificBody], degrees);
+                    }
+                    if(dim.equalsIgnoreCase("y")){
+                        RigidUtils.RotateYOnlyPoints(PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons[specificBody], degrees);
+                    }
+                    if(dim.equalsIgnoreCase("z")){
+                        RigidUtils.RotateZOnlyPoints(PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons[specificBody], degrees);
+                    }
+                    if(dim.equalsIgnoreCase("ccw")){
+                        degrees = Math.abs(degrees);
+                        degrees = -degrees;
+                        RigidUtils.RotateZOnlyPoints(PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons[specificBody], degrees);
+                    }
+                    if(dim.equalsIgnoreCase("cw")){
+                        degrees = Math.abs(degrees);
+                        RigidUtils.RotateZOnlyPoints(PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons[specificBody], degrees);
+                    }
+                }
+            }
+            if(data.startsWith("move")){
+                data = data.replaceAll("~ ", "~");
+                while(data.contains("~~")){
+                    data = data.replaceAll("~~", "~ ~");
+                }
+                int specificBody = (int)Float.parseFloat(data.replace("move:", "").split(" ")[0].replaceAll(" ", ""));
+                float tempX = 0;
+                float tempY = 0;
+                float tempZ = 0;
+                //X
+                if(data.replace("move:", "").split(" ")[1].replaceAll(" ", "").contains("~")){
+                    tempX = PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons[specificBody].normal.getX();
+                    if(!data.replace("move:", "").split(" ")[1].replaceAll(" ", "").replaceAll("~", "").isEmpty()){
+                        tempX *= Float.parseFloat(data.replace("move:", "").split(" ")[1].replaceAll(" ", "").replaceAll("~", ""));
+                    }
+                }else{
+                    tempX = Float.parseFloat(data.replace("move:", "").split(" ")[1].replaceAll(" ", ""));
+                }
+                //Y
+                if(data.replace("move:", "").split(" ")[2].replaceAll(" ", "").contains("~")){
+                    tempY = PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons[specificBody].normal.getY();
+                    if(!data.replace("move:", "").split(" ")[2].replaceAll(" ", "").replaceAll("~", "").isEmpty()){
+                        tempY *= Float.parseFloat(data.replace("move:", "").split(" ")[2].replaceAll(" ", "").replaceAll("~", ""));
+                    }
+                }else{
+                    tempY = Float.parseFloat(data.replace("move:", "").split(" ")[2].replaceAll(" ", ""));
+                }
+                //Z
+                if(data.replace("move:", "").split(" ")[3].replaceAll(" ", "").contains("~")){
+                    tempZ = PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons[specificBody].normal.getZ();
+                    if(!data.replace("move:", "").split(" ")[3].replaceAll(" ", "").replaceAll("~", "").isEmpty()){
+                        tempZ *= Float.parseFloat(data.replace("move:", "").split(" ")[3].replaceAll(" ", "").replaceAll("~", ""));
+                    }
+                }else{
+                    tempZ = Float.parseFloat(data.replace("move:", "").split(" ")[3].replaceAll(" ", ""));
+                }
+                Vector3D offset = new Vector3D(tempX, tempY, tempZ);
+                if(specificBody < PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons.length){
+                    RigidUtils.Move(offset, PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons[specificBody]);
+                }
+            }
+            if(data.startsWith("texture")){
+                int specificBody = (int)Float.parseFloat(data.replace("texture:", "").split(" ")[0].replaceAll(" ", ""));
+                PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons[specificBody].ImageIndex = SpriteBinder.checkImageID(data.replace("texture:", "").split(" ")[1]);
             }
         }else if(data.startsWith("ref-expr")){
             //ref-expr commands that have been added by the interpreter
@@ -344,13 +399,19 @@ public class Script {
             return;
         }else{
             //all unrecognised commands go here, maybe method refrences
-            System.out.println("Unrecognised Command:"+data);
+//            System.out.println("Unrecognised Command:"+data);
         }
         }
         index++;
     }
     
     public Variable findVar(String name){
+        //look through global vars first
+        for(int i=0; i<GlobalVars.vars.size(); i++){
+            if(name.equals(GlobalVars.vars.get(i).name.replaceAll(" ", ""))){
+                return GlobalVars.vars.get(i);
+            }
+        }
         for(int i=0; i<this.vars.size(); i++){
             if(name.equals(this.vars.get(i).name.replaceAll(" ", ""))){
                 return this.vars.get(i);

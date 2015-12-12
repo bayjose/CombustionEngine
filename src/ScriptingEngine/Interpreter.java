@@ -19,6 +19,11 @@ public class Interpreter {
     private static boolean debug = false;
     
     public static String InterprateCode(String data, LinkedList<Variable> vars){
+        LinkedList<Variable> allVars = (LinkedList<Variable>)vars.clone();
+        for(int i=0; i<GlobalVars.vars.size(); i++){
+            allVars.add(GlobalVars.vars.get(i));
+        }
+        
         String theAnswer;
         String beginning = "";
         String middle = "";
@@ -44,9 +49,9 @@ public class Interpreter {
         EvaluateAVariable:{
             if(!middle.contains(" ")){
                 String internals = middle.replaceAll("\\(", "").replaceAll("\\)", "");
-                for(int i=0; i<vars.size(); i++){
-                    if(vars.get(i).name.equals(internals)){
-                        theAnswer = beginning + vars.get(i).data + end;
+                for(int i=0; i<allVars.size(); i++){
+                    if(allVars.get(i).name.equals(internals)){
+                        theAnswer = beginning + allVars.get(i).data + end;
                         if(theAnswer.contains("(")||theAnswer.contains(")")){
                             return InterprateCode(theAnswer, vars);
                         }else{
@@ -95,14 +100,14 @@ public class Interpreter {
 //            System.out.println(beginning + internals + end);
             
             //implicit variable detection
-            for(int i=0; i<vars.size(); i++){
-                if(vars.get(i).name.equals(dataToProcess[1])){
-                    dataToProcess[1] = vars.get(i).data;
+            for(int i=0; i<allVars.size(); i++){
+                if(allVars.get(i).name.equals(dataToProcess[1])){
+                    dataToProcess[1] = allVars.get(i).data;
                 }
             }
-            for(int i=0; i<vars.size(); i++){
-                if(vars.get(i).name.equals(dataToProcess[2])){
-                    dataToProcess[2] = vars.get(i).data;
+            for(int i=0; i<allVars.size(); i++){
+                if(allVars.get(i).name.equals(dataToProcess[2])){
+                    dataToProcess[2] = allVars.get(i).data;
                 }
             }
 //            System.out.println("Var1:"+dataToProcess[1]+" Var2:"+dataToProcess[2]);

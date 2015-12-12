@@ -76,8 +76,8 @@ public class Handler {
         this.renderModels = new RenderModels();
         this.intro = new Intro(this);
         SceneManager.setScene("intro");
-        this.gui.add(new FileViewer(new Rectangle(0, 16, 128, Game.HEIGHT-16), "res/"));
-        this.gui.add(new FileViewer(new Rectangle(128, 16, 128, Game.HEIGHT-16), "Game/"));
+//        this.gui.add(new FileViewer(new Rectangle(0, 16, 128, Game.HEIGHT-16), "res/"));
+//        this.gui.add(new FileViewer(new Rectangle(128, 16, 128, Game.HEIGHT-16), "Game/"));
     }
     
     public void tick(){

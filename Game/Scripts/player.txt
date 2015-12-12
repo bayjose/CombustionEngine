@@ -20,13 +20,29 @@ Component_Collision{
 Component_Image{
 square.png
 }
-cmd_createChannel:(this)
 cmd_console:script:(this)
-cmd_addMessage:Player loaded
+cmd_addMessage:Current Channel:(activeChannel) has #(activeChannelSize) bodies in it.
 //cmd_loadScript:doubleFor
+cmd_texture:0 SamWinters.jpg
 }
 
 move:{
+set-count = 0
+if:(key a true){
+	cmd_rotate:0 ccw -5
+}
+if:(key d true){
+	cmd_rotate:0 cw 5
+}
+if:(key w true){
+	cmd_move:0 ~(speed) ~(speed) 0
+}
+if:(key s true){
+	cmd_move:0 ~(* speed -1) ~(* speed -1) 0
+}
+
+
+//the square camera movement thing, and retexture that square to a camera at some point.
 if:(key up true){
 	set-y=(- y speed)
 }
@@ -41,10 +57,13 @@ if:(key left true){
 if:(key right true){
 	set-x=(+ x speed)
 }
+//end of move method
 }
+
 if:(shouldMove){
 	ref-method:move
 }
+cmd_setCam:(+ (* x -1) (halfScreenWidth)) (+ (* y -1) (halfScreenHeight)) 0 0
 
-cmd_setCam:(+ (* x -1) 600) (+ (* y -1) 400) 0 0
 
+//cmd_addMessage:Current Channel:(activeChannel) has #(activeChannelSize) bodies in it.

@@ -14,6 +14,7 @@ import Listener.Console;
 import Listener.Listener;
 import Physics.Model;
 import PhysicsEngine.Vector3D;
+import ScriptingEngine.GlobalVars;
 import ScriptingEngine.Profileing;
 import World.LoadTiles;
 import gui.FileViewer;
@@ -52,6 +53,7 @@ public abstract class Game extends Canvas implements Runnable{
     public static String platform;
     
     public Handler handler;
+    public GlobalVars globalVars = new GlobalVars();
     public MousePositionLocator mpl;
     public MouseScroleInput msi;
     
@@ -98,6 +100,7 @@ public abstract class Game extends Canvas implements Runnable{
         this.addMouseWheelListener(msi);
         Screen = new Rectangle(0, 0, Game.WIDTH, Game.HEIGHT);
         SpriteBinder.init();
+        this.globalVars.init();
         handler.init();
         
         this.postInit();
@@ -135,25 +138,33 @@ public abstract class Game extends Canvas implements Runnable{
         double amountOfTicks = 60.0;
         double ns = 1000000000/ amountOfTicks;
         double delta=0;
+        //Render
+        double amountOfRender = 60.0;
+        double nsRender = 1000000000/ amountOfRender;
+        double deltaRender=0;
         long timer = System.currentTimeMillis();
         int updates = 0; 
         int frames = 0;
         while(running){
             long now = System.nanoTime(); 
             delta += ((now - lastTime)/ns);
- 
+            deltaRender += ((now - lastTime)/nsRender);
             lastTime=now;
+            
             while(delta >= 1){
                 tick();
                 updates++;
-//                render();
-//                frames++;
                 delta--;
+            }
+            while(deltaRender >= 1){
+                render();
+                frames++;
+                deltaRender--;
             }
             
             
-            render();
-            frames++;
+//            render();
+//            frames++;
             
             if(System.currentTimeMillis() - timer > 1000){
                 timer += 1000;
@@ -171,6 +182,7 @@ public abstract class Game extends Canvas implements Runnable{
     private void tick(){
        if(!broken){
             try{
+             this.globalVars.tick();
              this.extraTick();
              
              

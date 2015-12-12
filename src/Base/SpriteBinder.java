@@ -50,6 +50,7 @@ public class SpriteBinder {
     }
     
     public static int checkImageID(String id){
+        checkImage(id);
         for(int i=0; i<SpriteBinder.loadedImages.size(); i++){
             if(SpriteBinder.loadedImages.get(i).id.equals(id)){
 //                System.out.println("Image:"+id+" already exists.");
