@@ -23,8 +23,6 @@ import java.util.LinkedList;
 public class PhysicsEngine {
     public static String activeChannel = "bodies";
     public static CollisionChannel[] channels;
-//    public static LinkedList<RigidBody> bullets = new LinkedList<RigidBody>();
-    public static RigidBody collision ;
     private int numBods = 0;
     
     private int time = 0;
@@ -37,10 +35,10 @@ public class PhysicsEngine {
         Reset();
         SpriteBinder.checkImage("ship.png");
 //        SpriteBinder.checkImage("SamWinters.jpg");
-        PhysicsEngine.collision =PrebuiltBodies.quad(new Point2D(Game.WIDTH/2, Game.HEIGHT/2), 512);
-        PhysicsEngine.collision.Translate((Game.WIDTH/2), (Game.HEIGHT/2),0);
-        PhysicsEngine.addToChannel("bodies", PhysicsEngine.collision);
-        PhysicsEngine.collision.ImageIndex = SpriteBinder.checkImageID("SamWinters.jpg");
+//        PhysicsEngine.collision =PrebuiltBodies.quad(new Point2D(Game.WIDTH/2, Game.HEIGHT/2), 512);
+//        PhysicsEngine.collision.Translate((Game.WIDTH/2), (Game.HEIGHT/2),0);
+//        PhysicsEngine.addToChannel("bodies", PhysicsEngine.collision);
+//        PhysicsEngine.collision.ImageIndex = SpriteBinder.checkImageID("SamWinters.jpg");
     }
     
     public void tick(){
@@ -49,48 +47,26 @@ public class PhysicsEngine {
         for(int i=0; i<PhysicsEngine.channels.length; i++){
             PhysicsEngine.channels[i].tick();
         }
-//        for(int i=0; i<PhysicsEngine.getChannel("bodies").collisons.length; i++){
-//            RigidUtils.RotateZOnlyPoints(PhysicsEngine.getChannel("bodies").collisons[i], Math.toRadians(1));
-//        }
-        PhysicsEngine.collision.setColor(Color.BLUE);
-//         if(KeyInput.W){
-//            RigidUtils.RotateXOnlyPoints(PhysicsEngine.collision, Math.toRadians(-1));
-//         }   
-//         if(KeyInput.S){
-//            RigidUtils.RotateXOnlyPoints(PhysicsEngine.collision, Math.toRadians(1));
+//         if(KeyInput.SPACE){
+//             RigidBody temp = PrebuiltBodies.quad(new Point2D(PhysicsEngine.collision.points[0].getX()+(PhysicsEngine.collision.x), PhysicsEngine.collision.points[0].getY()+(PhysicsEngine.collision.y)), 6);
+//             temp.normal = PhysicsEngine.collision.normal;
+//             temp.setColor(this.randomColor());
+//             PhysicsEngine.getChannel("bullets").append(temp);
 //         }
-         if(KeyInput.A){
-            RigidUtils.RotateZOnlyPoints(PhysicsEngine.collision, Math.toRadians(-1));
-         }   
-         if(KeyInput.D){
-            RigidUtils.RotateZOnlyPoints(PhysicsEngine.collision, Math.toRadians(1));
-         }
-//         if(KeyInput.Q){
-//            RigidUtils.RotateYOnlyPoints(PhysicsEngine.collision, Math.toRadians(-1));
-//         }
-//         if(KeyInput.E){
-//            RigidUtils.RotateYOnlyPoints(PhysicsEngine.collision, Math.toRadians(1));
-//         } 
-         if(KeyInput.SPACE){
-             RigidBody temp = PrebuiltBodies.quad(new Point2D(PhysicsEngine.collision.points[0].getX()+(PhysicsEngine.collision.x), PhysicsEngine.collision.points[0].getY()+(PhysicsEngine.collision.y)), 6);
-             temp.normal = PhysicsEngine.collision.normal;
-             temp.setColor(this.randomColor());
-             PhysicsEngine.getChannel("bullets").append(temp);
-         }
          
         for(RigidBody obj: PhysicsEngine.getChannel("bullets").collisons){
             RigidUtils.Move(obj.normal.multiplyVector(new Vector3D(8,8,0)), obj);
         }
-        for(RigidBody obj: PhysicsEngine.getChannel("bodies").collisons){
-            
-            if(RigidUtils.Collides(PhysicsEngine.collision, obj)){
-                obj.setColor(Color.red);
-                PhysicsEngine.collision.setColor(Color.GREEN);
-            }else{
-                obj.setColor(Color.BLUE);
-            }
-
-        }
+//        for(RigidBody obj: PhysicsEngine.getChannel("bodies").collisons){
+//            
+//            if(RigidUtils.Collides(PhysicsEngine.collision, obj)){
+//                obj.setColor(Color.red);
+//                PhysicsEngine.collision.setColor(Color.GREEN);
+//            }else{
+//                obj.setColor(Color.BLUE);
+//            }
+//
+//        }
         
         for(RigidBody obj: PhysicsEngine.getChannel("bodies").collisons){
             if(Camera.pointOnScreen((int)obj.x, (int)obj.y)){
@@ -114,9 +90,6 @@ public class PhysicsEngine {
                 RigidUtils.Render(obj, g);
             }
         }
-        
-        
-        RigidUtils.Render(this.collision, g);
     }
     
     public static void addToChannel(String name, RigidBody object){

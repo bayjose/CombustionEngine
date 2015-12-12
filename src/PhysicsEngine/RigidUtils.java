@@ -148,9 +148,9 @@ public class RigidUtils {
         int[] ypts = new int[tempPts.length];
         for(int i=0; i<tempPts.length; i++){
             obj.Scale =  (DistanceCalculator.CalculateXDifferenceF((obj.z+tempPts[i].getZ())+Camera.position.getZ(), Camera.position.getZ()+Camera.position.getZ())+Camera.viewRange)/(Camera.optimalRender+Camera.viewRange);
-            if(obj.Scale<0){
-                obj.Scale = 0;
-            }
+//            if(obj.Scale<0){
+//                obj.Scale = 0;
+//            }
             xpts[i]=(int)(tempPts[i].getX() * obj.Scale);
             ypts[i]=(int)(tempPts[i].getY() * obj.Scale);
         }

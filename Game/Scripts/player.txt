@@ -27,7 +27,6 @@ cmd_texture:0 SamWinters.jpg
 }
 
 move:{
-set-count = 0
 if:(key a true){
 	cmd_rotate:0 ccw -5
 }

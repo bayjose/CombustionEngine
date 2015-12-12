@@ -29,8 +29,8 @@ public class Camera {
     
     private float speed = 0.1f;
     
-    public static final float viewRange = 1024;
-    public static final float optimalRender = 128;
+    public static final float viewRange = 128;
+    public static final float optimalRender = 0;
     
     //all translation stuff
     private boolean transition = false;

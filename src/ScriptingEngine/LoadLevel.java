@@ -22,7 +22,6 @@ public class LoadLevel {
         int y = 0;
         Chunk newChunk;
         PhysicsEngine.getChannel("bodies").clearAll();
-        PhysicsEngine.addToChannel("bodies", PhysicsEngine.collision);
         data = data.replace("loadLevel:", "");
         data = data+".txt";
         String[] chunkData = StringUtils.loadData("Game/Levels/"+data);
