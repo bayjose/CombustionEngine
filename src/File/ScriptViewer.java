@@ -6,7 +6,6 @@
 package File;
 
 import Base.Handler;
-import ScriptingEngine.Script;
 import gui.Gui;
 import gui.GuiScriptViewer;
 
@@ -15,10 +14,17 @@ import gui.GuiScriptViewer;
  * @author Bayjose
  */
 public class ScriptViewer implements IApplication{
-
+    
+    private GuiScriptViewer script = new GuiScriptViewer();
+    
+    public ScriptViewer(){
+        Handler.gui.add(script);
+    }
+    
     @Override
     public void Launch(String name, Gui parent) {
-        Handler.gui.add(new GuiScriptViewer(new Script(name)));
+        System.out.println("Scripting file:"+name);
+        script.setPath(name);
     }
     
 }

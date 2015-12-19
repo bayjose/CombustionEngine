@@ -1,9 +1,0 @@
-set-persist = true
-set-loop = true
-
-//if the camera y is greater that 0 subtract 10
-if:(> camY 0){
-print:camY
-cmd_moveCam:0 -10 0 1
-}
-

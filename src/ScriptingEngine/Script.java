@@ -29,7 +29,9 @@ import java.util.LinkedList;
  */
 public class Script {
     public String name;
+    public final String path;
     public String[] data;
+    public String[] initialData;
     
     private int index = 0;
     private int delay = 0;
@@ -47,14 +49,18 @@ public class Script {
     
     public Script(String path){
         this.name = path;
+        this.path = "Game/Scripts/"+path;
         Profileing.increaseNumCount();
         try{
             this.data = StringUtils.loadData("Game/Scripts/"+path);
         }catch(Exception e){
+            System.err.println("There was an error loading:Game/Scripts/"+path);
             this.remove = true;
             Profileing.decreaseNumCount();
             Handler.scripts.remove(this);
         }
+        //save an index of the data before it wasn manipulated
+        this.initialData = data;
         //Core variables that all scripts have
         this.vars.add(new VarInt("x", "0"));
         this.vars.add(new VarInt("y", "0"));
@@ -67,8 +73,22 @@ public class Script {
         */
         this.vars.add(new VarBoolean("loop", "false"));
         //remove all tabs from the front
-        for(int i=0; i<this.data.length; i++){
-            this.data[i] = this.data[i].replaceAll("\t", ""); 
+        try{
+            for(int i=0; i<this.data.length; i++){
+                System.out.println("Data at["+i+"]"+this.data[i]);
+                this.data[i] = this.data[i].replaceAll("\t", ""); 
+            }
+        }catch(NullPointerException npe){
+            System.err.println("There was an error loading:Game/Scripts/"+path);
+            System.err.println("Forcing the load of the file.");
+            try {
+                this.data = StringUtils.forceLoadData("Game/Scripts/" + path);
+            } catch (Exception e) {
+                System.err.println("Game/Scripts/" + path+" is very broken");
+                this.remove = true;
+                Profileing.decreaseNumCount();
+                Handler.scripts.remove(this);
+            }
         }
         //Determine the statements
         for(int i=0; i<this.data.length; i++){
@@ -195,23 +215,27 @@ public class Script {
         
         if(data.startsWith("define-")){
             data = data.replaceAll("define-", "");
-            String varName = data.split(":")[1].split("=")[0].replaceAll(" ", "");
-            String varData = data.split(":")[1].split("=")[1];
-            if(this.findVar(varName) == null){
-                if(data.startsWith("int")){
-                    this.vars.add(new VarInt(varName, varData));
-                }else if(data.startsWith("String")){
-                    this.vars.add(new VarString(varName, varData));
-                }else if(data.startsWith("float")){
-                    this.vars.add(new VarFloat(varName, varData));
-                }else if(data.startsWith("boolean")){
-                    this.vars.add(new VarBoolean(varName, varData));
-                }else{
-                    System.out.println("Type "+data+" was not recognised.");
+            if(data.contains("=")){
+                String varName = data.split(":")[1].split("=")[0].replaceAll(" ", "");
+                String varData = data.split(":")[1].split("=")[1];
+                if(this.findVar(varName) == null){
+                    if(data.startsWith("int")){
+                        this.vars.add(new VarInt(varName, varData));
+                    }else if(data.startsWith("String")){
+                        this.vars.add(new VarString(varName, varData));
+                    }else if(data.startsWith("float")){
+                        this.vars.add(new VarFloat(varName, varData));
+                    }else if(data.startsWith("boolean")){
+                        this.vars.add(new VarBoolean(varName, varData));
+                    }else{
+                        System.out.println("Type "+data+" was not recognised.");
+                    }
                 }
+                index++;
+                return;
+            }else{
+                
             }
-            index++;
-            return;
         }
         
         if(data.startsWith("Component-")){
@@ -362,6 +386,10 @@ public class Script {
             if(data.startsWith("texture")){
                 int specificBody = (int)Float.parseFloat(data.replace("texture:", "").split(" ")[0].replaceAll(" ", ""));
                 PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons[specificBody].ImageIndex = SpriteBinder.checkImageID(data.replace("texture:", "").split(" ")[1]);
+            }
+            if(data.startsWith("updateBody")){
+                int specificBody = (int)Float.parseFloat(data.replace("updateBody:", "").split(" ")[0].replaceAll(" ", ""));
+                RigidUtils.Update(PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons[specificBody]);
             }
         }else if(data.startsWith("ref-expr")){
             //ref-expr commands that have been added by the interpreter
@@ -674,6 +702,9 @@ public class Script {
         throw new MethodNotFoundException(name);
     }
     
+    public LinkedList<Variable> getVars(){
+        return this.vars;
+    }
     
     
 }

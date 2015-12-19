@@ -10,8 +10,16 @@ package ScriptingEngine;
  * @author Bayjose
  */
 public enum EnumVarType {
-    INT(),
-    FLOAT(),
-    BOOLEAN(),
-    STRING();
+    INT("int", new VarInt("", "")),
+    FLOAT("float", new VarFloat("", "")),
+    BOOLEAN("boolean", new VarBoolean("", "")),
+    STRING("String", new VarString("", ""));
+    
+    EnumVarType(String id, Variable var){
+        this.id = id;
+        this.varType = var;
+    }
+    
+    protected String id;
+    protected Variable varType;
 }

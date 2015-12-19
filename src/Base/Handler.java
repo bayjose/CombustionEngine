@@ -5,7 +5,6 @@
 package Base;
 
 import Base.util.EnumGameState;
-import Entity.Intro;
 import Lighting.LightingEngine;
 import Physics.RenderModels;
 import PhysicsEngine.PhysicsEngine;
@@ -76,7 +75,7 @@ public class Handler {
         this.intro = new Intro(this);
         SceneManager.setScene("intro");
 //        this.gui.add(new FileViewer(new Rectangle(0, 16, 128, Game.HEIGHT-16), "res/"));
-        this.gui.add(new FileViewer(new Rectangle(0, 16, 128, Game.HEIGHT-16), "Game/"));
+//        this.gui.add(new FileViewer(new Rectangle(0, 16, 128, Game.HEIGHT-16), "Game/Scripts/"));
     }
     
     public void tick(){

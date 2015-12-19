@@ -7,6 +7,7 @@ package Base.util;
 
 import PhysicsEngine.Point2D;
 import java.io.File;
+import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedList;
@@ -179,6 +180,52 @@ public class StringUtils {
         }
         lastFile = new LoadedFile(path, outData);
         return outData;
+    }
+    
+    public static String[] forceLoadData(String path){
+        LinkedList<String> data = new LinkedList<String>();
+        try {
+            Scanner in = new Scanner(new File(StringUtils.getAbsPath()+path));
+            do{
+                data.add(in.nextLine());
+            }while(in.hasNext());
+        } catch (Exception e) {
+            StringUtils.path = "cpu";
+            try{
+                Scanner in = new Scanner(new File(StringUtils.getAbsPath()+path));
+                do{
+                data.add(in.nextLine());
+                }while(in.hasNext());
+                in.close();
+            }catch(Exception e2){
+//                e2.printStackTrace();
+            }
+        }
+        String[] outData = new String[data.size()];
+        for(int i=0; i<outData.length; i++){
+            outData[i] = data.get(i);
+        }
+        return outData;
+    }
+    
+    public static void saveData(String path, String[] data){
+        try {
+            PrintWriter p = new PrintWriter(new File(StringUtils.getAbsPath()+path));
+            for(int i = 0; i<data.length; i++){
+                p.println(data[i]);
+            }
+            p.close();
+        } catch (Exception e) {
+            try{
+                PrintWriter p2 = new PrintWriter(new File(StringUtils.getAbsPath()+path));
+                for (int i = 0; i < data.length; i++) {
+                    p2.println(data[i]);
+                }
+                p2.close();
+            }catch(Exception e2){
+//                e2.printStackTrace();
+            }
+        }
     }
     
     public static String[] loadUrl(String urlpath){

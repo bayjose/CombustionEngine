@@ -1,8 +1,0 @@
-define-int:soup = 128
-define-float:turtle = 12.9
-
-
-cmd_addMessage:”Crazy Function Tests”
-cmd_addMessage:(* (- (+ turtle (- 4 (+ 2 soup))) 1) 41)
-
-
