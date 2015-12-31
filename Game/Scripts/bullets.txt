@@ -1,0 +1,31 @@
+set-persist=true
+set-loop=true
+
+//fix this so it works
+//define-int:lifespanIndex = (lifespan)
+init:{
+define-int:lifespan = 10
+define-int:lifespanIndex = 0
+set-lifespanIndex=(lifespan)
+
+define-int:count=0
+cmd_createChannel:bullets
+//(get-activeChannel-bodies-0-normal)
+}
+set-count=0
+cmd_setChannel:bullets
+define-int:count = 0
+for:(< count activeChannelSize){
+	//cmd_rotate:(count) ccw 2
+	set-count=(+ count 1)
+}
+
+cmd_setChannel:bullets
+if:(& (> activeChannelSize 0) (< lifespanIndex 1)){
+cmd_removeBody:0
+set-lifespanIndex=(lifespan)
+}
+
+if:(> lifespanIndex 0){
+set-lifespanIndex=(- lifespanIndex 1)
+}

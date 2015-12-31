@@ -13,7 +13,6 @@ public class VarFloat extends Variable{
 
     public VarFloat(String name, String data) {
         super(name, data, EnumVarType.FLOAT);
-        this.data = data;
     }
 
 }

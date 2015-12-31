@@ -13,7 +13,6 @@ public class VarBoolean extends Variable{
 
     public VarBoolean(String name, String data) {
         super(name, data, EnumVarType.BOOLEAN);
-        this.data = data;
     }
 
 }

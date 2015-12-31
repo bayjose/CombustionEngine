@@ -25,13 +25,14 @@ public enum EnumAction {
     LES("<"),
     EQL("="),
     NOT("!"),
+    //unRecognised
+    NULL(""),
     ;
     
     
     protected String character;
     
     public String Action(EnumAction action, String var1, String var2){
-//        System.out.println("Var 1:"+var1+" Var 2:"+var2);
         if(action.equals(this.ADD)){
             return (Float.parseFloat(var1) + Float.parseFloat(var2))+"";
         }
@@ -71,14 +72,16 @@ public enum EnumAction {
         }
         
         if(action.equals(this.AND)){
+            var1 = var1.replaceAll(" ", "");
+            var2 = var2.replaceAll(" ", "");
             return (Boolean.valueOf(var1)&&Boolean.valueOf(var2))+"";
         }
         
         if(action.equals(this.OR)){
             return (Boolean.valueOf(var1) || Boolean.valueOf(var2))+"";
         }
-        
-        return "Unrecognised Action";
+        System.err.println("Unrecognised Action");
+        return "";
     }
     
     EnumAction(String character){

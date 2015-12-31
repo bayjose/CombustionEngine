@@ -41,6 +41,7 @@ public class ComponentImage extends Component{
         g.drawImage(image, x, y, null);
     }
     
+    @Override
     public void render(Graphics g){
         g.drawImage(image, x, y, null);
     }

@@ -13,7 +13,6 @@ public class VarString extends Variable{
 
     public VarString(String name, String data) {
         super(name, data, EnumVarType.STRING);
-        this.data = data;
     }
 
 }

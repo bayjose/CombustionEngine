@@ -62,6 +62,10 @@ public abstract class Component {
         return;
     }
     
+    public void render(Graphics g){
+        return;
+    }
+    
     public void render(Graphics g, int x, int y){
         return;
     }

@@ -40,7 +40,7 @@ public class GlobalVars {
         GlobalVars.vars.add(new VarInt("halfScreenHeight", (Game.HEIGHT/2)+""));
     }
     
-    public void tick(){
+    public static void tick(){
         GlobalVars.setVar("camX", ""+(int)Camera.position.getX());
         GlobalVars.setVar("camY", ""+(int)Camera.position.getY());
         GlobalVars.setVar("camZ", ""+(int)Camera.position.getZ());
@@ -56,7 +56,7 @@ public class GlobalVars {
     private static void setVar(String name, String data){
         for(int i=0; i<GlobalVars.vars.size(); i++){
             if(name.equals(GlobalVars.vars.get(i).name.replaceAll(" ", ""))){
-                GlobalVars.vars.get(i).data = data;
+                GlobalVars.vars.get(i).setData(data);
                 return;
             }
         }

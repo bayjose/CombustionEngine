@@ -5,12 +5,9 @@
  */
 package ScriptingEngine;
 
-import Base.Camera;
 import Base.Game;
 import Base.Handler;
 import Base.SpriteBinder;
-import Base.input.MouseInput;
-import Base.input.MousePositionLocator;
 import Base.util.StringUtils;
 import Listener.Console;
 import Listener.Listener;
@@ -126,41 +123,49 @@ public class Script {
             }
         });
         
+        Console.listeners.add(new Listener("terminate:"+name) {
+            @Override
+            public void Event() {
+                termiante();
+            }
+        });
+        
     }
     
     public void tick(){
         //always first, directly in the tick method
         
         if(index >= this.data.length){
-            remove = !(Boolean.parseBoolean(this.findVar("persist").data));
+            remove = !(Boolean.parseBoolean(this.findVar("persist").getData()));
             if(remove){
                 Profileing.decreaseNumCount();
                 System.out.print(remove);
                 return;
             }
-            if(Boolean.parseBoolean(this.findVar("loop").data) == true){
+            if(Boolean.parseBoolean(this.findVar("loop").getData()) == true){
                 //repeat interpretation
                 this.index = 0;
             }
         }
         //if there is no delay, interpret line[index] otherwise rest for this tick
         if(delay<=0){
+            for (Script subscript : this.subscripts) {
+                if (!subscript.remove) {
+                    subscript.tick();
+                } else {
+                    this.subscripts.remove(subscript);
+                }
+            }
+            for(conditionalComponent component: this.components){
+                if(component.init){
+                    component.component.tick((int)Float.parseFloat(this.findVar("x").getData()), (int)Float.parseFloat(this.findVar("y").getData()));
+                }
+            }
             for(; index<this.data.length;){
+                //reason for this statement is to have pauses break out of the current tick itteration, and stop to tick down the time
                 if(delay<=0){
                     //all tick stuff
                     InterperateScript(this.data[index]);
-                    for (Script subscript : this.subscripts) {
-                        if (!subscript.remove) {
-                            subscript.tick();
-                        } else {
-                            this.subscripts.remove(subscript);
-                        }
-                    }
-                    for(conditionalComponent component: this.components){
-                        if(component.init){
-                            component.component.tick((int)Float.parseFloat(this.findVar("x").data), (int)Float.parseFloat(this.findVar("y").data));
-                        }
-                    }
                 }else{
                     break;
                 }
@@ -198,7 +203,7 @@ public class Script {
         if(data.startsWith("set-")){
             Variable var = this.findVar(data.replace("set-", "").split("=")[0].replaceAll(" ", ""));
             if(var != null){
-                var.data = data.split("=")[1].replaceAll(" ", "");
+                var.setData(data.split("=")[1].replaceAll(" ", ""));
                 
                 for(int i=0; i<this.vars.size(); i++){
                     if(this.vars.get(i).name.equals(var.name)){
@@ -244,13 +249,13 @@ public class Script {
                this.components.get(componentIndex).init= true;
                //initialize everything
                this.components.get(componentIndex).setComponent(vars);
-               this.components.get(componentIndex).component.onInit((int)Float.parseFloat(this.findVar("x").data), (int)Float.parseFloat(this.findVar("y").data));
+               this.components.get(componentIndex).component.onInit((int)Float.parseFloat(this.findVar("x").getData()), (int)Float.parseFloat(this.findVar("y").getData()));
             }else{
                this.components.addLast(new conditionalComponent(false, this.components.get(componentIndex).componentData));
                this.components.getLast().init= true;
                //initialize everything
                this.components.getLast().setComponent(vars);
-               this.components.getLast().component.onInit((int)Float.parseFloat(this.findVar("x").data), (int)Float.parseFloat(this.findVar("y").data));
+               this.components.getLast().component.onInit((int)Float.parseFloat(this.findVar("x").getData()), (int)Float.parseFloat(this.findVar("y").getData()));
             }
             index++;
             return;
@@ -264,7 +269,7 @@ public class Script {
             String conditional = Interpreter.InterprateCode(data.split(":")[1].replace("{", ""), this.vars);
             Variable tempVar  = this.findVar(conditional);
             if(tempVar!=null){
-                conditional = tempVar.data.replaceAll(" ", ""); 
+                conditional = tempVar.getData();
             }
 //            System.out.println("conditional:"+conditional+"-");
             if(conditional.equals("true")){
@@ -299,6 +304,7 @@ public class Script {
                 System.out.println(data.replace("print:", ""));
             }
             if(data.startsWith("moveCam")){
+                System.out.println(data);
                 String[] camData = data.replace("moveCam:", "").split(" ");
                 Handler.cam.applyTranslation(new Vector3D((int)Float.parseFloat(camData[0]),(int)Float.parseFloat(camData[1]), (int)Float.parseFloat(camData[2])), (int)Float.parseFloat(camData[3]));
             }
@@ -310,11 +316,21 @@ public class Script {
                 this.delay = (int)(Float.parseFloat(data.replace("pause:", "")) * 60.0f);
             }
             if(data.startsWith("loadScript")){
-               this.subscripts.addFirst(new Script(data.replace("loadScript:", "")+".txt")); 
+               this.subscripts.addFirst(new Script(data.replace("loadScript:", "")+".txt"));
+               
             }
             //collision Channels
             if(data.startsWith("createChannel")){
                 PhysicsEngine.PhysicsEngine.addChannel(data.replace("createChannel:", ""));
+            }
+            if(data.startsWith("setChannel")){
+                PhysicsEngine.PhysicsEngine.activeChannel = data.replace("setChannel:", "");
+                GlobalVars.tick();
+            }
+            if(data.startsWith("removeBody:")){
+                int specificBody = (int)Float.parseFloat(data.replace("removeBody:", "").split(" ")[0].replaceAll(" ", ""));
+                PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).remove(PhysicsEngine.PhysicsEngine.getChannel(PhysicsEngine.PhysicsEngine.activeChannel).collisons[specificBody]);
+                GlobalVars.tick();
             }
             if(data.startsWith("rotate")){
                 int specificBody = (int)Float.parseFloat(data.replace("rotate:", "").split(" ")[0].replaceAll(" ", ""));
@@ -342,7 +358,7 @@ public class Script {
                     }
                 }
             }
-            if(data.startsWith("move")){
+            if(data.startsWith("move:")){
                 data = data.replaceAll("~ ", "~");
                 while(data.contains("~~")){
                     data = data.replaceAll("~~", "~ ~");
@@ -451,7 +467,7 @@ public class Script {
     public void setVar(String name, String data){
         for(int i=0; i<this.vars.size(); i++){
             if(name.equals(this.vars.get(i).name.replaceAll(" ", ""))){
-                this.vars.get(i).data = data;
+                this.vars.get(i).setData(data);
                 return;
             }
         }
@@ -656,7 +672,7 @@ public class Script {
         System.out.println("--------------------"+this.name+"--------------------");
         System.out.println("--------------------Variables--------------------");
         for(int i=0; i<this.vars.size(); i++){
-            System.out.println("Name:"+this.vars.get(i).name+" Type:"+this.vars.get(i).evt.name()+" Value:"+this.vars.get(i).data);
+            System.out.println("Name:"+this.vars.get(i).name+" Type:"+this.vars.get(i).evt.name()+" Value:"+this.vars.get(i).getData());
         }
         System.out.println("--------------------Script--------------------");
         for(int i=0; i<this.data.length; i++){
@@ -689,7 +705,8 @@ public class Script {
     public void render(Graphics g){
         for(conditionalComponent component: this.components){
             if(component.init){
-                component.component.render(g, (int)Float.parseFloat(this.findVar("x").data), (int)Float.parseFloat(this.findVar("y").data));
+//                component.component.render(g);
+                component.component.render(g, (int)Float.parseFloat(this.findVar("x").getData()), (int)Float.parseFloat(this.findVar("y").getData()));
             }
         }
     }
@@ -706,6 +723,10 @@ public class Script {
         return this.vars;
     }
     
+    public void termiante(){
+        this.delay = 0;
+        this.remove = true;
+    }
     
 }
 

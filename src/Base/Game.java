@@ -182,7 +182,7 @@ public abstract class Game extends Canvas implements Runnable{
     private void tick(){
        if(!broken){
             try{
-             this.globalVars.tick();
+             GlobalVars.tick();
              this.extraTick();
              
              
@@ -196,7 +196,7 @@ public abstract class Game extends Canvas implements Runnable{
                throw e;
            } catch (Exception ex) {
               ex.printStackTrace();
-              float fuckMath = 1/0;
+              throw new RuntimeException();
            }
        }
     }
@@ -212,7 +212,7 @@ public abstract class Game extends Canvas implements Runnable{
         Graphics g = bs.getDrawGraphics();
         ///////////////////////////////////
         //Draw Here
-        g.setColor(Color.BLACK);
+        g.setColor(Color.WHITE);
         g.setClip(0, 0, Game.WIDTH, Game.HEIGHT);
         g.fillRect(0, 0, getWidth(), getHeight());
         

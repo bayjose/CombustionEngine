@@ -180,7 +180,13 @@ public class RigidUtils {
             }
             g.translate((int)-obj.x, (int)-obj.y);
             if(Handler.bool1){
-                g.drawLine((int)obj.x, (int)obj.y, (int)(obj.x+(obj.normal.getX()*10)), (int)(obj.y+(obj.normal.getX()*10)));
+                g.setColor(Color.MAGENTA);
+                g.drawLine((int)obj.x, (int)obj.y, (int)(obj.x+(obj.normal.getX()*20)), (int)(obj.y+(obj.normal.getY()*20)));
+                g.setColor(Color.red);
+                g.drawOval((int)obj.x-2, (int)obj.y-2, 4, 4);
+                for(int i=0; i<obj.points.length; i++){
+                    g.drawOval((int)obj.points[i].getX()-2+(int)obj.x, (int)obj.points[i].getY()-2+(int)obj.y, 4, 4);
+                }
             }
         }
     }

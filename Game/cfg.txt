@@ -1,6 +1,6 @@
-Build:Win
-Game Name:Edaxerum
+Build:Raspberry Pi
+Game Name:Polyship
 Version:0.1
-Preview Icon:game.png
+Preview Icon:preview.png
 Default Font:mainGameFont
-Start Script:player.txt
+Start Script:main.txt

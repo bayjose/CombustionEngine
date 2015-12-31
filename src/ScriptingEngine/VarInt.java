@@ -13,7 +13,6 @@ public class VarInt extends Variable{
 
     public VarInt(String name, String data) {
         super(name, data, EnumVarType.INT);
-        this.data = data;
     }
 
 }

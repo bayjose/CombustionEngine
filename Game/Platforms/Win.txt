@@ -1,1 +1,1 @@
-Resolution:1200x800
+Resolution:800x480

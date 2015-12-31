@@ -1,0 +1,20 @@
+set-persist=true
+set-loop=true
+
+init:{
+cmd_createChannel:solid
+cmd_createChannel:bg
+Component_Collision{
+0 0 0 
+(screenWidth) 0 0
+(screenWidth) 4096 0
+0 4096 0
+}
+cmd_texture:0 forest.png
+cmd_setCam:0 (+ -4096 (screenHeight)) 0 0
+cmd_pause:2
+cmd_setCam:0 0 0 600
+cmd_pause:2
+}
+
+cmd_setChannel:bg

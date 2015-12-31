@@ -30,7 +30,7 @@ public class Intro extends Entity{
     private int curTicks = 0;
     private int maxTicks = 0;
     private Entity Text;
-    private final boolean devMode = true;
+    private final boolean devMode = false;
     
     public Intro(Handler handler) {
         super(Models.generateQuad(new Vector3D(0,0,128), Game.WIDTH, Game.HEIGHT));
@@ -79,6 +79,7 @@ public class Intro extends Entity{
                 PhysicsEngine.PhysicsEngine.getChannel("bodies").append(PrebuiltBodies.quad(new Point3D(((i*(size*1.5f))+Game.WIDTH/2)-(numSquares*(size*1.5f))/2, ((j*(size*1.5f))+Game.HEIGHT/2)-(numSquares*(size*1.5f))/2, 0), size));
             }
         }
+        //starts the game with the designated start script
         Handler.scripts.add(new Script(Game.cfg[5].replace("Start Script:", "")));
         //reset the camera
         Handler.cam.goTo(new Vector3D(0, 0, 0), 0);

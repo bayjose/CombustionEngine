@@ -1,10 +1,16 @@
 set-persist=true
 set-loop=true
 define-boolean:shouldMove = true
-define-Script:ship = ship.txt
+//define-Script:ship = ship.txt
 
 //speed variable
 define-int:speed = 4
+define-int:bulletSize = 16
+define-boolean:canFire = true
+define-int:fireCooldown = 0
+define-int:fireRate = 12
+//other stuff
+set-bulletSize = (/ bulletSize 2)
 
 init:{
 set-y=256
@@ -18,16 +24,12 @@ Component_Collision{
 -35 50 0
 -25 0 0 
 }
-Component_Image{
-square.png
-}
-cmd_console:script:(this)
 cmd_addMessage:Current Channel:(activeChannel) has #(activeChannelSize) bodies in it.
-//cmd_loadScript:doubleFor
-cmd_texture:0 SamWinters.jpg
+cmd_texture:0 ship.png
 }
 
 move:{
+cmd_setChannel:ships
 if:(key a true){
 	cmd_rotate:0 ccw 3
 }
@@ -40,31 +42,28 @@ if:(key w true){
 if:(key s true){
 	cmd_move:0 ~(* speed -1) ~(* speed -1) 0
 }
-
-
-//the square camera movement thing, and retexture that square to a camera at some point.
-if:(key up true){
-	set-y=(- y speed)
+if:(& canFire (key space true)){
+	cmd_setChannel:bullets
+set-fireCooldown = (fireRate)
+Component_Collision{
+-8 -8 0
+8 -8 0
+8 8 0
+-8 8 0
+}
+cmd_texture:(activeChannelSize) fish.png
+}
 }
 
-if:(key down true){
-	set-y=(+ y speed)
-}
-if:(key left true){
-	set-x=(- x speed)
+if:(> fireCooldown 0){
+set-canFire = false
+set-fireCooldown = (- fireCooldown 1)
 }
 
-if:(key right true){
-	set-x=(+ x speed)
-}
-//end of move method
+if:(= fireCooldown 0.0){
+set-canFire = true
 }
 
 if:(shouldMove){
 	ref-method:move
 }
-if:(key space true){
-cmd_setCam:(+ (* x -1) (halfScreenWidth)) (+ (* y -1) (halfScreenHeight)) 0 0
-}
-
-//cmd_addMessage:Current Channel:(activeChannel) has #(activeChannelSize) bodies in it.

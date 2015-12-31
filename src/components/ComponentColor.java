@@ -19,7 +19,7 @@ public class ComponentColor extends Component{
     
     public ComponentColor(String[] data) {
         super(EnumComponentType.Color, data);
-        this.color = Color.decode(""+data[0]);
+        this.color = Color.decode("#"+data[0]);
         this.colorString = data[0];
     }
 

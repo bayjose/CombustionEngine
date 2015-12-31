@@ -1,0 +1,38 @@
+set-persist=true
+set-loop=true
+
+//Variable declaration
+define-int:speed = 4
+
+init:{
+Component_Image{
+error.png
+}
+cmd_loadScript:player
+cmd_loadScript:forest
+cmd_loadScript:bullets
+}
+
+//movement
+move:{
+//the square camera movement thing, and retexture that square to a camera at some point.
+if:(key up true){
+	set-y=(- y speed)
+}
+if:(key down true){
+	set-y=(+ y speed)
+}
+if:(key left true){
+	set-x=(- x speed)
+}
+
+if:(key right true){
+	set-x=(+ x speed)
+}
+//end of move method
+}
+
+
+if:(key space true){
+cmd_setCam:(+ (* x -1) (halfScreenWidth)) (+ (* y -1) (halfScreenHeight)) 0 0
+}

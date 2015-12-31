@@ -51,7 +51,7 @@ public class Interpreter {
                 String internals = middle.replaceAll("\\(", "").replaceAll("\\)", "");
                 for(int i=0; i<allVars.size(); i++){
                     if(allVars.get(i).name.equals(internals)){
-                        theAnswer = beginning + allVars.get(i).data + end;
+                        theAnswer = beginning + allVars.get(i).getData() + end;
                         if(theAnswer.contains("(")||theAnswer.contains(")")){
                             return InterprateCode(theAnswer, vars);
                         }else{
@@ -89,7 +89,7 @@ public class Interpreter {
                 }
             }
 
-            EnumAction action = EnumAction.ADD;
+            EnumAction action = EnumAction.NULL;
             for(int i = 0; i<EnumAction.values().length; i++){
                 if(EnumAction.values()[i].character.equals(dataToProcess[0])){
                     action = EnumAction.values()[i];
@@ -102,12 +102,12 @@ public class Interpreter {
             //implicit variable detection
             for(int i=0; i<allVars.size(); i++){
                 if(allVars.get(i).name.equals(dataToProcess[1])){
-                    dataToProcess[1] = allVars.get(i).data;
+                    dataToProcess[1] = allVars.get(i).getData();
                 }
             }
             for(int i=0; i<allVars.size(); i++){
                 if(allVars.get(i).name.equals(dataToProcess[2])){
-                    dataToProcess[2] = allVars.get(i).data;
+                    dataToProcess[2] = allVars.get(i).getData();
                 }
             }
 //            System.out.println("Var1:"+dataToProcess[1]+" Var2:"+dataToProcess[2]);
